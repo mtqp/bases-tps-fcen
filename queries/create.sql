@@ -1,5 +1,7 @@
 -- DDL --
 
+USE db_tp1;
+
 -- Creacion de tablas --
 
 CREATE TABLE seleccion
@@ -158,4 +160,55 @@ CREATE TABLE tiposancion
 );
 
 -- Creacion de foreign keys --
+
+-- seleccion --
+-- FK = { (hospedaHospedaje), (representaPais), (concentraEstadio), (ubicaPosicion) }
+ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionHospedaje FOREIGN KEY(hospedaHospedaje)   REFERENCES lugarhospedaje(idHospedaje);
+ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionPais      FOREIGN KEY(representaPais)     REFERENCES pais(idPais);
+ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionEstadio   FOREIGN KEY(concentraEstadio)   REFERENCES estadio(idEStadio);
+ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionPosicion  FOREIGN KEY(ubicaPosicion)      REFERENCES posiciones(idPosicion);
+
+-- integrante --
+-- FK = { (perteneceSeleccion) }
+ALTER TABLE integrante ADD CONSTRAINT fkIntegranteSeleccion FOREIGN KEY(perteneceSeleccion) REFERENCES seleccion(idSeleccion);
+
+-- jugador --
+-- FK = { (estaEnEquipo) }
+ALTER TABLE jugador ADD CONSTRAINT fkJugadorEquipo FOREIGN KEY(estaEnEquipo) REFERENCES equipo(idEquipo);
+
+-- cuerpotecnico --
+-- FK = { (cumpleFuncion) }
+ALTER TABLE cuerpotecnico ADD CONSTRAINT fkTecnicoFuncion FOREIGN KEY(cumpleFuncion) REFERENCES funcion(idFuncion);
+
+-- partido --
+-- FK = { (juegaEnEtapa), (equipoSeleccion1), (equipoSeleccion2), (juegaEnEstadio) };
+ALTER TABLE partido ADD CONSTRAINT fkPartidoEtapa       FOREIGN KEY(juegaEnEtapa)     REFERENCES etapa(idEtapa);
+ALTER TABLE partido ADD CONSTRAINT fkPartidoSeleccion1  FOREIGN KEY(equipoSeleccion1) REFERENCES seleccion(idSeleccion);
+ALTER TABLE partido ADD CONSTRAINT fkPartidoSeleccion2  FOREIGN KEY(equipoSeleccion2) REFERENCES seleccion(idSeleccion);
+ALTER TABLE partido ADD CONSTRAINT fkPartidoEstadio     FOREIGN KEY(juegaEnEstadio)   REFERENCES estadio(idEstadio);
+
+-- tanteador --
+-- FK = { (idPartido) }
+ALTER TABLE tanteador ADD CONSTRAINT fkTanteadorPartido FOREIGN KEY(idPartido) REFERENCES partido(idPartido);
+
+-- arbitro --
+-- FK = { (pertenecePais) }
+ALTER TABLE arbitro ADD CONSTRAINT fkArbitroPais    FOREIGN KEY(pertenecePais) REFERENCES pais(idPais);
+
+-- arbitra --
+-- FK = { (idArbitroArb), (idPartidoArb) }
+ALTER TABLE arbitra ADD CONSTRAINT fkArbitraArbitro FOREIGN KEY(idArbitroArb) REFERENCES arbitro(idArbitro);
+ALTER TABLE arbitra ADD CONSTRAINT fkArbitraPartido FOREIGN KEY(idPartidoArb) REFERENCES partido(idPartido);
+
+-- participacion --
+-- FK = { (juegoPartido), (participaJugador) }
+ALTER TABLE participacion ADD CONSTRAINT fkParticipacionPartido FOREIGN KEY(jugoPartido)     REFERENCES partido(idPartido);
+ALTER TABLE participacion ADD CONSTRAINT fkParticipacionJugador FOREIGN KEY(participaJugador) REFERENCES jugador(idJugador);
+
+-- sancion --
+-- FK = { (aplicaParticipacion) , (sancionadaPorArbitro), (esDeTipo)};
+ALTER TABLE sancion ADD CONSTRAINT fkSancionParticipacion   FOREIGN KEY(aplicaParticipacion)  REFERENCES participacion(idParticipacion);
+ALTER TABLE sancion ADD CONSTRAINT fkSancionArbitro         FOREIGN KEY(sancionadaPorArbitro) REFERENCES arbitro(idArbitro);
+ALTER TABLE sancion ADD CONSTRAINT fkSancionTipo            FOREIGN KEY(esDeTipo)             REFERENCES tiposancion(idTipoSancion);
+
 
