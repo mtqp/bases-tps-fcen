@@ -1,7 +1,14 @@
 -- DDL --
 
-USE db_tp1;
+-- Solo la primera vez.
+-- create database db_tp1 
 
+DROP DATABASE db_tp1;
+
+CREATE DATABASE db_tp1;
+
+USE db_tp1;
+ 
 -- Creacion de tablas --
 
 CREATE TABLE seleccion
@@ -17,10 +24,15 @@ CREATE TABLE seleccion
     , PRIMARY KEY (idSeleccion)
 );
 
-CREATE TABLE posiciones
+CREATE TABLE posicion
 (
-      idPosicion    INT NOT NULL AUTO_INCREMENT
-    , puntos        INT NOT NULL
+      idPosicion    	INT NOT NULL AUTO_INCREMENT
+    , puntos        	INT NOT NULL DEFAULT 0
+    , partidosJugados 	INT NOT NULL DEFAULT 0
+    , partidosGanados	INT NOT NULL DEFAULT 0
+    , partidosPerdidos	INT NOT NULL DEFAULT 0
+    , tantosAFavor		INT NOT NULL DEFAULT 0
+    , tantosEnContra	INT NOT NULL DEFAULT 0
     , PRIMARY KEY (idPosicion)
 );
 
@@ -45,10 +57,10 @@ CREATE TABLE integrante
     , nroPasaporte          INT NOT NULL
     , nombreIntegrante      VARCHAR(50)
     , apellido              VARCHAR(50) 
-    , edad                  INT NOT NULL
     , fechaNacimiento       DATE NOT NULL
     , tipoIntegrante        VARCHAR(15) NOT NULL
     , PRIMARY KEY (idIntegrante)
+    , UNIQUE (nroPasaporte)
 );
 
 CREATE TABLE jugador
@@ -86,9 +98,9 @@ CREATE TABLE partido
     , equipoSeleccion1  INT NOT NULL
     , equipoSeleccion2  INT NOT NULL
     , juegaEnEstadio    INT NOT NULL
-    , duracion          INT 
+    , duracion          INT DEFAULT 55
     , fecha             DATE NOT NULL
-    , horario           INT  
+    , horario           INT NOT NULL 
     , PRIMARY KEY (idPartido)
 );
 
@@ -104,6 +116,7 @@ CREATE TABLE etapa
       idEtapa       INT NOT NULL AUTO_INCREMENT
     , nombreEtapa   VARCHAR(50)
     , PRIMARY KEY (idEtapa)
+    , UNIQUE (nombreEtapa)
 );
 
 CREATE TABLE tanteador
@@ -166,7 +179,7 @@ CREATE TABLE tiposancion
 ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionHospedaje FOREIGN KEY(hospedaHospedaje)   REFERENCES lugarhospedaje(idHospedaje);
 ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionPais      FOREIGN KEY(representaPais)     REFERENCES pais(idPais);
 ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionEstadio   FOREIGN KEY(concentraEstadio)   REFERENCES estadio(idEStadio);
-ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionPosicion  FOREIGN KEY(ubicaPosicion)      REFERENCES posiciones(idPosicion);
+ALTER TABLE seleccion ADD CONSTRAINT fkSeleccionPosicion  FOREIGN KEY(ubicaPosicion)      REFERENCES posicion(idPosicion);
 
 -- integrante --
 -- FK = { (perteneceSeleccion) }
