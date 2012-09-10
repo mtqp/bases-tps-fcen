@@ -26,7 +26,7 @@ CREATE TABLE seleccion
     , grupo             CHAR(1) NOT NULL
     , PRIMARY KEY (idSeleccion)
     , UNIQUE (representaPais)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE posicion
 (
@@ -38,21 +38,21 @@ CREATE TABLE posicion
     , tantosAFavor		INT NOT NULL DEFAULT 0
     , tantosEnContra	INT NOT NULL DEFAULT 0
     , PRIMARY KEY (idPosicion)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE lugarhospedaje
 (   
       idHospedaje       INT NOT NULL AUTO_INCREMENT
     , nombreHospedaje   VARCHAR(50)
     , PRIMARY KEY (idHospedaje)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE pais
 (
       idPais        INT NOT NULL AUTO_INCREMENT
     , nombrePais    VARCHAR(50)
     , PRIMARY KEY (idPais)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE integrante
 (
@@ -65,35 +65,35 @@ CREATE TABLE integrante
     , tipoIntegrante        VARCHAR(15) NOT NULL
     , PRIMARY KEY (idIntegrante)
     , UNIQUE (nroPasaporte)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE jugador
 (
       idJugador    INT NOT NULL
     , estaEnEquipo INT NOT NULL
     , PRIMARY KEY (idJugador)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE cuerpotecnico
 (
       idCuerpoTecnico   INT NOT NULL
     , cumpleFuncion     INT NOT NULL
     , PRIMARY KEY (idCuerpoTecnico)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE funcion
 (
       idFuncion     INT NOT NULL AUTO_INCREMENT
     , nombreFuncion VARCHAR(50)
     , PRIMARY KEY (idFuncion)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE equipo
 (
       idEquipo      INT NOT NULL AUTO_INCREMENT
     , nombreEquipo  VARCHAR(50)
     , PRIMARY KEY (idEquipo)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE partido
 (
@@ -106,14 +106,14 @@ CREATE TABLE partido
     , fecha             DATE NOT NULL
     , horario           INT NOT NULL 
     , PRIMARY KEY (idPartido)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE estadio
 (
       idEstadio     INT NOT NULL AUTO_INCREMENT
     , nombreEstadio VARCHAR(50)
     , PRIMARY KEY (idEstadio)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE etapa
 (
@@ -121,7 +121,7 @@ CREATE TABLE etapa
     , nombreEtapa   VARCHAR(50)
     , PRIMARY KEY (idEtapa)
     , UNIQUE (nombreEtapa)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE tanteador
 (
@@ -130,7 +130,7 @@ CREATE TABLE tanteador
     , scoreEquip1   INT NOT NULL
     , scoreEquip2   INT NOT NULL
     , PRIMARY KEY (nroCuarto, idPartido)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE arbitro
 (
@@ -138,14 +138,14 @@ CREATE TABLE arbitro
     , pertenecePais INT NOT NULL
     , nombreArbitro VARCHAR(50)
     , PRIMARY KEY (idArbitro)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE arbitra
 (
       idArbitroArb  INT NOT NULL
     , idPartidoArb  INT NOT NULL
     , PRIMARY KEY (idArbitroArb, idPartidoArb)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE participacion
 (
@@ -158,7 +158,7 @@ CREATE TABLE participacion
     , puntos            INT DEFAULT 0
     , esTitular         BIT NOT NULL
     , PRIMARY KEY (idParticipacion)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE sancion
 (
@@ -167,14 +167,14 @@ CREATE TABLE sancion
     , sancionadaPorArbitro  INT NOT NULL
     , esDeTipo              INT NOT NULL
     , PRIMARY KEY (idSancion)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE tiposancion
 (
       idTipoSancion INT NOT NULL AUTO_INCREMENT
     , nombreSancion VARCHAR(50)
     , PRIMARY KEY (idTipoSancion)
-);
+)ENGINE=InnoDB;
 
 -- Creacion de foreign keys --
 
@@ -213,7 +213,7 @@ ALTER TABLE tanteador ADD CONSTRAINT fkTanteadorPartido FOREIGN KEY(idPartido) R
 
 -- arbitro --
 -- FK = { (pertenecePais) }
-ALTER TABLE arbitro ADD CONSTRAINT fkArbitroPais    FOREIGN KEY(pertenecePais) REFERENCES pais(idPais);
+ALTER TABLE arbitro ADD CONSTRAINT fkArbitroPais FOREIGN KEY(pertenecePais) REFERENCES pais(idPais);
 
 -- arbitra --
 -- FK = { (idArbitroArb), (idPartidoArb) }
