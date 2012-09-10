@@ -8,6 +8,11 @@ DROP TRIGGER IF EXISTS check_posicion_bi $$
 CREATE TRIGGER check_posicion_bi
 BEFORE INSERT ON posicion
 FOR EACH ROW BEGIN
+    -- Cantidad de inserts <= 8
+    IF ((SELECT COUNT(1) FROM posicion) >= 8) THEN
+        CALL `La cantidad de posiciones maxima es 8`;
+    END IF;
+
     -- POSICION.puntos >= 0
     IF (NEW.puntos < 0) THEN
 	CALL `Puntos debe ser >= 0`;
@@ -40,7 +45,7 @@ END$$
 
 DROP TRIGGER IF EXISTS check_posicion_bu $$
 
-CREATE TRIGGER check_posicion_bi
+CREATE TRIGGER check_posicion_bu
 BEFORE UPDATE ON posicion
 FOR EACH ROW BEGIN
     -- POSICION.puntos >= 0
