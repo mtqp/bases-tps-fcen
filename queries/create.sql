@@ -23,7 +23,7 @@ CREATE TABLE seleccion
     , ubicaPosicion     INT DEFAULT 0 -- This sholud be never null (it cant be not null because if not the user should insert this value)
     , cantIntegrantes   INT NOT NULL DEFAULT 0
     , fechaArribo       DATE NOT NULL
-    , grupo             CHAR(1) NOT NULL CHECK (grupo = 'A')
+    , grupo             CHAR(1) NOT NULL
     , PRIMARY KEY (idSeleccion)
 );
 
@@ -68,14 +68,14 @@ CREATE TABLE integrante
 
 CREATE TABLE jugador
 (
-      idJugador    INT NOT NULL AUTO_INCREMENT
+      idJugador    INT NOT NULL
     , estaEnEquipo INT NOT NULL
     , PRIMARY KEY (idJugador)
 );
 
 CREATE TABLE cuerpotecnico
 (
-      idCuerpoTecnico   INT NOT NULL AUTO_INCREMENT
+      idCuerpoTecnico   INT NOT NULL
     , cumpleFuncion     INT NOT NULL
     , PRIMARY KEY (idCuerpoTecnico)
 );
@@ -191,10 +191,13 @@ ALTER TABLE integrante ADD CONSTRAINT fkIntegranteSeleccion FOREIGN KEY(pertenec
 -- jugador --
 -- FK = { (estaEnEquipo) }
 ALTER TABLE jugador ADD CONSTRAINT fkJugadorEquipo FOREIGN KEY(estaEnEquipo) REFERENCES equipo(idEquipo);
+ALTER TABLE jugador ADD CONSTRAINT fkJugadorIntegrante FOREIGN KEY(idJugador)  REFERENCES integrante(idIntegrante);
 
 -- cuerpotecnico --
 -- FK = { (cumpleFuncion) }
 ALTER TABLE cuerpotecnico ADD CONSTRAINT fkTecnicoFuncion FOREIGN KEY(cumpleFuncion) REFERENCES funcion(idFuncion);
+ALTER TABLE cuerpotecnico ADD CONSTRAINT fkCuerpotecnicoIntegrante FOREIGN KEY(idCuerpoTecnico) REFERENCES integrante(idIntegrante);
+
 
 -- partido --
 -- FK = { (juegaEnEtapa), (equipoSeleccion1), (equipoSeleccion2), (juegaEnEstadio) };
