@@ -230,3 +230,10 @@ ALTER TABLE sancion ADD CONSTRAINT fkSancionTipo            FOREIGN KEY(esDeTipo
 -- Ejecutar las constraints
 source business_constraints.sql
 
+-- Tabla para log
+CREATE TABLE LOG
+(
+      idSeleccion    INT NOT NULL AUTO_INCREMENT
+    , nombre		 VARCHAR(50)	
+    , msg			 VARCHAR(100)
+);
