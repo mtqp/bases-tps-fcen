@@ -37,7 +37,7 @@ FOR EACH ROW BEGIN
 	CALL `PartidosJugados = partidosGanados + partidosPerdidos`;
     END IF;
 END$$
-DELIMITER;
+DELIMITER ;
 
 -- Si POSICION.puntos es el mayor de todos => POSICION.partidosGanados >=2
 -- (minimo debe ganar dos partidos en fase de grupos para ser campéon)
