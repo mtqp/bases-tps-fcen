@@ -12,6 +12,8 @@ DROP TRIGGER IF EXISTS check_grupo_bi $$
 CREATE TRIGGER check_grupo_bi
 BEFORE INSERT ON seleccion
 FOR EACH ROW BEGIN
+  DECLARE maxPosicion INT;
+  
   IF (NEW.grupo <> 'A' AND NEW.grupo <> 'B') THEN
 	  CALL `Grupo debe ser A o B`;
   END IF;
@@ -19,6 +21,10 @@ FOR EACH ROW BEGIN
   IF (NEW.cantIntegrantes <> 0) THEN
   	  CALL `La cantidad de integrantes difiere de los integrantes actuales`;
   END IF;
+  
+  INSERT INTO posicion values ();
+  SET maxPosicion = (SELECT max(idPosicion) FROM posicion); 
+  SET NEW.ubicaPosicion = @maxPosicion;
   
 END$$
 
