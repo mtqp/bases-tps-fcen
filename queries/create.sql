@@ -8,19 +8,22 @@ DROP DATABASE db_tp1;
 CREATE DATABASE db_tp1;
 
 USE db_tp1;
- 
+
+-- Para que habilite las check constraints.
+SET sql_mode='STRICT_ALL_TABLES';
+
 -- Creacion de tablas --
 
 CREATE TABLE seleccion
 (
       idSeleccion       INT NOT NULL AUTO_INCREMENT
-    , hospedaHospedaje  INT NOT NULL
-    , representaPais    INT NOT NULL
-    , concentraEstadio  INT NOT NULL
-    , ubicaPosicion     INT NOT NULL
-    , cantIntegrantes   INT NOT NULL
-    , fechaArribo       INT NOT NULL
-    , grupo             CHAR(1) NOT NULL
+    , hospedaHospedaje  INT NOT NULL DEFAULT 0
+    , representaPais    INT NOT NULL DEFAULT 0
+    , concentraEstadio  INT NOT NULL DEFAULT 0
+    , ubicaPosicion     INT NOT NULL DEFAULT 0
+    , cantIntegrantes   INT NOT NULL DEFAULT 0
+    , fechaArribo       DATE NOT NULL 
+    , grupo             CHAR(1) NOT NULL CHECK (grupo = 'A')
     , PRIMARY KEY (idSeleccion)
 );
 
@@ -224,4 +227,6 @@ ALTER TABLE sancion ADD CONSTRAINT fkSancionParticipacion   FOREIGN KEY(aplicaPa
 ALTER TABLE sancion ADD CONSTRAINT fkSancionArbitro         FOREIGN KEY(sancionadaPorArbitro) REFERENCES arbitro(idArbitro);
 ALTER TABLE sancion ADD CONSTRAINT fkSancionTipo            FOREIGN KEY(esDeTipo)             REFERENCES tiposancion(idTipoSancion);
 
+-- Ejecutar las constraints
+source business_constraints.sql
 
