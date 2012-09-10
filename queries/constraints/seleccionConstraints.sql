@@ -7,15 +7,36 @@
 
 DELIMITER $$
 
-DROP TRIGGER IF EXISTS check_grupo $$
+DROP TRIGGER IF EXISTS check_grupo_bi $$
 
-CREATE TRIGGER check_grupo
+CREATE TRIGGER check_grupo_bi
 BEFORE INSERT ON seleccion
 FOR EACH ROW BEGIN
   IF (NEW.grupo <> 'A' AND NEW.grupo <> 'B') THEN
 	  CALL `Grupo debe ser A o B`;
   END IF;
+  
+  IF (NEW.cantIntegrantes <> 0) THEN
+  	  CALL `La cantidad de integrantes difiere de los integrantes actuales`;
+  END IF;
+  
 END$$
-DELIMITER ;
 
+DROP TRIGGER IF EXISTS check_grupo_bu $$
+
+CREATE TRIGGER check_grupo_bu
+BEFORE UPDATE ON seleccion
+FOR EACH ROW BEGIN
+	
+   DECLARE cantIntegrantes INT;
+   SET cantIntegrantes = (SELECT count(*) FROM integrante I WHERE I.perteneceSeleccion = OLD.idSeleccion);
+   -- INSERT INTO LOG (nombre, msg) VALUES ("check_grupo_bu", @cantIntegrantes);
+   IF (NEW.cantIntegrantes <> cantIntegrantes) THEN
+  	  CALL `La cantidad de integrantes difiere de los integrantes actuales`;
+   END IF;
+  
+END$$
+
+
+DELIMITER ;
 

@@ -30,7 +30,7 @@ INSERT INTO seleccion (cantIntegrantes,fechaArribo,grupo) values (0,'2012-08-24'
 
 -- Invalidas --
 
--- No hay integrantes al insertar por primera vez la selección 
+-- La cantidad de Integrantes no coincide con los existentes  
 -- INSERT INTO seleccion (cantIntegrantes,fechaArribo,grupo) values (20,'2012-08-25','B');
 
 -- Solo grupo A o B están permitidos 
