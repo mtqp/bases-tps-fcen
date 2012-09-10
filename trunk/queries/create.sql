@@ -17,12 +17,12 @@ SET sql_mode='STRICT_ALL_TABLES';
 CREATE TABLE seleccion
 (
       idSeleccion       INT NOT NULL AUTO_INCREMENT
-    , hospedaHospedaje  INT NOT NULL DEFAULT 0
-    , representaPais    INT NOT NULL DEFAULT 0
-    , concentraEstadio  INT NOT NULL DEFAULT 0
-    , ubicaPosicion     INT NOT NULL DEFAULT 0
+    , hospedaHospedaje  INT NOT NULL
+    , representaPais    INT NOT NULL
+    , concentraEstadio  INT NOT NULL
+    , ubicaPosicion     INT DEFAULT 0 -- This sholud be never null (it cant be not null because if not the user should insert this value)
     , cantIntegrantes   INT NOT NULL DEFAULT 0
-    , fechaArribo       DATE NOT NULL 
+    , fechaArribo       DATE NOT NULL
     , grupo             CHAR(1) NOT NULL CHECK (grupo = 'A')
     , PRIMARY KEY (idSeleccion)
 );
@@ -228,12 +228,16 @@ ALTER TABLE sancion ADD CONSTRAINT fkSancionArbitro         FOREIGN KEY(sanciona
 ALTER TABLE sancion ADD CONSTRAINT fkSancionTipo            FOREIGN KEY(esDeTipo)             REFERENCES tiposancion(idTipoSancion);
 
 -- Ejecutar las constraints
-source business_constraints.sql
+source business_constraints.sql;
 
--- Tabla para log
+-- Carga de datos
+source data.sql;
+
+-- Tabla para log de errores o cosas
 CREATE TABLE LOG
 (
-      idSeleccion    INT NOT NULL AUTO_INCREMENT
-    , nombre		 VARCHAR(50)	
-    , msg			 VARCHAR(100)
+      idlog    INT NOT NULL AUTO_INCREMENT
+    , nombre   VARCHAR(50)	
+    , msg	   VARCHAR(100)
+    , PRIMARY KEY (idLog)
 );
