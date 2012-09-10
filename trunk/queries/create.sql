@@ -25,6 +25,7 @@ CREATE TABLE seleccion
     , fechaArribo       DATE NOT NULL
     , grupo             CHAR(1) NOT NULL
     , PRIMARY KEY (idSeleccion)
+    , UNIQUE (representaPais)
 );
 
 CREATE TABLE posicion
