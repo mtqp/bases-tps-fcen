@@ -3,26 +3,18 @@
 
 DELIMITER $$
 
-DROP TRIGGER IF EXISTS check_etapa_bi $$
+DROP TRIGGER IF EXISTS check_integrante $$
 
-CREATE TRIGGER check_etapa_bi
-BEFORE INSERT ON etapa
+CREATE TRIGGER check_integrante
+BEFORE INSERT ON integrante
 FOR EACH ROW BEGIN
-    -- ETAPA.nombreEtapa debe ser o bien FASE_GRUPOS o 5TO_PUESTO, o 3ER_PUESTO o SEMIFINAL, o FINAL
-    IF (NEW.nombreEtapa <> 'FASE_GRUPOS' AND NEW.nombreEtapa <> '5TO_PUESTO' AND NEW.nombreEtapa <> '3ER_PUESTO' AND NEW.nombreEtapa <> 'SEMIFINAL' AND NEW.nombreEtapa <> 'FINAL') THEN
-	CALL `NombreEtapa es FASE_GRUPOS, 5TO/3ER_PUESTO, SEMIFINAL o FINAL`;
+    -- INTEGRANTE.tipoIntegrante IN { ‘Jugador’, ‘CuerpoTecnico’}
+    IF (NEW.tipoIntegrante <> 'Jugador' AND NEW.tipoIntegrante <> 'CuerpoTecnico') THEN
+        CALL `TipoIntegrante debe ser Jugador o CuerpoTecnico`;
+    END IF;
+    -- AÑO(SYSDATE) - AÑO(INTEGRANTE.fechaNacimiento) >= 18
+    IF (YEAR(SYSDATE()) - YEAR(NEW.fechaNacimiento) < 18) THEN  
+	CALL `AÑO(SYSDATE) - AÑO(INTEGRANTE.fechaNacimiento) debe ser >= 18`;
     END IF;
 END$$
-
-DROP TRIGGER IF EXISTS check_etapa_bu $$
-
-CREATE TRIGGER check_etapa_bu
-BEFORE UPDATE ON etapa
-FOR EACH ROW BEGIN
-    -- ETAPA.nombreEtapa debe ser o bien FASE_GRUPOS o 5TO_PUESTO, o 3ER_PUESTO o SEMIFINAL, o FINAL
-    IF (NEW.nombreEtapa <> 'FASE_GRUPOS' AND NEW.nombreEtapa <> '5TO_PUESTO' AND NEW.nombreEtapa <> '3ER_PUESTO' AND NEW.nombreEtapa <> 'SEMIFINAL' AND NEW.nombreEtapa <> 'FINAL') THEN
-	CALL `NombreEtapa es FASE_GRUPOS, 5TO/3ER_PUESTO, SEMIFINAL o FINAL`;
-    END IF;
-END$$
-
 DELIMITER ;

@@ -1,5 +1,5 @@
 -- ACA VAN TODAS LAS CONSTRAINTS DE SELECCION
---select "Acá van las constraints de tanteador" from DUAL;
+-- select "Acá van las constraints de tanteador" from DUAL;
 
 DELIMITER $$
 
@@ -17,7 +17,7 @@ FOR EACH ROW BEGIN
   END IF;
   
   SET cuartoRepetido = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido and nroCuarto = NEW.nroCuarto);
-  IF (cuartoRepetido == 1)  THEN
+  IF (cuartoRepetido = 1)  THEN
     CALL `el cuarto correspondiente ya fue ingresado`;
   END IF;
   
