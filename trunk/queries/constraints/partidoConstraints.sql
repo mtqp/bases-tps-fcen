@@ -26,10 +26,7 @@ FOR EACH ROW BEGIN
     SET etapa3ero       = (SELECT idEtapa FROM etapa WHERE nombreEtapa = '3ER_PUESTO');
     SET etapaFinal      = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FINAL');
 
-    -- PARTIDO.equipoSeleccion1 <> PARTIDO.equipoSeleccion2
-    IF (NEW.equipoSeleccion1 = NEW.equipoSeleccion2) THEN
-	CALL `EquipoSeleccion1 debe ser distinto de equipoSeleccion2`;
-    END IF;
+    CALL sp_partido_distintas_selecciones(NEW.equipoSeleccion1 = NEW.equipoSeleccion2);
 
     -- La duración de los partidos tiene que ser > 0
     IF (NEW.duracion <= 0) THEN
