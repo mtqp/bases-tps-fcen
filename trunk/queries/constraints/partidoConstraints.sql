@@ -184,6 +184,7 @@ FOR EACH ROW BEGIN
         CALL `Partido en mismo horario`;
     END IF;
     
+    CALL logOk('insert', CONCAT('ok insert partido con id: ', (NEW.idPartido AS CHAR));
     
 
 END$$
