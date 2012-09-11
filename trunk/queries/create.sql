@@ -158,6 +158,7 @@ CREATE TABLE participacion
     , puntos            INT DEFAULT 0
     , esTitular         BIT NOT NULL
     , PRIMARY KEY (idParticipacion)
+    , UNIQUE (jugoPartido, participaJugador) -- reemplaza un check
 )ENGINE=InnoDB;
 
 CREATE TABLE sancion
