@@ -63,7 +63,7 @@ INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEs
 					(			1, 				  1, 			   8, 				1, 	'2012-08-22', 	   	  1);
 
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, 		  fecha, horario) values
-					(			1, 				  8, 				1, 				2, 	'2012-08-23', 	   1);
+					(			2, 				  8, 				1, 				2, 	'2012-08-23', 	   1);
 
 -- INTEGRANTE
 -- SELECCION ARGENTINA ( 5 titulares 1 suplente)
@@ -235,10 +235,18 @@ INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, 
 -- haciendo update esTitular = 1 se puede testear el reporte
 
 -- ARBITRO --
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('Enrique','2');
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('Pablo','1');
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('Marcelo','5');
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('Evo','3');
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('EnzoARG',1);
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('EvoBOL',2);
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('MouquinhoBRA',3);
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('BermudezCHI',4);
+
+-- ARBITRA --
+
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','1'); -- Argentino
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('2','1'); -- Boliviano
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('3','2'); -- Brasilero
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','2'); -- Chileno
+
 
 -- Invalidas --
 -- La cantidad de Integrantes no coincide con los existentes  

@@ -3,6 +3,7 @@
 -- Se abren desde archivos separados para que sea mas prolijo -- 
 
 source constraints/arbitroConstraints.sql
+source constraints/arbitraConstraints.sql
 source constraints/partidoConstraints.sql
 source constraints/jugadorConstraints.sql
 source constraints/seleccionConstraints.sql
