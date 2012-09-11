@@ -10,9 +10,3 @@ END&&
 
 delimiter ;
 
-
-sourceFile = open('./../sps.sql', 'w')
-
-for sqlFile in sqlFiles:
-    sourceFile.write('source')
-
