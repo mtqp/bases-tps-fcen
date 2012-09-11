@@ -38,46 +38,7 @@ FOR EACH ROW BEGIN
 
     CALL sp_partido_fase_anterior_completa (NEW.juegaEnEtapa); --  (SI ESTO NO VA ORDENADO CON EL DE ABAJO, SE ROMPE TODO)
 
-    -- Las fechas de los partidos tienen que estar ordenado por la etapa (FASE_GRUPO < 5TO_PUESTO < SEMIFINAL < 3ER_PUESTO < FINAL)
-    -- TODO REFACTORIZAR... SE UTILIZA ARRIBA TBM!!!!
-    -- Consige la fase anterior
-    IF (NEW.juegaEnEtapa = etapa5to) THEN
-        SET faseAnterior = etapaFaseGrupo;
-    ELSE 
-        IF (NEW.juegaEnEtapa = etapaFaseSemi) THEN
-            SET faseAnterior = etapa5to;
-        ELSE 
-            IF(NEW.juegaEnEtapa = etapa3ro) THEN
-                SET faseAnterior = etapaFaseSemi;
-            ELSE 
-                IF(NEW.juegaEnEtapa = etapaFinal) THEN
-                    SET faseAnterior = etapa3ro;
-                END IF;
-            END IF;
-        END IF;
-    END IF;
-
-    -- Chequea que la fase anterior no tenga fecha/horario posterior al que se va a insertar
-    SET fechaFaseMax    = (SELECT MAX(fecha) FROM partido WHERE juegaEnEtapa = @faseAnterior);
-    SET horarioFaseMax  = (SELECT MAX(horario) FROM partido WHERE NEW.fecha = @fechaFaseMax);
-
-    IF EXISTS 
-    (
-        -- Dia posterior
-        SELECT * 
-        FROM partido 
-        WHERE
-            NEW.fecha < @fechaFaseMax
-        UNION
-        -- Igual dia, Hora posterior
-        SELECT * 
-        FROM partido
-        WHERE
-            NEW.horario < @horarioFaseMax
-    )
-    THEN
-        CALL `Existe un partido de fase anterior con fecha mayor`;
-    END IF;
+    CALL sp_partido_ordenados_por_fecha (NEW.juegaEnEtapa, NEW.fecha, NEW.horario);
 
     -- Si PARTIDO.juegaEnEtapa = ‘FASE_GRUPOS’’entonces 
        -- PARTIDO.equipoSeleccion1.grupo = PARTIDO.equipoSeleccion2.grupo
