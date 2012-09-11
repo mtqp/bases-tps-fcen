@@ -1,0 +1,12 @@
+
+delimiter &&
+
+DROP PROCEDURE IF EXISTS procedureName &&
+
+CREATE PROCEDURE procedureName (var1 VARCHAR(50), ... , varN INT)
+BEGIN
+    //Write some code
+END&&
+
+delimiter ;
+
