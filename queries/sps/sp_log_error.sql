@@ -11,6 +11,8 @@ BEGIN
         caller,
         msg
     );
+    
+    CALL `[ERROR!] Ver LOG para mas detalles`;
 END&&
 
 delimiter ;
