@@ -30,7 +30,6 @@ FOR EACH ROW BEGIN
 
     CALL sp_valor_positivo (NEW.duracion, 'partido', 'duracion');
 
-    -- La hora del partido tiene que estar entre 0 y 23
     CALL sp_valor_en_rango (NEW.horario, 0, 23, 'partido', 'horario');
     
     -- Dos equipos no pueden enfrentarse en la misma etapa dos veces.
