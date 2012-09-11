@@ -177,6 +177,15 @@ CREATE TABLE tiposancion
     , PRIMARY KEY (idTipoSancion)
 )ENGINE=InnoDB;
 
+-- Tabla para log de errores o cosas
+CREATE TABLE LOG
+(
+      idlog    INT NOT NULL AUTO_INCREMENT
+    , nombre   VARCHAR(50)	
+    , msg	   VARCHAR(100)
+    , PRIMARY KEY (idLog)
+);
+
 -- Creacion de foreign keys --
 
 -- seleccion --
@@ -238,11 +247,6 @@ source business_constraints.sql;
 -- Carga de datos
 source data.sql;
 
--- Tabla para log de errores o cosas
-CREATE TABLE LOG
-(
-      idlog    INT NOT NULL AUTO_INCREMENT
-    , nombre   VARCHAR(50)	
-    , msg	   VARCHAR(100)
-    , PRIMARY KEY (idLog)
-);
+-- Ejecutar SPS
+source sps.sql;
+
