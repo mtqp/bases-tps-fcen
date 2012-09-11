@@ -26,17 +26,12 @@ FOR EACH ROW BEGIN
     SET etapa3ero       = (SELECT idEtapa FROM etapa WHERE nombreEtapa = '3ER_PUESTO');
     SET etapaFinal      = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FINAL');
 
-    CALL sp_partido_distintas_selecciones(NEW.equipoSeleccion1 = NEW.equipoSeleccion2);
+    CALL sp_partido_distintas_selecciones(NEW.equipoSeleccion1, NEW.equipoSeleccion2);
 
-    -- La duración de los partidos tiene que ser > 0
-    IF (NEW.duracion <= 0) THEN
-		CALL `La duración debe ser > 0`;
-    END IF;
+    CALL sp_valor_positivo (NEW.duracion, 'partido', 'duracion');
 
     -- La hora del partido tiene que estar entre 0 y 23
-    IF (NEW.horario < 0 OR NEW.horario > 23) THEN
-        CALL `El horario debe estar en rango [1..23]`;
-    END IF;
+    CALL sp_valor_en_rango (NEW.horario, 0, 23, 'partido', 'horario');
     
     -- Dos equipos no pueden enfrentarse en la misma etapa dos veces.
     IF EXISTS 
