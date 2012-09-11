@@ -32,87 +32,12 @@ FOR EACH ROW BEGIN
 
     CALL sp_valor_en_rango (NEW.horario, 0, 23, 'partido', 'horario');
     
-    -- Dos equipos no pueden enfrentarse en la misma etapa dos veces.
-    IF EXISTS 
-    (
-        SELECT * 
-        FROM partido
-        WHERE
-            juegaEnEtapa = NEW.juegaEnEtapa AND
-            equipoSeleccion1 IN (NEW.equipoSeleccion1, NEW.equipoSeleccion2) AND
-            equipoSeleccion2 IN (NEW.equipoSeleccion1, NEW.equipoSeleccion2)
-    )
-    THEN
-        CALL `Mismos equipos se enfrentan dos veces en la misma etapa`;
-    END IF;
+    CALL sp_partido_mismo_equipos_misma_etapa (NEW.equipoSeleccion1, NEW.equipoSeleccion2, NEW.juegaEnEtapa);
+    
+    CALL sp_partido_cantidad_por_fase (NEW.juegaEnEtapa);
 
-    -- Si PARTIDO.juegaEnEtapa = ‘FASE_GRUPOS’’ ⇒ #PARTIDO <= 6
-    -- Si PARTIDO.juegaEnEtapa = ‘5TO_PUESTO’ ⇒ #PARTIDO <= 1
-    -- Si PARTIDO.juegaEnEtapa = ‘3ER_PUESTO’ ⇒ #PARTIDO <= 1
-    -- Si PARTIDO.juegaEnEtapa = ‘SEMIFINAL’ ⇒ #PARTIDO <= 2
-    -- Si PARTIDO.juegaEnEtapa = ‘FINAL’ ⇒ #PARTIDO <= 1
-    IF (NEW.juegaEnEtapa = etapaFaseGrupo) THEN
-        SET countPartidosMax = 6;
-    ELSE
-        IF (NEW.juegaEnEtapa = etapaFaseSemi) THEN
-            SET countPartidosMax = 2;
-        ELSE
-            SET countPartidosMax = 1;
-        END IF;
-    END IF;
-   
-    SET countPartidosExistentes = (SELECT COUNT(1) FROM partido WHERE juegaEnEtapa = NEW.juegaEnEtapa);
-    IF (@countPartidosExistentes = @countPartidosMax) THEN
-        CALL `La cantidad de partidos para la fase supera el maximo esperado`;
-    END IF;
+    CALL sp_partido_fase_anterior_completa (NEW.juegaEnEtapa); --  (SI ESTO NO VA ORDENADO CON EL DE ABAJO, SE ROMPE TODO)
 
-   
-    -- Al insertar un partido, esten todos los anteriores de fase (SI ESTO NO VA ORDENADO CON EL DE ABAJO, SE ROMPE TODO)
-    IF NOT EXISTS
-    (
-        SELECT COUNT(1)
-        FROM partido
-        WHERE 
-            juegaEnEtapa = NEW.juegaEnEtapa AND
-            juegaEnEtapa <> etapaFaseGrupo
-    ) 
-    THEN 
-        -- Voy a insertar el primer partido de esa fase
-        -- Valido que existan todos los partidos anteriores
-        IF (NEW.juegaEnEtapa = etapa5to) THEN
-            SET faseAnterior = etapaFaseGrupo;
-            SET countPartidosMax = 6;
-        ELSE 
-            IF (NEW.juegaEnEtapa = etapaFaseSemi) THEN
-                SET faseAnterior = etapa5to;
-                SET countPartidosMax = 1;
-            ELSE 
-                IF(NEW.juegaEnEtapa = etapa3ro) THEN
-                    SET faseAnterior = etapaFaseSemi;
-                    SET countPartidosMax = 2;
-                ELSE 
-                    IF(NEW.juegaEnEtapa = etapaFinal) THEN
-                        SET faseAnterior = etapa3ro;
-                        SET countPartidosMax = 1;
-                    END IF;
-                END IF;
-            END IF;
-        END IF;
-
-        IF EXISTS 
-        (
-            SELECT COUNT(1), juegaEnEtapa
-            FROM partido
-            WHERE 
-                juegaEnEtapa = faseAnterior
-            HAVING
-                COUNT(1) = @countPartidosMax
-        )
-        THEN
-            CALL `La fase anterior no esta completa`;
-        END IF;
-      END IF;
-           
     -- Las fechas de los partidos tienen que estar ordenado por la etapa (FASE_GRUPO < 5TO_PUESTO < SEMIFINAL < 3ER_PUESTO < FINAL)
     -- TODO REFACTORIZAR... SE UTILIZA ARRIBA TBM!!!!
     -- Consige la fase anterior
@@ -184,7 +109,7 @@ FOR EACH ROW BEGIN
         CALL `Partido en mismo horario`;
     END IF;
     
-    CALL logOk('insert', CONCAT('ok insert partido con id: ', (NEW.idPartido AS CHAR));
+    CALL logOk('insert', CONCAT('ok insert partido con id: ', 'dsp concatenar el id partido'));-- (NEW.idPartido AS CHAR)));
     
 
 END$$

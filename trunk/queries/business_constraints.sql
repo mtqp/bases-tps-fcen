@@ -1,5 +1,7 @@
 -- ACA VAN TODAS LAS CONSTRAINTS DE LOGICA DE NEGOCIO QUE PIDEN QUE NO SEAN PKS Y FKS -- 
 
+USE db_tp1;
+
 -- Se abren desde archivos separados para que sea mas prolijo -- 
 
 source constraints/arbitroConstraints.sql
