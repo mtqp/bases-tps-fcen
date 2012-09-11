@@ -242,7 +242,8 @@ INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('BermudezCHI',4);
 
 -- ARBITRA --
 
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','1'); -- Argentino
+-- Invalid
+-- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','1'); -- Argentino
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('2','1'); -- Boliviano
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('3','2'); -- Brasilero
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','2'); -- Chileno
