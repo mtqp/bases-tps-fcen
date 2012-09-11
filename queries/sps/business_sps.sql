@@ -76,33 +76,33 @@ ON idJugador = idIntegrante
 ORDER BY cantidadPartidos
 END;
 
---CREATE PROCEDURE sp_estadisticas_por_jugador
---BEGIN
+-- CREATE PROCEDURE sp_estadisticas_por_jugador
+-- BEGIN
 -- proyecto los campos pedidos
---SELECT apellido Apellido, nombreIntegrante Nombre, cantidadPartidos Partidos, 
---promedioPuntos [Promedio Puntos], promedioAsistencias [Promedio Asistencias], promedioRebotes [Promedio Rebotes]
---FROM 
---(
+-- SELECT apellido Apellido, nombreIntegrante Nombre, cantidadPartidos Partidos, 
+-- promedioPuntos [Promedio Puntos], promedioAsistencias [Promedio Asistencias], promedioRebotes [Promedio Rebotes]
+-- FROM 
+-- (
 	-- agrupo todos las estadisticas por jugador (no uso el nombre porque pueden haber dos jugadores con el mismo nombre)
 --	SELECT participaJugador participaJugador, SUM(1) cantidadPartidos, AVG(puntos) promedioPuntos, 
 --	AVG(asistencias) promedioAsistencias, AVG(rebotes) promedioRebotes
 --	FROM participacion
 --	GROUP BY (participaJugador)
---) estadisticas
---JOIN jugador
---ON participaJugador = idJugador
---JOIN integrante
---ON idJugador = idIntegrante
---ORDER BY cantidadPartidos
---END;
+-- ) estadisticas
+-- JOIN jugador
+-- ON participaJugador = idJugador
+-- JOIN integrante
+-- ON idJugador = idIntegrante
+-- ORDER BY cantidadPartidos
+-- END;
 
 
---declare  @idPartido int
---declare  @equipo1   int
---declare  @equipo2   int
+-- declare  @idPartido int
+-- declare  @equipo1   int
+-- declare  @equipo2   int
  
---select @equipo1 = equipoSeleccion1, @equipo2 = equipoSeleccion2 from partido where idPartido = @idPartido
---set @idPartido = 4
+-- select @equipo1 = equipoSeleccion1, @equipo2 = equipoSeleccion2 from partido where idPartido = @idPartido
+-- set @idPartido = 4
 
 --	select equipoSeleccion1 equipo, idArbitro arbitro, count(1) partidos  from arbitro
 --	join arbitra 
@@ -118,7 +118,7 @@ END;
 	-- que haya ganado mas de 1 partido
 --    having count(1) >= 2
 	
---and equipoSeleccion2 in (@equipo1, @equipo2)
+-- and equipoSeleccion2 in (@equipo1, @equipo2)
 
 
 
