@@ -77,3 +77,26 @@ ORDER BY cantidadPartidos
 END;
 
 
+declare  @idPartido int
+declare  @equipo1   int
+declare  @equipo2   int
+ 
+select @equipo1 = equipoSeleccion1, @equipo2 = equipoSeleccion2 from partido where idPartido = @idPartido
+set @idPartido = 4
+
+	select equipoSeleccion1 equipo, idArbitro arbitro, count(1) partidos  from arbitro
+	join arbitra 
+	on idArbitroArb = idArbitro
+	join partido
+	on idPartido = idPartidoArb
+	join tanteador
+	on tanteador.idPartido = partido.idPartido
+	and nroCuarto = 4 -- el ultimo 4 tiene el resultado del partido
+	-- es el equipo que quiero y gano
+	where equipoSeleccion1 = @equipo1 and scoreEquip1 > scoreEquip2
+	group by idArbitro, equipoSeleccion1
+	-- que haya ganado mas de 1 partido
+	having count(1) >= 2
+	
+--and equipoSeleccion2 in (@equipo1, @equipo2)
+
