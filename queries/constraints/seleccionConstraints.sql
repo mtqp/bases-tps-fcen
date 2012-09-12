@@ -1,45 +1,63 @@
 -- ACA VAN TODAS LAS CONSTRAINTS DE SELECCION
--- select "Acá van las constraints de seleccion" from DUAL;
-
--- seleccion --
--- SELECCION.grupo solo puede ser ‘A’ o ‘B’.
--- ALTER TABLE seleccion ADD CONSTRAINT chk_grupo CHECK (grupo='A' OR grupo='B'); -- Constraint puto no anda. 
+select "Acá van las constraints de seleccion" from DUAL;
 
 DELIMITER $$
 
-DROP TRIGGER IF EXISTS check_grupo_bi $$
+DROP TRIGGER IF EXISTS check_seleccion_bi $$
 
-CREATE TRIGGER check_grupo_bi
+CREATE TRIGGER check_seleccion_bi
 BEFORE INSERT ON seleccion
 FOR EACH ROW BEGIN
-  DECLARE maxPosicion INT;
-  
-  IF (NEW.grupo <> 'A' AND NEW.grupo <> 'B') THEN
-	  CALL `Grupo debe ser A o B`;
-  END IF;
-  
-  IF (NEW.cantIntegrantes <> 0) THEN
-  	  CALL `La cantidad de integrantes difiere de los integrantes actuales`;
-  END IF;
-  
-  INSERT INTO posicion values ();
-  SET maxPosicion = (SELECT max(idPosicion) FROM posicion); 
-  SET NEW.ubicaPosicion = @maxPosicion;
-  
+-- SELECCION.grupo == “A” no puede repetirse más de 4 veces.
+-- SELECCION.grupo == “B” no puede repetirse más de 4 veces.
+-- SELECCION.grupo solo puede ser ‘A’ o ‘B’. Revisión (+1) Martin
+-- SELECCION.fechaArribo <= PARTIDO.fecha
+-- #SELECCION.cantIntegrantes debe ser igual a la cantidad de integrantes relacionados. Revisión (+1) Martin
+
+    DECLARE maxPosicion INT;
+
+    -- SELECCION.grupo solo puede ser ‘A’ o ‘B’. Revisión (+1) Martin
+    IF (NEW.grupo <> 'A' AND NEW.grupo <> 'B') THEN
+      CALL `Grupo debe ser A o B`;
+    END IF;
+
+    -- SELECCION.grupo == “&” no puede repetirse más de 4 veces.
+    CALL sp_seleccion_max_equipos_por_grupo (NEW.grupo);
+
+    -- #SELECCION.cantIntegrantes debe ser igual a la cantidad de integrantes relacionados. Revisión (+1) Martin
+    IF (NEW.cantIntegrantes <> 0) THEN
+      CALL `La cantidad de integrantes difiere de los integrantes actuales`;
+    END IF;
+
+    
+    -- LOG POSICION --
+    INSERT INTO posicion values ();
+    SET maxPosicion = (SELECT max(idPosicion) FROM posicion); 
+    SET NEW.ubicaPosicion = @maxPosicion;
+
+    CALL logOk('insert seleccion', 'el insert de seleccion fue exitoso');
+
 END$$
 
-DROP TRIGGER IF EXISTS check_grupo_bu $$
+DROP TRIGGER IF EXISTS check_seleccion_bu $$
 
-CREATE TRIGGER check_grupo_bu
+CREATE TRIGGER check_seleccion_bu
 BEFORE UPDATE ON seleccion
 FOR EACH ROW BEGIN
-	
-   DECLARE cantIntegrantes INT;
-   SET cantIntegrantes = (SELECT count(*) FROM integrante I WHERE I.perteneceSeleccion = OLD.idSeleccion);
-   -- INSERT INTO LOG (nombre, msg) VALUES ("check_grupo_bu", @cantIntegrantes);
-   IF (NEW.cantIntegrantes <> cantIntegrantes) THEN
-  	  CALL `La cantidad de integrantes difiere de los integrantes actuales`;
-   END IF;
+
+    -- #SELECCION.cantIntegrantes debe ser igual a la cantidad de integrantes relacionados. Revisión (+1) Martin	
+    DECLARE cantIntegrantes INT;
+    SET cantIntegrantes = (SELECT count(*) FROM integrante I WHERE I.perteneceSeleccion = OLD.idSeleccion);
+    IF (NEW.cantIntegrantes <> cantIntegrantes) THEN
+      CALL `La cantidad de integrantes difiere de los integrantes actuales`;
+    END IF;
+  
+    -- SELECCION.grupo == “&” no puede repetirse más de 4 veces.
+    IF(NEW.grupo <> OLD.grupo) THEN
+        CALL sp_seleccion_max_equipos_por_grupo (NEW.grupo);
+    END IF;
+  
+    CALL logOk('update seleccion', 'el update de seleccion fue exitoso');
   
 END$$
 
