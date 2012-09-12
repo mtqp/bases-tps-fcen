@@ -426,7 +426,7 @@ INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apel
 -- ETAPAS --
 
 -- 1 FASE_GRUPOS
--- 2 FASE_GRUPOS
+-- 2 5TO_PUESTO
 -- 3 SEMIFINAL
 -- 4 3ER_PUESTO
 -- 5 FINAL
@@ -447,6 +447,20 @@ INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEs
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 6, 8, 2, '2012-08-05',2);
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 7, 8, 2, '2012-08-06',2);
 
+-- 5TO_PUESTO
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(2, 4, 5, 2, '2012-08-07',2);
+
+-- SEMIFINAL
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(3, 3, 8, 1, '2012-08-08',2);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(3, 1, 6, 2, '2012-08-08',3);
+
+-- 3ER_PUESTO
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(4, 8, 6, 2, '2012-08-09',2);
+
+-- FINAL
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(5, 3, 1, 2, '2012-08-10',1);
+
+
 
 -- EQUIPOS
 INSERT INTO equipo (nombreEquipo) values ('Atenas');
@@ -457,122 +471,150 @@ INSERT INTO equipo (nombreEquipo) values ('Lakers');
 INSERT INTO equipo (nombreEquipo) values ('Boston');
 
 -- JUGADORES
--- LOS ARGENTINOS
-INSERT INTO jugador (idJugador, estaEnEquipo) values (1, 1);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (2, 1);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (3, 2);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (4, 2);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (5, 3);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (6, 3);
+-- ARGENTINOS
+INSERT INTO jugador (idJugador, estaEnEquipo) values (101, 1);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (102, 1);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (103, 2);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (104, 2);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (105, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (106, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (107, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (108, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (109, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (110, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (111, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (112, 3);
 
--- LOS VENEZUELA
-INSERT INTO jugador (idJugador, estaEnEquipo) values (7, 4);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (8, 4);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (9, 5);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (10, 5);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (11, 6);
-INSERT INTO jugador (idJugador, estaEnEquipo) values (12, 6);
+-- BOLIVIA
+INSERT INTO jugador (idJugador, estaEnEquipo) values (201, 1);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (202, 1);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (203, 2);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (204, 2);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (205, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (206, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (207, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (208, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (209, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (210, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (211, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (212, 3);
+
+-- BRASIL
+INSERT INTO jugador (idJugador, estaEnEquipo) values (301, 1);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (302, 1);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (303, 2);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (304, 2);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (305, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (306, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (307, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (308, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (309, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (310, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (311, 3);
+INSERT INTO jugador (idJugador, estaEnEquipo) values (312, 3);
+
+
 
 -- PARTICIPACIONES
--- PRIMER PARTIDO idpartido = 1 de 15 en adelante
+-- PRIMER PARTIDO (ARGENTINA - BOLIVIA)
 -- GINOBILI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 1, 4, 1, 'ALERO', 24, 1);
+(1, 101, 4, 1, 'ALERO', 24, 1);
 
 -- SCOLA
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 2, 8, 1, 'PIVOT', 22, 1);
+(1, 102, 8, 1, 'PIVOT', 22, 1);
 
 -- NOCIONI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 3, 3, 1, 'BASE', 17, 1);
+(1, 103, 3, 1, 'BASE', 17, 1);
 
 -- PRIGIONI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 4, 3, 1, 'ALERO', 13, 1);
+(1, 104, 3, 1, 'ALERO', 13, 1);
 
 -- DELFINO
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 5, 6, 1, 'PIVOT', 15, 1);
+(1, 105, 6, 1, 'PIVOT', 15, 1);
 
 -- JASEN
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 6, 3, 1, 'BASE', 4, 0);
+(1, 106, 3, 1, 'BASE', 4, 0);
+
+-- BOLIVIA idpartido = 1 de 21 en adelante
+-- Tyson
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(1, 201, 3, 1, 'ALERO', 21, 1);
+
+-- LeBron
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(1, 202, 3, 1, 'PIVOT', 1, 1);
+
+-- Durant
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(1, 203, 3, 1, 'BASE', 3, 1);
+
+-- Paul
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(1, 204, 3, 0, 'ALERO', 12, 1);
+
+-- Anthony
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(1, 205, 3, 1, 'PIVOT', 5, 1);
+
+-- Bryan
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(1, 206, 3, 0, 'BASE', 1, 0);
+
+-- SEGUNDO PARTIDO (ARGENTINA - BRASIL)
+-- GINOBILI
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(2, 101, 3, 1, 'ALERO', 22, 1);
+
+-- SCOLA
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(2, 102, 3, 1, 'PIVOT', 26, 1);
+
+-- NOCIONI
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(2, 103, 3, 1, 'BASE', 2, 1);
+
+-- PRIGIONI
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(2, 104, 3, 1, 'ALERO', 1, 1);
+
+-- DELFINO
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(2, 105, 5, 1, 'PIVOT', 6, 1);
+
+-- JASEN
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(2, 106, 3, 1, 'BASE', 182, 0);
 
 -- EEUU idpartido = 1 de 21 en adelante
 -- Tyson
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 7, 3, 1, 'ALERO', 21, 1);
+(2, 301, 3, 1, 'ALERO', 4, 1);
 
 -- LeBron
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 8, 3, 1, 'PIVOT', 1, 1);
+(2, 302, 3, 1, 'PIVOT', 2, 1);
 
 -- Durant
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 9, 3, 1, 'BASE', 3, 1);
+(2, 303, 3, 1, 'BASE', 18, 1);
 
 -- Paul
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 10, 3, 0, 'ALERO', 12, 1);
+(2, 304, 3, 1, 'ALERO', 4, 1);
 
 -- Anthony
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 11, 3, 1, 'PIVOT', 5, 1);
+(2, 305, 3, 1, 'PIVOT', 5, 1);
 
 -- Bryan
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(1, 12, 3, 0, 'BASE', 1, 0);
-
--- SEGUNDO PARTIDO idpartido = 1 de 15 en adelante
--- GINOBILI
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 1, 3, 1, 'ALERO', 22, 1);
-
--- SCOLA
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 2, 3, 1, 'PIVOT', 26, 1);
-
--- NOCIONI
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 3, 3, 1, 'BASE', 2, 1);
-
--- PRIGIONI
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 4, 3, 1, 'ALERO', 1, 1);
-
--- DELFINO
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 5, 5, 1, 'PIVOT', 6, 1);
-
--- JASEN
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 6, 3, 1, 'BASE', 182, 0);
-
--- EEUU idpartido = 1 de 21 en adelante
--- Tyson
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 7, 3, 1, 'ALERO', 4, 1);
-
--- LeBron
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 8, 3, 1, 'PIVOT', 2, 1);
-
--- Durant
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 9, 3, 1, 'BASE', 18, 1);
-
--- Paul
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 10, 3, 1, 'ALERO', 4, 1);
-
--- Anthony
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 11, 3, 1, 'PIVOT', 5, 1);
-
--- Bryan
-INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 12, 3, 1, 'BASE', 0, 0);
+(2, 305, 3, 1, 'BASE', 0, 0);
 
 -- haciendo update esTitular = 1 se puede testear el reporte
 

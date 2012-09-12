@@ -3,9 +3,9 @@
 
 DELIMITER $$
 
-DROP TRIGGER IF EXISTS check_integrante $$
+DROP TRIGGER IF EXISTS check_integrante_bi $$
 
-CREATE TRIGGER check_integrante
+CREATE TRIGGER check_integrante_bi
 BEFORE INSERT ON integrante
 FOR EACH ROW BEGIN
     -- INTEGRANTE.tipoIntegrante IN { ‘Jugador’, ‘CuerpoTecnico’}
@@ -17,4 +17,20 @@ FOR EACH ROW BEGIN
 	CALL `AÑO(SYSDATE) - AÑO(INTEGRANTE.fechaNacimiento) debe ser >= 18`;
     END IF;
 END$$
+
+DROP TRIGGER IF EXISTS check_integrante_ai $$
+
+CREATE TRIGGER check_integrante_ai
+AFTER INSERT ON integrante
+FOR EACH ROW BEGIN
+    -- Por si los jugadores se insertan automaticamente 
+	-- IF (NEW.tipoIntegrante = 'JUGADOR') THEN
+    --    INSERT INTO jugador VALUES (NEW.idIntegrante, null);
+    -- END IF;
+    
+    -- IF (NEW.tipoIntegrante = 'CUERPOTECNICO') THEN
+    --    INSERT INTO cuerpotecnico VALUES (NEW.idIntegrante, null);
+    -- END IF;
+END$$
+
 DELIMITER ;
