@@ -55,7 +55,7 @@ FOR EACH ROW BEGIN
  
       CALL sp_partido_mismo_horario (NEW.horario, NEW.fecha);
     
-    CALL logOk('insert', CONCAT('ok insert partido con id: ', 'dsp concatenar el id partido'));-- (NEW.idPartido AS CHAR)));
+    CALL logOk('update', CONCAT('ok update partido con id: ', 'dsp concatenar el id partido'));-- (NEW.idPartido AS CHAR)));
 
 END$$
 

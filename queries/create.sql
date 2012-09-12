@@ -266,6 +266,6 @@ source business_constraints.sql;
 source sps.sql;
 
 -- Carga de datos
--- source data.sql;
+source data.sql;
 
 
