@@ -5,11 +5,13 @@ DROP PROCEDURE IF EXISTS sp_partido_cantidad_por_fase &&
 
 CREATE PROCEDURE sp_partido_cantidad_por_fase (etapa INT)
 BEGIN
+    DECLARE etapaFaseSemi INT;
     DECLARE etapaFaseGrupo INT;
     DECLARE countPartidosMax INT;
     DECLARE countPartidosExistentes INT;
 
     SET etapaFaseGrupo  = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FASE_GRUPOS');
+    SET etapaFaseSemi   = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'SEMIFINAL');
 
     -- Si PARTIDO.juegaEnEtapa = ‘FASE_GRUPOS’’ ⇒ #PARTIDO <= 6
     -- Si PARTIDO.juegaEnEtapa = ‘5TO_PUESTO’ ⇒ #PARTIDO <= 1
