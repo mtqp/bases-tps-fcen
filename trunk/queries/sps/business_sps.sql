@@ -58,7 +58,7 @@ JOIN pais
 ON idJugadoresPais = idPais;
 END&&
 
-delimiter &&
+-- delimiter &&
 
 DROP PROCEDURE IF EXISTS sp_estadisticas_por_jugador &&
 
@@ -82,7 +82,7 @@ ON idJugador = idIntegrante
 ORDER BY cantidadPartidos;
 END&&
 
--- delimiter ;
+delimiter ;
 
 -- declare  @idPartido int
 -- declare  @equipo1   int
