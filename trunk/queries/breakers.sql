@@ -54,4 +54,7 @@ INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apel
 -- FAIL por Arbitro con misma nacionalidad que algun equipo que dirige. 
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','1'); -- Argentino
 
+-- PARTICIPACION.posicion puede ser o bien BASE o ESCOLTA o ALERO o ALA-PIVOT o PIVOT o nulo.    
+UPDATE participacion SET posicion='lalalala' WHERE idParticipacion = 1;
+
 
