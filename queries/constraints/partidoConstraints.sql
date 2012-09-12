@@ -31,6 +31,21 @@ FOR EACH ROW BEGIN
 
 END$$
 
+DROP TRIGGER IF EXISTS check_partido_ai $$
+
+CREATE TRIGGER check_partido_ai
+AFTER INSERT ON partido
+FOR EACH ROW BEGIN
+
+	INSERT INTO tanteador VALUES (1,NEW.idPartido, 0,0);
+    INSERT INTO tanteador VALUES (2,NEW.idPartido, 0,0);
+    INSERT INTO tanteador VALUES (3,NEW.idPartido, 0,0);
+    INSERT INTO tanteador VALUES (4,NEW.idPartido, 0,0);
+    
+    CALL logOk('insert', CONCAT('ok insert partido con id: ', 'dsp concatenar el id partido'));-- (NEW.idPartido AS CHAR)));
+
+END$$
+
 DROP TRIGGER IF EXISTS check_partido_bu $$
 
 CREATE TRIGGER check_partido_bu
