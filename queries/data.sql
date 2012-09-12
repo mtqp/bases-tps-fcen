@@ -49,14 +49,14 @@ INSERT INTO tiposancion (nombreSancion) values ('PUÑETAZO');
 -- Estos datos los carga un trigger cuando se inserta en la seleccion
 
 -- SELECCION --
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','A', 1, 1, 1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-21','A', 2, 2, 2);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-22','A', 3, 3, 3);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-23','A', 4, 4 ,1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-24','B', 1, 5, 2);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','B', 1, 6, 1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','B', 1, 7, 1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','B', 1, 8, 1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-20','A', 1, 1, 1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-21','A', 2, 2, 2);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-22','A', 3, 3, 3);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-23','A', 4, 4 ,1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-24','B', 1, 5, 2);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-20','B', 1, 6, 1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-20','B', 1, 7, 1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2000-08-20','B', 1, 8, 1);
 
 -- INTEGRANTE
 -- ARGENTINA ( 12 jugadores, 1 cuerpo tecnico) 
@@ -410,10 +410,43 @@ INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apel
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
 (8, 816, 'LaChica', 'Masajista', '1972-08-24', 'CUERPOTECNICO');
 
--- PARTIDOS -- 
+-- PARTIDOS --
+-- Grupo A 
+-- 1 Argentina
+-- 2 Bolivia
+-- 3 Brasil
+-- 4 Chile
 
-INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 1, 7, 1, '2012-08-22',1);
-INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values (2, 8, 1, 2, '2012-08-23', 5);
+-- Grupo B
+-- 5 Colombia
+-- 6 Paraguay
+-- 7 Peru
+-- 8 Uruguay
+
+-- ETAPAS --
+
+-- 1 FASE_GRUPOS
+-- 2 FASE_GRUPOS
+-- 3 SEMIFINAL
+-- 4 3ER_PUESTO
+-- 5 FINAL
+
+-- FASE_GRUPOS (GRUPO A)
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 1, 2, 1, '2012-08-01',1);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 1, 3, 1, '2012-08-02',1);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 1, 4, 1, '2012-08-03',1);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 2, 3, 1, '2012-08-04',1);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 2, 4, 1, '2012-08-05',1);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 3, 4, 1, '2012-08-06',1);
+
+-- FASE_GRUPOS (GRUPO B)
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 5, 6, 2, '2012-08-01',2);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 5, 7, 2, '2012-08-02',2);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 5, 8, 2, '2012-08-03',2);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 6, 7, 2, '2012-08-04',2);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 6, 8, 2, '2012-08-05',2);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 7, 8, 2, '2012-08-06',2);
+
 
 -- EQUIPOS
 INSERT INTO equipo (nombreEquipo) values ('Atenas');
@@ -544,21 +577,27 @@ INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, 
 -- haciendo update esTitular = 1 se puede testear el reporte
 
 -- ARBITRO --
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('EnzoARG',1);
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('EvoBOL',2);
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('MouquinhoBRA',3);
-INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('BermudezCHI',4);
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('EnzoARG'     ,1); -- ARGENTINA
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('EvoBOL'      ,2); -- BOLIVIA
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('MouquinhoBRA',3); -- BRASIL
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('BermudezCHI' ,4); -- CHILE
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('BustilloCOL' ,5); -- COLOMBIA
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('CormenPAR'   ,6); -- PARAGUAY
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('GomezPER'    ,7); -- PERU
+INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('AtanezURU'   ,8); -- URUGUAY
 
 -- ARBITRA --
 
 -- Invalid
--- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','1'); -- Argentino
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('2','1'); -- Boliviano
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('3','2'); -- Brasilero
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','2'); -- Chileno
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('3','1'); -- Brasilero
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('2','2'); -- Boliviano
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('2','3'); -- Boliviano
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','4'); -- Chileno
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','5'); -- Argentino
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','6'); -- Argentino
 
 -- SANCION --
-INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,2,1);
+INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,3,1);
 
 -- TANTEADOR --
 -- Estos datos los carga un trigger cuando se inserta en el partido
