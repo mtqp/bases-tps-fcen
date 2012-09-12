@@ -60,8 +60,8 @@ INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, re
 
 -- PARTIDOS -- 
 
-INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 1, 8, 1, '2012-08-22',1);
-INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values (2, 8, 1, 2, '2012-08-23', 1);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 1, 7, 1, '2012-08-22',1);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values (2, 8, 1, 2, '2012-08-23', 5);
 					
 -- INTEGRANTE
 -- SELECCION ARGENTINA ( 5 titulares 1 suplente)
