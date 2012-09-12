@@ -2,6 +2,7 @@
 
 source ./sps/business_sps.sql;
 source ./sps/sp_log_ok.sql;
+source ./sps/participacion/sp_participacion_posiciones_validas.sql;
 source ./sps/sancion/sp_sancion_arbitro_mismo_partido.sql;
 source ./sps/seleccion/sp_seleccion_max_equipos_por_grupo.sql;
 source ./sps/seleccion/sp_seleccion_fecha_arribo_invalida.sql;
