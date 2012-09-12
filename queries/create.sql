@@ -20,7 +20,7 @@ CREATE TABLE seleccion
     , hospedaHospedaje  INT NOT NULL
     , representaPais    INT NOT NULL
     , concentraEstadio  INT NOT NULL
-    , ubicaPosicion     INT DEFAULT 0 -- This sholud be never null (it cant be not null because if not the user should insert this value)
+    , ubicaPosicion     INT DEFAULT 0 -- This should be never null (it cant be not null because if not the user should insert this value)
     , cantIntegrantes   INT NOT NULL DEFAULT 0
     , fechaArribo       DATE NOT NULL
     , grupo             CHAR(1) NOT NULL
