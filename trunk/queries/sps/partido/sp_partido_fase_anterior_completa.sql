@@ -8,6 +8,7 @@ BEGIN
     DECLARE etapaFaseGrupo INT;
     DECLARE etapa5to INT;
     DECLARE etapaFaseSemi INT;
+    DECLARE etapa3ero INT;
     DECLARE etapaFinal INT;
     DECLARE countPartidosMax INT;
     DECLARE faseAnterior INT;
@@ -15,6 +16,7 @@ BEGIN
     SET etapaFaseGrupo  = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FASE_GRUPOS');
     SET etapa5to        = (SELECT idEtapa FROM etapa WHERE nombreEtapa = '5TO_PUESTO');
     SET etapaFaseSemi   = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'SEMIFINAL');
+    SET etapa3ero       = (SELECT idEtapa FROM etapa WHERE nombreEtapa = '3ER_PUESTO');
     SET etapaFinal      = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FINAL');
 
 
@@ -38,12 +40,12 @@ BEGIN
                 SET faseAnterior = etapa5to;
                 SET countPartidosMax = 1;
             ELSE 
-                IF(etapa = etapa3ro) THEN
+                IF(etapa = etapa3ero) THEN
                     SET faseAnterior = etapaFaseSemi;
                     SET countPartidosMax = 2;
                 ELSE 
                     IF(etapa = etapaFinal) THEN
-                        SET faseAnterior = etapa3ro;
+                        SET faseAnterior = etapa3ero;
                         SET countPartidosMax = 1;
                     END IF;
                 END IF;

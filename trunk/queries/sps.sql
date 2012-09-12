@@ -9,3 +9,4 @@ source ./sps/partido/sp_partido_mismos_equipos_misma_etapa.sql;
 source ./sps/partido/sp_partido_ordenados_por_fecha.sql;
 source ./sps/partido/sp_partido_cantidad_por_fase.sql;
 source ./sps/partido/sp_partido_distintas_selecciones.sql;
+source ./sps/partido/sp_partido_mismo_grupo_fase_grupo.sql;

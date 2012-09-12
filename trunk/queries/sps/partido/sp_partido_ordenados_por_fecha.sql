@@ -8,6 +8,7 @@ BEGIN
     DECLARE etapaFaseGrupo INT;
     DECLARE etapa5to INT;
     DECLARE etapaFaseSemi INT;
+    DECLARE etapa3ero INT;
     DECLARE etapaFinal INT;
     DECLARE faseAnterior INT;
     DECLARE fechaFaseMax DATE;
@@ -16,6 +17,7 @@ BEGIN
     SET etapaFaseGrupo  = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FASE_GRUPOS');
     SET etapa5to        = (SELECT idEtapa FROM etapa WHERE nombreEtapa = '5TO_PUESTO');
     SET etapaFaseSemi   = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'SEMIFINAL');
+    SET etapa3ero       = (SELECT idEtapa FROM etapa WHERE nombreEtapa = '3ER_PUESTO');
     SET etapaFinal      = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FINAL');
 
     -- Las fechas de los partidos tienen que estar ordenado por la etapa (FASE_GRUPO < 5TO_PUESTO < SEMIFINAL < 3ER_PUESTO < FINAL)
@@ -25,11 +27,11 @@ BEGIN
         IF (etapaSP = etapaFaseSemi) THEN
             SET faseAnterior = etapa5to;
         ELSE 
-            IF(etapaSP = etapa3ro) THEN
+            IF(etapaSP = etapa3ero) THEN
                 SET faseAnterior = etapaFaseSemi;
             ELSE 
                 IF(etapaSP = etapaFinal) THEN
-                    SET faseAnterior = etapa3ro;
+                    SET faseAnterior = etapa3ero;
                 END IF;
             END IF;
         END IF;
