@@ -23,16 +23,17 @@ FOR EACH ROW BEGIN
     -- Si TANTEADOR.nroCuarto = 4 => TANTEADOR.scoreEquip1 <> TANTEADOR.scoreEquip2 (no hay empates)
     IF (NEW.nroCuarto = 4 AND NEW.scoreEquip1 = NEW.scoreEquip2) THEN
     CALL `un partido no puede terminar con el tanteador empatado`;
+    END IF;
 
     -- TANTEADOR.nroCuarto no puede aparecer más de 4 veces por TANTEADOR.idPartido (el tanteador se genera con los 4 cuartos cuando se genera un partido)
     SET totalCuartos = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido);
     IF (totalCuartos > 4)  THEN
-    CALL `el total de cuartos no puede ser superior a 4`;
+        CALL `el total de cuartos no puede ser superior a 4`;
     END IF;
 
     SET cuartoRepetido = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido AND nroCuarto = NEW.nroCuarto);
     IF (cuartoRepetido = 1)  THEN
-    CALL `el cuarto correspondiente ya fue ingresado`;
+        CALL `el cuarto correspondiente ya fue ingresado`;
     END IF; 
 
     CALL logOk('insert tanteador','insert tanteador exitoso');
@@ -56,18 +57,19 @@ FOR EACH ROW BEGIN
     CALL sp_valor_positivo (NEW.scoreEquip2, 'tanteador', 'scoreEquip2');
 
     -- Si TANTEADOR.nroCuarto = 4 => TANTEADOR.scoreEquip1 <> TANTEADOR.scoreEquip2 (no hay empates)
-    IF (NEW.nroCuarto = 4 AND NEW.scoreEquip1 == NEW.scoreEquip2) THEN
-    CALL `un partido no puede terminar con el tanteador empatado`;
+    IF (NEW.nroCuarto = 4 AND NEW.scoreEquip1 = NEW.scoreEquip2) THEN
+        CALL `un partido no puede terminar con el tanteador empatado`;
+    END IF;
 
     -- TANTEADOR.nroCuarto no puede aparecer más de 4 veces por TANTEADOR.idPartido (el tanteador se genera con los 4 cuartos cuando se genera un partido)
     SET totalCuartos = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido);
     IF (totalCuartos > 4)  THEN
-    CALL `el total de cuartos no puede ser superior a 4`;
+        CALL `el total de cuartos no puede ser superior a 4`;
     END IF;
 
     SET cuartoRepetido = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido AND nroCuarto = NEW.nroCuarto);
     IF (cuartoRepetido = 1)  THEN
-    CALL `el cuarto correspondiente ya fue ingresado`;
+        CALL `el cuarto correspondiente ya fue ingresado`;
     END IF; 
 
     CALL logOk('update tanteador','update tanteador exitoso');  
