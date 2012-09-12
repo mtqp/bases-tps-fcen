@@ -38,6 +38,9 @@ UPDATE posicion SET tantosEnContra = -1;
 -- partidosJugados = partidosGanados + partidosPerdidos
 UPDATE posicion SET partidosJugados = 100;
 
+-- sancion emitida por un arbitro que no conduce el partido
+INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,3,1);
+
 -- INTEGRANTE --
 -- FAIL por tipoIntegrante
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
