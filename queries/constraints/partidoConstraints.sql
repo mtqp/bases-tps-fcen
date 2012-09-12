@@ -40,22 +40,7 @@ FOR EACH ROW BEGIN
 
     CALL sp_partido_ordenados_por_fecha (NEW.juegaEnEtapa, NEW.fecha, NEW.horario);
 
-    -- Si PARTIDO.juegaEnEtapa = ‘FASE_GRUPOS’’entonces 
-       -- PARTIDO.equipoSeleccion1.grupo = PARTIDO.equipoSeleccion2.grupo
-    
-	IF (@etapaFaseGrupo = NEW.juegaEnEtapa) THEN
-		IF EXISTS
-			(SELECT COUNT(1), grupo
-			    FROM seleccion
-			    WHERE
-			        idSeleccion IN (NEW.equipoSeleccion1, NEW.equipoSeleccion2)
-			    GROUP BY grupo
-		     HAVING COUNT(1) <> 2
-			)
-		THEN
-		    CALL `Grupos de distintos grupos jugando en Fase de grupos`;
-		END IF;
-    END IF;
+    CALL sp_partido_mismo_grupo_fase_grupo (NEW.juegaEnEtapa, NEW.equipoSeleccion1, NEW.equipoSeleccion2)
 
     -- No puede haber dos partidos en un mismo horario
     IF EXISTS
