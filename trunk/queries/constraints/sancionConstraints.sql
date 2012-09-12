@@ -1,5 +1,6 @@
--- ACA VAN TODAS LAS CONSTRAINTS DE SELECCION
-select "Acá van las constraints de sancion" from DUAL;
+-- ACA VAN TODAS LAS CONSTRAINTS DE SANCION
+
+select "creando constraints de sancion" from DUAL;
 
 DELIMITER $$
 

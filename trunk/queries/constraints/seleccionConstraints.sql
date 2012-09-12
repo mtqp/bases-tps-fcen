@@ -1,5 +1,6 @@
 -- ACA VAN TODAS LAS CONSTRAINTS DE SELECCION
--- select "Acá van las constraints de seleccion" from DUAL;
+
+select "[!!!MISSING CORRECT SP_SELECCION_FECHA_ARRIBO_INVALIDADA!!!!] creando constraints de seleccion" from DUAL;
 
 DELIMITER $$
 

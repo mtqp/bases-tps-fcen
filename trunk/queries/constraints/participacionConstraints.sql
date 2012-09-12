@@ -1,3 +1,3 @@
--- ACA VAN TODAS LAS CONSTRAINTS DE SELECCION
+-- ACA VAN TODAS LAS CONSTRAINTS DE PARTICIPACION
 
-select "Acá van las constraints de participacion" from DUAL;
+select "[!!!!MISSING!!!!!] Acá van las constraints de participacion" from DUAL;

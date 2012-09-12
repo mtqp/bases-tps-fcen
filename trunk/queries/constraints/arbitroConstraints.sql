@@ -1,2 +1,3 @@
--- ACA VAN TODAS LAS CONSTRAINTS DE SELECCION
-select "Acá van las constraints de arbitro" from DUAL;
+-- ACA VAN TODAS LAS CONSTRAINTS DE ARBITRO
+
+select "creando constraints de arbitro (NO HAY)" from DUAL;
