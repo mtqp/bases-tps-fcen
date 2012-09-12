@@ -8,29 +8,8 @@ DROP TRIGGER IF EXISTS check_sancion_bi $$
 CREATE TRIGGER check_sancion_bi
 BEFORE INSERT ON sancion
 FOR EACH ROW BEGIN
-    -- ARBITRA.idArbitroArb = SANCION.sancionadaPorArbitro  AND ARBITRA.idPartidoArb =  SANCION.aplicaParticipacion.jugoPartido
-    -- jugoPartido = idPartido
-    
-    IF NOT EXISTS 
-    (
-        SELECT * 
-        FROM 
-            arbitra
-        WHERE
-            idArbitroArb = NEW.sancionadaPorArbitro AND
-            idPartidoArb IN
-            (
-                SELECT jugoPartido
-                FROM 
-                    participacion
-                WHERE
-                    idParticipacion = NEW.aplicaParticipacion
-            )
-    )   
-    THEN 
-        CALL `El arbitro que sanciona debe estar asignado al partido`;
-    END IF;
 
+    CALL sp_sancion_arbitro_mismo_partido (NEW.sancionadaPorArbitro, NEW.aplicaParticipacion);
     CALL logOk('sancion insert', 'sancion insertada correctamente');
 
 END$$

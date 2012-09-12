@@ -11,3 +11,4 @@ source ./sps/partido/sp_partido_cantidad_por_fase.sql;
 source ./sps/partido/sp_partido_mismo_horario.sql;
 source ./sps/partido/sp_partido_distintas_selecciones.sql;
 source ./sps/partido/sp_partido_mismo_grupo_fase_grupo.sql;
+source ./sps/sancion/sp_sancion_arbitro_mismo_partido.sql;
