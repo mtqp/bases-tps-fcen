@@ -1,3 +1,4 @@
 -- ACA VAN TODAS LAS CONSTRAINTS DE JUGADOR
 
-select "[!!!!MISSING!!!!!] Acá van las constraints de JUGADOR" from DUAL;
+select "creando constraints de JUGADOR (NO TIENE)" from DUAL;
+
