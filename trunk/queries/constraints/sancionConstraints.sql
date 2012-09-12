@@ -13,7 +13,7 @@ FOR EACH ROW BEGIN
     -- ARBITRA.idArbitroArb = SANCION.sancionadaPorArbitro  AND ARBITRA.idPartidoArb =  SANCION.aplicaParticipacion.jugoPartido
     -- jugoPartido = idPartido
     SET partidoId = (SELECT jugoPartido FROM participacion WHERE idParticipacion = NEW.aplicaParticipacion);
-   IF (NOT (NEW.sancionadaPorArbitro IN (SELECT COUNT(1), idArbitroArb FROM arbitra WHERE idPartidoArb = @jugoPartido))) THEN
+   IF (NOT (NEW.sancionadaPorArbitro IN (SELECT idArbitroArb FROM arbitra WHERE idPartidoArb = @jugoPartido))) THEN
  	CALL `El arbitro que sanciona debe estar asignado al partido`;
    END IF;
 END$$
@@ -27,7 +27,7 @@ FOR EACH ROW BEGIN
     -- ARBITRA.idArbitroArb = SANCION.sancionadaPorArbitro  AND ARBITRA.idPartidoArb =  SANCION.aplicaParticipacion.jugoPartido
     -- jugoPartido = idPartido
    SET partidoId = (SELECT jugoPartido FROM participacion WHERE idParticipacion = NEW.aplicaParticipacion);
-    IF (NOT (NEW.sancionadaPorArbitro IN (SELECT COUNT(1), idArbitroArb FROM arbitra WHERE idPartidoArb = @jugoPartido))) THEN
+    IF (NOT (NEW.sancionadaPorArbitro IN (SELECT idArbitroArb FROM arbitra WHERE idPartidoArb = @jugoPartido))) THEN
 	CALL `El arbitro que sanciona debe estar asignado al partido`;
     END IF;
 END$$
