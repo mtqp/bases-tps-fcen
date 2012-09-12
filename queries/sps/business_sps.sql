@@ -82,87 +82,87 @@ ON idJugador = idIntegrante
 ORDER BY cantidadPartidos;
 END&&
 
---delimiter ;
+-- delimiter ;
 
---declare  @idPartido int
---declare  @equipo1   int
---declare  @equipo2   int
+-- declare  @idPartido int
+-- declare  @equipo1   int
+-- declare  @equipo2   int
  
---select @equipo1 = equipoSeleccion1, @equipo2 = equipoSeleccion2 from partido where idPartido = @idPartido
---set @idPartido = 4
+-- select @equipo1 = equipoSeleccion1, @equipo2 = equipoSeleccion2 from partido where idPartido = @idPartido
+-- set @idPartido = 4
 
---Dirigió a alguno de los equipos 2 o más veces, y en todos los partidos el
---equipo obtuvo el mismo resultado (ganó o perdió, no hay empate)
+-- Dirigió a alguno de los equipos 2 o más veces, y en todos los partidos el
+-- equipo obtuvo el mismo resultado (ganó o perdió, no hay empate)
 
-	--select * 
-	--from arbitro
-	--join arbitra 
-	--on idArbitroArb = idArbitro
-	--join partido
-	--on idPartido = idPartidoArb
-	--and
-	--(
+	-- select * 
+	-- from arbitro
+	-- join arbitra 
+	-- on idArbitroArb = idArbitro
+	-- join partido
+	-- on idPartido = idPartidoArb
+	-- and
+	-- (
 	--	select * from tanteador
 	--	where tanteador.idPartido = partido.idPartido
 	--	and nroCuarto = 4 -- el ultimo cuarto tiene el resultado del partido
 		
-	--)
+	-- )
 
 
-	--select equipoSeleccion1 equipo, idArbitro arbitro 
-	--from arbitro
-	--join arbitra 
-	--on idArbitroArb = idArbitro
-	--join partido
-	--on idPartido = idPartidoArb
-	--join tanteador
-	--on tanteador.idPartido = partido.idPartido
-	--and nroCuarto = 4 -- el ultimo cuarto tiene el resultado del partido
-	---- es el equipo que quiero
-	--where (equipoSeleccion1 = @equipo1 or equipoSeleccion1 = @equipo2)
-	--group by idArbitro, equipoSeleccion1
-	---- donde lo haya dirigido en mas de 1 partido count(1) equivale a la cantidad de partidos ya que hay 1 registro por partido
-	--having (count(1) >= 2 and
-	---- que perdio todos o gano todos
-	--(count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) = 0 or count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) = count(1)))
-	--union 
-	--select equipoSeleccion2 equipo, idArbitro arbitro 
-	--from arbitro
-	--join arbitra 
-	--on idArbitroArb = idArbitro
-	--join partido
-	--on idPartido = idPartidoArb
-	--join tanteador
-	--on tanteador.idPartido = partido.idPartido
-	--and nroCuarto = 4 -- el ultimo cuarto tiene el resultado del partido
-	---- es el equipo que quiero
-	--where (equipoSeleccion2 = @equipo1 or equipoSeleccion2 = @equipo2)
-	--group by idArbitro, equipoSeleccion2
-	---- donde lo haya dirigido en mas de 1 partido count(1) equivale a la cantidad de partidos ya que hay 1 registro por partido
-	--having (count(1) >= 2 and
-	---- que perdio todos o gano todos
-	--(count(case when scoreEquip2 > scoreEquip1 then 1 else 0 end) = 0 or count(case when scoreEquip2 > scoreEquip1 then 1 else 0 end) = count(1)))
+	-- select equipoSeleccion1 equipo, idArbitro arbitro 
+	-- from arbitro
+	-- join arbitra 
+	-- on idArbitroArb = idArbitro
+	-- join partido
+	-- on idPartido = idPartidoArb
+	-- join tanteador
+	-- on tanteador.idPartido = partido.idPartido
+	-- and nroCuarto = 4 -- el ultimo cuarto tiene el resultado del partido
+	-- -- es el equipo que quiero
+	-- where (equipoSeleccion1 = @equipo1 or equipoSeleccion1 = @equipo2)
+	-- group by idArbitro, equipoSeleccion1
+	-- -- donde lo haya dirigido en mas de 1 partido count(1) equivale a la cantidad de partidos ya que hay 1 registro por partido
+	-- having (count(1) >= 2 and
+	-- -- que perdio todos o gano todos
+	-- (count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) = 0 or count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) = count(1)))
+	-- union 
+	-- select equipoSeleccion2 equipo, idArbitro arbitro 
+	-- from arbitro
+	-- join arbitra 
+	-- on idArbitroArb = idArbitro
+	-- join partido
+	-- on idPartido = idPartidoArb
+	-- join tanteador
+	-- on tanteador.idPartido = partido.idPartido
+	-- and nroCuarto = 4 -- el ultimo cuarto tiene el resultado del partido
+	-- -- es el equipo que quiero
+	-- where (equipoSeleccion2 = @equipo1 or equipoSeleccion2 = @equipo2)
+	-- group by idArbitro, equipoSeleccion2
+	-- -- donde lo haya dirigido en mas de 1 partido count(1) equivale a la cantidad de partidos ya que hay 1 registro por partido
+	-- having (count(1) >= 2 and
+	-- -- que perdio todos o gano todos
+	-- (count(case when scoreEquip2 > scoreEquip1 then 1 else 0 end) = 0 or count(case when scoreEquip2 > scoreEquip1 then 1 else 0 end) = count(1)))
 	
-	---- idem para la otra relacion con seleccion
-	--select equipoSeleccion2 equipo, idArbitro arbitro  from arbitro
-	--join arbitra 
-	--on idArbitroArb = idArbitro
-	--join partido
-	--on idPartido = idPartidoArb
-	--join tanteador
-	--on tanteador.idPartido = partido.idPartido
-	--and nroCuarto = 4 -- el ultimo cuarto tiene el resultado del partido
-	---- es el equipo que quiero
-	--where (equipoSeleccion2 = @equipo1 or equipoSeleccion2 = @equipo2)
-	--group by idArbitro, equipoSeleccion2
-	---- donde lo haya dirigido en mas de 1 partido count(1) equivale a la cantidad de partidos ya que hay 1 registro por partido
-	--having (count(1) >= 2 and
-	---- que perdio todos o gano todos
-	--(count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) > 0 and count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) < count(1)))
+	-- -- idem para la otra relacion con seleccion
+	-- select equipoSeleccion2 equipo, idArbitro arbitro  from arbitro
+	-- join arbitra 
+	-- on idArbitroArb = idArbitro
+	-- join partido
+	-- on idPartido = idPartidoArb
+	-- join tanteador
+	-- on tanteador.idPartido = partido.idPartido
+	-- and nroCuarto = 4 -- el ultimo cuarto tiene el resultado del partido
+	-- -- es el equipo que quiero
+	-- where (equipoSeleccion2 = @equipo1 or equipoSeleccion2 = @equipo2)
+	-- group by idArbitro, equipoSeleccion2
+	-- -- donde lo haya dirigido en mas de 1 partido count(1) equivale a la cantidad de partidos ya que hay 1 registro por partido
+	-- having (count(1) >= 2 and
+	-- -- que perdio todos o gano todos
+	-- (count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) > 0 and count(case when scoreEquip1 > scoreEquip2 then 1 else 0 end) < count(1)))
 
-	--select * from arbitro
-	--join arbitra
-	--on idArbitroArb = idArbitro
+	-- select * from arbitro
+	-- join arbitra
+	-- on idArbitroArb = idArbitro
 
 
 
