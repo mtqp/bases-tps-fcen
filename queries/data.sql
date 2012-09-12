@@ -37,6 +37,10 @@ INSERT INTO etapa (nombreEtapa) values ('SEMIFINAL');
 INSERT INTO etapa (nombreEtapa) values ('3ER_PUESTO');
 INSERT INTO etapa (nombreEtapa) values ('FINAL');
 
+-- SANCION --
+INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,2,1);
+
+
 -- TIPO_SANCION --
 INSERT INTO tiposancion (nombreSancion) values ('BLOQUEO');
 INSERT INTO tiposancion (nombreSancion) values ('EMPUJE');
