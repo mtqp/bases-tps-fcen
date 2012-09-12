@@ -20,6 +20,7 @@ CREATE TRIGGER check_sancion_bu
 BEFORE UPDATE ON sancion
 FOR EACH ROW BEGIN
 
+    CALL sp_sancion_arbitro_mismo_partido (NEW.sancionadaPorArbitro, NEW.aplicaParticipacion);
     CALL logOk('sancion update', 'sancion updateada correctamente');
 
 END$$
