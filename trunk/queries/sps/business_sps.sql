@@ -1,12 +1,15 @@
 -- Script de Stored Pedidos por catedra --
+delimiter &&
 
-CREATE PROCEDURE sp_paises_todos_titulares
+DROP PROCEDURE IF EXISTS sp_paises_todos_titulares &&
+
+CREATE PROCEDURE sp_paises_todos_titulares()
 BEGIN
 SELECT DISTINCT(nombrePais) Pais
 FROM
 (
 	-- cuento todos los jugadores por pais que fueron titulares correspondientes a la primer seleccion
-	SELECT COUNT (DISTINCT(participaJugador)) jugadores, seleccion1.representaPais representaPais
+	SELECT COUNT(DISTINCT(participaJugador)) jugadores, seleccion1.representaPais representaPais
 	FROM seleccion
 	JOIN partido
 	ON equipoSeleccion1 = idSeleccion
@@ -23,7 +26,7 @@ FROM
 	GROUP BY seleccion1.representaPais
 	UNION 
 	-- cuento todos los jugadores por pais que fueron titulares correspondientes a la segunda seleccion
-	SELECT COUNT (DISTINCT(participaJugador)) jugadores, seleccion2.representaPais representaPais
+	SELECT COUNT(DISTINCT(participaJugador)) jugadores, seleccion2.representaPais representaPais
 	FROM seleccion
 	JOIN partido
 	ON equipoSeleccion2 = idSeleccion
@@ -52,15 +55,18 @@ ON total_jugadores = jugadores
 -- del mismo pais
 AND representaPais = idJugadoresPais
 JOIN pais 
-ON idJugadoresPais = idPais
-END;
+ON idJugadoresPais = idPais;
+END&&
 
+delimiter &&
 
-CREATE PROCEDURE sp_estadisticas_por_jugador
+DROP PROCEDURE IF EXISTS sp_estadisticas_por_jugador &&
+
+CREATE PROCEDURE sp_estadisticas_por_jugador()
 BEGIN
 -- proyecto los campos pedidos
 SELECT apellido Apellido, nombreIntegrante Nombre, cantidadPartidos Partidos, 
-promedioPuntos [Promedio Puntos], promedioAsistencias [Promedio Asistencias], promedioRebotes [Promedio Rebotes]
+promedioPuntos Promedio_Puntos, promedioAsistencias Promedio_Asistencias, promedioRebotes Promedio_Rebotes
 FROM 
 (
 	-- agrupo todos las estadisticas por jugador (no uso el nombre porque pueden haber dos jugadores con el mismo nombre)
@@ -73,8 +79,10 @@ JOIN jugador
 ON participaJugador = idJugador
 JOIN integrante
 ON idJugador = idIntegrante
-ORDER BY cantidadPartidos
-END;
+ORDER BY cantidadPartidos;
+END&&
+
+delimiter ;
 
 -- CREATE PROCEDURE sp_estadisticas_por_jugador
 -- BEGIN
