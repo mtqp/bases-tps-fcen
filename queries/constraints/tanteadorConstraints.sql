@@ -21,7 +21,7 @@ FOR EACH ROW BEGIN
     CALL sp_valor_positivo (NEW.scoreEquip2, 'tanteador', 'scoreEquip2');
 
     -- Si TANTEADOR.nroCuarto = 4 => TANTEADOR.scoreEquip1 <> TANTEADOR.scoreEquip2 (no hay empates)
-    IF (NEW.nroCuarto = 4 AND NEW.scoreEquip1 == NEW.scoreEquip2) THEN
+    IF (NEW.nroCuarto = 4 AND NEW.scoreEquip1 = NEW.scoreEquip2) THEN
     CALL `un partido no puede terminar con el tanteador empatado`;
 
     -- TANTEADOR.nroCuarto no puede aparecer más de 4 veces por TANTEADOR.idPartido (el tanteador se genera con los 4 cuartos cuando se genera un partido)
