@@ -261,11 +261,11 @@ ALTER TABLE sancion ADD CONSTRAINT fkSancionParticipacion   FOREIGN KEY(aplicaPa
 ALTER TABLE sancion ADD CONSTRAINT fkSancionArbitro         FOREIGN KEY(sancionadaPorArbitro) REFERENCES arbitro(idArbitro);
 ALTER TABLE sancion ADD CONSTRAINT fkSancionTipo            FOREIGN KEY(esDeTipo)             REFERENCES tiposancion(idTipoSancion);
 
--- Ejecutar las constraints
-source business_constraints.sql;
-
 -- Ejecutar SPS
 source sps.sql;
+
+-- Ejecutar las constraints
+source business_constraints.sql;
 
 -- Carga de datos
 -- source data.sql;
