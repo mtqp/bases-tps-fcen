@@ -8,11 +8,6 @@ DROP TRIGGER IF EXISTS check_seleccion_bi $$
 CREATE TRIGGER check_seleccion_bi
 BEFORE INSERT ON seleccion
 FOR EACH ROW BEGIN
--- SELECCION.grupo == “A” no puede repetirse más de 4 veces.
--- SELECCION.grupo == “B” no puede repetirse más de 4 veces.
--- SELECCION.grupo solo puede ser ‘A’ o ‘B’. Revisión (+1) Martin
--- SELECCION.fechaArribo <= PARTIDO.fecha
--- #SELECCION.cantIntegrantes debe ser igual a la cantidad de integrantes relacionados. Revisión (+1) Martin
 
     DECLARE maxPosicion INT;
 
@@ -29,6 +24,8 @@ FOR EACH ROW BEGIN
       CALL `La cantidad de integrantes difiere de los integrantes actuales`;
     END IF;
 
+    -- SELECCION.fechaArribo <= PARTIDO.fecha
+--  CALL sp_seleccion_fecha_arribo_invalida (NEW.fechaArribo);
     
     -- LOG POSICION --
     INSERT INTO posicion values ();
@@ -56,6 +53,9 @@ FOR EACH ROW BEGIN
     IF(NEW.grupo <> OLD.grupo) THEN
         CALL sp_seleccion_max_equipos_por_grupo (NEW.grupo);
     END IF;
+
+    -- SELECCION.fechaArribo <= PARTIDO.fecha
+--  CALL sp_seleccion_fecha_arribo_invalida (NEW.fechaArribo);
   
     CALL logOk('update seleccion', 'el update de seleccion fue exitoso');
   
