@@ -13,7 +13,7 @@ USE db_tp1;
 SET sql_mode='STRICT_ALL_TABLES';
 
 -- Creacion de tablas --
-
+DROP TABLE IF EXISTS seleccion;
 CREATE TABLE seleccion
 (
       idSeleccion       INT NOT NULL AUTO_INCREMENT
@@ -28,6 +28,7 @@ CREATE TABLE seleccion
     , UNIQUE (representaPais)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS posicion;
 CREATE TABLE posicion
 (
       idPosicion    	INT NOT NULL AUTO_INCREMENT
@@ -40,6 +41,7 @@ CREATE TABLE posicion
     , PRIMARY KEY (idPosicion)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS lugarhospedaje;
 CREATE TABLE lugarhospedaje
 (   
       idHospedaje       INT NOT NULL AUTO_INCREMENT
@@ -47,6 +49,7 @@ CREATE TABLE lugarhospedaje
     , PRIMARY KEY (idHospedaje)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS pais;
 CREATE TABLE pais
 (
       idPais        INT NOT NULL AUTO_INCREMENT
@@ -54,6 +57,7 @@ CREATE TABLE pais
     , PRIMARY KEY (idPais)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS integrante;
 CREATE TABLE integrante
 (
       idIntegrante          INT NOT NULL AUTO_INCREMENT
@@ -67,6 +71,7 @@ CREATE TABLE integrante
     , UNIQUE (nroPasaporte)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS jugador;
 CREATE TABLE jugador
 (
       idJugador    INT NOT NULL
@@ -74,6 +79,7 @@ CREATE TABLE jugador
     , PRIMARY KEY (idJugador)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS cuerpotecnico;
 CREATE TABLE cuerpotecnico
 (
       idCuerpoTecnico   INT NOT NULL
@@ -81,6 +87,7 @@ CREATE TABLE cuerpotecnico
     , PRIMARY KEY (idCuerpoTecnico)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS funcion;
 CREATE TABLE funcion
 (
       idFuncion     INT NOT NULL AUTO_INCREMENT
@@ -88,6 +95,7 @@ CREATE TABLE funcion
     , PRIMARY KEY (idFuncion)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS equipo;
 CREATE TABLE equipo
 (
       idEquipo      INT NOT NULL AUTO_INCREMENT
@@ -95,6 +103,7 @@ CREATE TABLE equipo
     , PRIMARY KEY (idEquipo)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS partido;
 CREATE TABLE partido
 (
       idPartido         INT NOT NULL AUTO_INCREMENT
@@ -108,6 +117,7 @@ CREATE TABLE partido
     , PRIMARY KEY (idPartido)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS estadio;
 CREATE TABLE estadio
 (
       idEstadio     INT NOT NULL AUTO_INCREMENT
@@ -115,6 +125,7 @@ CREATE TABLE estadio
     , PRIMARY KEY (idEstadio)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS etapa;
 CREATE TABLE etapa
 (
       idEtapa       INT NOT NULL AUTO_INCREMENT
@@ -123,6 +134,7 @@ CREATE TABLE etapa
     , UNIQUE (nombreEtapa)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS tanteador;
 CREATE TABLE tanteador
 (
       nroCuarto     INT NOT NULL
@@ -132,6 +144,7 @@ CREATE TABLE tanteador
     , PRIMARY KEY (nroCuarto, idPartido)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS arbitro;
 CREATE TABLE arbitro
 (
       idArbitro     INT NOT NULL AUTO_INCREMENT
@@ -140,6 +153,7 @@ CREATE TABLE arbitro
     , PRIMARY KEY (idArbitro)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS arbitra;
 CREATE TABLE arbitra
 (
       idArbitroArb  INT NOT NULL
@@ -147,6 +161,7 @@ CREATE TABLE arbitra
     , PRIMARY KEY (idArbitroArb, idPartidoArb)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS participacion;
 CREATE TABLE participacion
 (
       idParticipacion   INT NOT NULL AUTO_INCREMENT
@@ -161,6 +176,7 @@ CREATE TABLE participacion
     , UNIQUE (jugoPartido, participaJugador) -- reemplaza un check
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS sancion;
 CREATE TABLE sancion
 (
       idSancion             INT NOT NULL AUTO_INCREMENT
@@ -170,6 +186,7 @@ CREATE TABLE sancion
     , PRIMARY KEY (idSancion)
 )ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS tiposancion;
 CREATE TABLE tiposancion
 (
       idTipoSancion INT NOT NULL AUTO_INCREMENT
@@ -178,6 +195,7 @@ CREATE TABLE tiposancion
 )ENGINE=InnoDB;
 
 -- Tabla para log de errores o cosas
+DROP TABLE IF EXISTS LOG;
 CREATE TABLE LOG
 (
       idlog    INT NOT NULL AUTO_INCREMENT
@@ -248,6 +266,6 @@ source business_constraints.sql;
 source sps.sql;
 
 -- Carga de datos
-source data.sql;
+-- source data.sql;
 
 
