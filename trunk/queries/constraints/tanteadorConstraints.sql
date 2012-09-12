@@ -38,7 +38,6 @@ FOR EACH ROW BEGIN
 
     CALL logOk('insert tanteador','insert tanteador exitoso');
 END$$
-DELIMITER ;
 
 DROP TRIGGER IF EXISTS check_tanteador_bu $$
 
