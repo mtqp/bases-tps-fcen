@@ -82,7 +82,7 @@ ON idJugador = idIntegrante
 ORDER BY cantidadPartidos;
 END&&
 
-delimiter &&
+-- delimiter &&
 
 DROP PROCEDURE IF EXISTS sp_posibles_arbitros_por_partidos &&
 
@@ -216,3 +216,4 @@ WHERE
 GROUP BY arbitro.idArbitro, arbitro.nombreArbitro;
 END&&
 
+delimiter ;
