@@ -175,7 +175,7 @@ CREATE TABLE participacion
     , puntos            INT DEFAULT 0
     , esTitular         BIT NOT NULL
     , PRIMARY KEY (idParticipacion)
-    , UNIQUE (jugoPartido, participaJugador) -- reemplaza un check
+    , UNIQUE UK_jugadorEnMismoPartido (jugoPartido, participaJugador) -- reemplaza un check
 )ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS sancion;
@@ -268,6 +268,6 @@ source sps.sql;
 source business_constraints.sql;
 
 -- Carga de datos
--- source data.sql;
+source data.sql;
 
 
