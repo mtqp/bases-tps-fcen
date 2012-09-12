@@ -1,6 +1,11 @@
 
 -- Las sentencias de la pesada del SQL, que vienen a romper todo con palos y datos invalidos.
 
+-- PARTICIPACION --
+-- Solo una participacion por jugador por partido
+INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
+(1, 1, 4, 1, 'ALERO', 24, 1);
+
 -- ETAPA --
 -- Solo etapas predefinidas
 INSERT INTO etapa (nombreEtapa) values ('NUEVA_FASE');
