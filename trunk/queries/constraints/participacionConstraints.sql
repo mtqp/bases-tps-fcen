@@ -9,11 +9,26 @@ DROP TRIGGER IF EXISTS check_participacion_bi $$
 -- PARTICIPACION(idParticipacion, jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular)
 -- FK = { (jugoPartido), (participaJugador) }
 
+--    PARTICIPACION.jugoPartido.equipoSeleccion1 puede aparecer a lo sumo 5 veces con PARTICIPACION.esTitular = true
+--    PARTICIPACION.jugoPartido.equipoSeleccion2 puede aparecer a lo sumo 5 veces con PARTICIPACION.esTitular = true
+--    No puede haber dos PARTICIPACION.participaJugador tal que PARTICIPACION.esTitular = true y  PARTICIPACION.participaJugador.IdIntegrante.perteneceSeleccion  sean iguales y PARTICIPACION.posicion sean iguales.
+--    PARTICIPACION.rebotes >= 0
+--    PARTICIPACION.asistencias >= 0
+--    PARTICIPACION.puntos >= 0
+
+Si PARTICIPACION.esTitular = false => PARTICIPACION.posicion is null  Donde 
+
 CREATE TRIGGER check_participacion_bi
 BEFORE INSERT ON participacion
 FOR EACH ROW BEGIN
 
     CALL sp_participacion_posiciones_validas(NEW.posicion);
+
+    CALL sp_valor_positivo(NEW.rebotes);
+    
+    CALL sp_valor_positivo(NEW.asistencias);
+    
+    CALL sp_valor_positivo(NEW.puntos);
 
     CALL logOk('insert participacion', 'update participacion exitoso');
 END$$
@@ -24,19 +39,12 @@ CREATE TRIGGER check_participacion_bu
 BEFORE UPDATE ON participacion
 FOR EACH ROW BEGIN
     CALL sp_participacion_posiciones_validas(NEW.posicion);
---  -- PARTICIPACION.posicion puede ser o bien BASE o ESCOLTA o ALERO o ALA-PIVOT o PIVOT o nulo.    
---  IF 
---  (   
---      NEW.posicion <> 'BASE'      AND 
---      NEW.posicion <> 'ESCOLTA'   AND 
---      NEW.posicion <> 'ALERO'     AND 
---      NEW.posicion <> 'ALA-PIVOT' AND 
---      NEW.posicion <> 'PIVOT'     AND
---      NEW.posicion IS NOT NULL
---  ) THEN
---     CALL `Posicion es BASE o ESCOLTA o ALERO o ALA-PIVOT o PIVOT o nulo`;
---  END IF;
     
+    CALL sp_valor_positivo(NEW.rebotes);
+    
+    CALL sp_valor_positivo(NEW.asistencias);
+    
+    CALL sp_valor_positivo(NEW.puntos);
     
     CALL logOk('update participacion', 'update participacion exitoso');
 END$$
