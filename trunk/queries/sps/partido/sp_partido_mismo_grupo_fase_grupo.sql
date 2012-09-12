@@ -1,10 +1,14 @@
 
 delimiter &&
 
-DROP PROCEDURE IF EXISTS procedureName &&
+DROP PROCEDURE IF EXISTS sp_partido_mismo_grupo_fase_grupo &&
 
-CREATE PROCEDURE procedureName (etapaSP INT, seleccion1SP INT, seleccion2SP INT)
+CREATE PROCEDURE sp_partido_mismo_grupo_fase_grupo (etapaSP INT, seleccion1SP INT, seleccion2SP INT)
 BEGIN
+    DECLARE etapaFaseGrupo INT;
+
+    SET etapaFaseGrupo  = (SELECT idEtapa FROM etapa WHERE nombreEtapa = 'FASE_GRUPOS');
+
     -- Si PARTIDO.juegaEnEtapa = ‘FASE_GRUPOS’’entonces 
        -- PARTIDO.equipoSeleccion1.grupo = PARTIDO.equipoSeleccion2.grupo
     
