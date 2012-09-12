@@ -12,7 +12,7 @@ INSERT INTO pais (nombrePais) values ('Colombia');
 INSERT INTO pais (nombrePais) values ('Paraguay');
 INSERT INTO pais (nombrePais) values ('Peru');
 INSERT INTO pais (nombrePais) values ('Uruguay');
-INSERT INTO pais (nombrePais) values ('Venezuela');
+-- INSERT INTO pais (nombrePais) values ('Venezuela');
 
 -- HOSPEDAJE --
 INSERT INTO lugarhospedaje (nombreHospedaje) values ('Hotel Intercontinental');
@@ -46,65 +46,376 @@ INSERT INTO tiposancion (nombreSancion) values ('PUÑETAZO');
 
 -- POSICION DEFAULT --
 -- INSERT INTO posicion (puntos, partidosJugados, partidosGanados, partidosPerdidos, tantosAFavor, tantosEnContra) values (0, 0, 0, 0, 0, 0);
--- No va, esto ya lo hace un trigger cuando se inserta en la seleccion
+-- Estos datos los carga un trigger cuando se inserta en la seleccion
 
 -- SELECCION --
 INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','A', 1, 1, 1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-21','B', 2, 2, 2);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-21','A', 2, 2, 2);
 INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-22','A', 3, 3, 3);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-23','B', 4, 4 ,1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-24','A', 1, 5, 2);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','A', 1, 6, 1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','A', 1, 7, 1);
-INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','A', 1, 8, 1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-23','A', 4, 4 ,1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-24','B', 1, 5, 2);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','B', 1, 6, 1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','B', 1, 7, 1);
+INSERT INTO seleccion (cantIntegrantes, fechaArribo, grupo, hospedaHospedaje, representaPais, concentraEstadio) values (0,'2012-08-20','B', 1, 8, 1);
+
+-- INTEGRANTE
+-- ARGENTINA ( 12 jugadores, 1 cuerpo tecnico) 
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 101, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 102, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 103, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 104, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 105, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 106, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 107, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 108, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 109, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 110, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 111, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 112, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 113, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(1, 114, 'Jose', 'Caese', '1950-08-24', 'CUERPOTECNICO');
+
+-- BOLIVIA -- (12 jugadores, 1 cuerpo tecnico) 
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 201, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 202, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 203, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 204, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 205, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 206, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 207, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 208, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 209, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 210, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 211, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 212, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 213, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(2, 214, 'Jose', 'Caese', '1950-08-24', 'CUERPOTECNICO');
+
+-- BRASIL --
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 301, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 302, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 303, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 304, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 305, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 306, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 307, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 308, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 309, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 310, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 311, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 312, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 313, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(3, 314, 'Jose', 'Caese', '1950-08-24', 'CUERPOTECNICO');
+
+-- CHILE --
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 401, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 402, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 403, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 404, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 405, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 406, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 407, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 408, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 409, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 410, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 411, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 412, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 413, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(4, 414, 'Jose', 'Caese', '1950-08-24', 'CUERPOTECNICO');
+
+-- COLOMBIA --
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 501, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 502, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 503, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 504, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 505, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 506, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 507, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 508, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 509, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 510, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 511, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 512, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 513, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(5, 514, 'Jose', 'Caese', '1950-08-24', 'CUERPOTECNICO');
+
+-- PARAGUAY --
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 601, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 602, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 603, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 604, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 605, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 606, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 607, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 608, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 609, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 610, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 611, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 612, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 613, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(6, 614, 'Jose', 'Caese', '1960-08-24', 'CUERPOTECNICO');
+
+-- PERU --
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 701, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 702, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 703, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 704, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 705, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 706, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 707, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 708, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 709, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 710, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 711, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 712, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 713, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(7, 714, 'Jose', 'Caese', '1970-08-24', 'CUERPOTECNICO');
+
+-- URUGUAY ( 5 titulares 1 suplente)
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 801, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 802, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 803, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 804, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 805, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 806, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 807, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 808, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 809, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 810, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 811, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 812, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 813, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 814, 'Jose', 'Caese', '1980-08-24', 'CUERPOTECNICO');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 815, 'Dr', 'Dolittle', '1972-08-24', 'CUERPOTECNICO');
+
+INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
+(8, 816, 'LaChica', 'Masajista', '1972-08-24', 'CUERPOTECNICO');
 
 -- PARTIDOS -- 
 
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values(1, 1, 7, 1, '2012-08-22',1);
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario) values (2, 8, 1, 2, '2012-08-23', 5);
-					
--- INTEGRANTE
--- SELECCION ARGENTINA ( 5 titulares 1 suplente)
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(1, 1, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(1, 2, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(1, 3, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(1, 4, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(1, 5, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(1, 6, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
-
--- SELECCION EEUU ( 5 titulares 1 suplente)
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(8, 7, 'Tyson', 'Chandler', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(8, 8, 'LeBron', 'James', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(8, 9, 'Durant', 'Kevin', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(8, 10, 'Paul', 'Chris', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(8, 11, 'Anthony', 'Carmelo', '1992-08-24', 'JUGADOR');
-
-INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(8, 12, 'Bryant', 'Kobe', '1992-08-24', 'JUGADOR');
 
 -- EQUIPOS
-
 INSERT INTO equipo (nombreEquipo) values ('Atenas');
 INSERT INTO equipo (nombreEquipo) values ('Peñarol');
 INSERT INTO equipo (nombreEquipo) values ('Boca Juniors');
@@ -121,7 +432,7 @@ INSERT INTO jugador (idJugador, estaEnEquipo) values (4, 2);
 INSERT INTO jugador (idJugador, estaEnEquipo) values (5, 3);
 INSERT INTO jugador (idJugador, estaEnEquipo) values (6, 3);
 
--- LOS EEUU
+-- LOS VENEZUELA
 INSERT INTO jugador (idJugador, estaEnEquipo) values (7, 4);
 INSERT INTO jugador (idJugador, estaEnEquipo) values (8, 4);
 INSERT INTO jugador (idJugador, estaEnEquipo) values (9, 5);
@@ -248,6 +559,9 @@ INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','2'); -- Chileno
 
 -- SANCION --
 INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,2,1);
+
+-- TANTEADOR --
+-- Estos datos los carga un trigger cuando se inserta en el partido
 
 
 -- Invalidas --
