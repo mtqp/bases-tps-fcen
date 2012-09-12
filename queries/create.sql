@@ -244,9 +244,10 @@ ALTER TABLE sancion ADD CONSTRAINT fkSancionTipo            FOREIGN KEY(esDeTipo
 -- Ejecutar las constraints
 source business_constraints.sql;
 
+-- Ejecutar SPS
+source sps.sql;
+
 -- Carga de datos
 source data.sql;
 
--- Ejecutar SPS
-source sps.sql;
 
