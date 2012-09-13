@@ -11,7 +11,7 @@ BEFORE INSERT ON tanteador
 FOR EACH ROW BEGIN
     DECLARE totalCuartos INT;
     DECLARE cuartoRepetido INT;
-    -- Los valores posibles de TANTEADOR.nroCuatro son = {1 ,2 , 3, 4}
+    -- Los valores posibles de TANTEADOR.nroCuarto son = {1 ,2 , 3, 4}
     CALL sp_valor_en_rango (NEW.nroCuarto, 1, 4, 'tanteador', 'nroCuarto');
 
     -- TANTEADOR.scoreEquip1 >= 0
@@ -34,12 +34,12 @@ FOR EACH ROW BEGIN
     -- NO se permite ingresar un tanteador en el cuarto cuatro con un score <> 0
     IF 
     (
-        NEW.nroCuatro = 4 AND
+        NEW.nroCuarto = 4 AND
         (NEW.scoreEquip1 <> 0 OR 
          NEW.scoreEquip2 <> 0)
     )
     THEN
-        CALL `el 4to cuatro debe tener ambos scores en 0`;
+        CALL `el 4to cuarto debe tener ambos scores en 0`;
     END IF;
 
     CALL logOk('insert tanteador','insert tanteador exitoso');
@@ -80,7 +80,7 @@ FOR EACH ROW BEGIN
     
     -- se calcula la posicion solo si se hace el 1er update sobre los scordes
     -- sino, rompo
-    IF (NEW.nroCuatro = 4) THEN
+    IF (NEW.nroCuarto = 4) THEN
         IF
         (
             OLD.scoreEquip1 = 0 AND 
