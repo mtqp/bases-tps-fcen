@@ -362,9 +362,9 @@ INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEs
 
 -- RESULTADOS
 -- GRUPO A
-UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 1;
-UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 3 where nrocuarto = 4 and idPartido = 2;
-UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 3;
+UPDATE tanteador set scoreEquip1 = 100, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 1;
+UPDATE tanteador set scoreEquip1 = 100, scoreEquip2 = 3 where nrocuarto = 4 and idPartido = 2;
+UPDATE tanteador set scoreEquip1 = 100, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 3;
 UPDATE tanteador set scoreEquip1 = 0, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 4;
 UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 5;
 UPDATE tanteador set scoreEquip1 = 4, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 6;
@@ -1023,15 +1023,15 @@ INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('AtanezURU'   ,8); -- 
 -- ARBITRA --
 
 -- Invalid
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('3','1'); -- Brasilero
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('2','2'); -- Boliviano
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('2','3'); -- Boliviano
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','4'); -- Chileno
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','1'); -- Brasilero
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','2'); -- Boliviano
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','3'); -- Boliviano
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','4'); -- Chileno
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','5'); -- Argentino
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','6'); -- Argentino
 
 -- SANCION --
-INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,3,1);
+INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,4,1);
 
 -- TANTEADOR --
 -- Estos datos los carga un trigger cuando se inserta en el partido
