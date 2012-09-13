@@ -25,13 +25,15 @@
 			linkcolor=magenta]            % permite cambiar el color de los links
 			{hyperref}                    % Permite jugar con algunas cosas que aparecer\'an en el PDF final
 \usepackage{hyperref}
+\usepackage{rotating}
+
 
 
 %\selectlanguage{spanish}
 
 \linespread{1.3}                    % interlineado equivalente al 1.5 l\'ineas de Word...
 \pagestyle{myheadings}              %encabezado personalizable con \markboth{}{}
-\markboth{}{Trabajo Modelado de Objetivos. (Abreg\'u, Cammi, De Sousa, M\'endez, Raffo) }
+\markboth{}{Campeonato Sudamericano de B\'asquet. (Cammi, De Sousa, M\'endez, Serapio) }
 \headsep = 30pt                     % separaci\'on entre encabezado y comienzo del p\'arrafo
 
 %\addtolength{\oddsidemargin}{-2cm}	% configuracion IDEAL!!!
@@ -101,11 +103,76 @@
 % END Ejemplos de uso
 
 \newpage
+\section{Tecnolog\'ias utilizadas}
+Hemos utilizado para la confecci\'on del trabajo pr\'actico el motor de base de datos Mysql
+
+\newpage
 	
 \section{Modelo Entidad-Relacion}
 
+	%\begin{sidewaysfigure}
+	\begin{center}
+		\includegraphics[scale=0.35]{diagramas/DiagramaMER.png}\\
+	\end{center}
+	%\end{sidewaysfigure}
+
+\newpage 
+
 \section{Modelo Logico Relacional}
 
-\section{Implementacion}
+\textbf{SELECCION}(idSeleccion, hospedaHospedaje, representaPais, concentraEstadio, ubicaPosicion, cantIntegrantes, fechaArribo, grupo)\\
+
+PK = \{ (idSeleccion) \}\\
+\indent{CC = \{ (idSeleccion) \}}\\
+\indent{FK = \{ (hospedaHospedaje), (representaPais), (concentraEstadio), (ubicaPosicion) \}}\\
+
+\noindent{ \textbf{References:}}
+
+    SELECCION.hospedaHospedaje debe estar en LUGARHOSPEDAJE.idHospedaje\\
+\indent{SELECCION.representaPais debe estar en PAIS.idPais}\\
+\indent{SELECCION.concentraEstadio debe estar en ESTADIO.idEstadio}\\
+\indent{SELECCION.ubicaPosicion debe estar en POSICION.idPosicion}\\
+
+\indent{SELECCION.hospedaHospedaje no puede ser nulo}\\
+\indent{SELECCION.representaPais no puede ser nulo}\\
+\indent{SELECCION.concentraEstadio no puede ser nulo}\\
+\indent{SELECCION.ubicaPosicion no puede ser nulo}\\
+
+
+\noindent{ \textbf{Constraints:}}
+
+\indent{SELECCION.grupo $==$ ``A`` no puede repetirse más de 4 veces.}\\
+\indent{SELECCION.grupo $==$ ``B`` no puede repetirse más de 4 veces.}\\
+\indent{SELECCION.grupo solo puede ser ``A`` o ``B``.}\\
+\indent{SELECCION.fechaArribo <= PARTIDO.fecha.}\\
+\indent{$\#$ SELECCION.cantIntegrantes debe ser igual a la cantidad de integrantes relacionados.}\\
+
+\newpage 
+\section{Supuestos asumidos}
+Supuestos y asunciones.
+
+\newpage 
+\section{Dise\~{n}o f\'isico}
+Detalle grafico o escrito de las tablas de mysql
+
+\newpage 
+\section{Restricciones adicionales al modelo}
+Las 1000 restricciones que pusimos.
+
+\newpage 
+\section{Breakers}
+
+Los breakers son sentencias de inserts dise\~{n}adas espec\'ificamente para poner a prueba las restricciones del modelo.
+El archivo breakers.sql permite ejecutarlas y ver como todas ellas se verifican.
+
+\newpage 
+\section{Triggers y Store Procedures de restricciones}
+
+
+\newpage 
+\section{Datos de prueba}
+Imagen de datos.sql y el fixture de los partidos con los puntajes
+
+Todo el trabajo pr\'actico cuenta con 
 
 \end{document}
