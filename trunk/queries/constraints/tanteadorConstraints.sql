@@ -30,6 +30,17 @@ FOR EACH ROW BEGIN
     IF (cuartoRepetido = 1)  THEN
         CALL `el cuarto correspondiente ya fue ingresado`;
     END IF; 
+    
+    -- NO se permite ingresar un tanteador en el cuarto cuatro con un score <> 0
+    IF 
+    (
+        NEW.nroCuatro = 4 AND
+        (NEW.scoreEquip1 <> 0 OR 
+         NEW.scoreEquip2 <> 0)
+    )
+    THEN
+        CALL `el 4to cuatro debe tener ambos scores en 0`;
+    END IF;
 
     CALL logOk('insert tanteador','insert tanteador exitoso');
 END$$
@@ -65,6 +76,24 @@ FOR EACH ROW BEGIN
     IF (cuartoRepetido = 1)  THEN
         CALL `el cuarto correspondiente ya fue ingresado`;
     END IF; 
+
+    
+    -- se calcula la posicion solo si se hace el 1er update sobre los scordes
+    -- sino, rompo
+    IF (NEW.nroCuatro = 4) THEN
+        IF
+        (
+            OLD.scoreEquip1 = 0 AND 
+            OLD.scoreEquip2 = 0 AND
+            (NEW.scoreEquip1 <> 0 OR
+             NEW.scoreEquip2 <> 0)
+        )
+        THEN
+            CALL sp_posicion_recalculate_posiciones(NEW.idPartido, NEW.scoreEquip1, NEW.scoreEquip2);
+        ELSE
+            CALL `partido terminado. no se puede mod el tanteador`;
+        END IF;
+    END IF;
 
     CALL logOk('update tanteador','update tanteador exitoso');  
 END$$
