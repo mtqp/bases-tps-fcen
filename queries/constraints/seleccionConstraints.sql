@@ -30,8 +30,8 @@ FOR EACH ROW BEGIN
     
     -- LOG POSICION --
     INSERT INTO posicion values ();
-    SET maxPosicion = (SELECT max(idPosicion) FROM posicion); 
-    SET NEW.ubicaPosicion = @maxPosicion;
+    -- SET @maxPosicion = (SELECT max(idPosicion) FROM posicion); 
+    SET NEW.ubicaPosicion = (SELECT max(idPosicion) FROM posicion);
 
     CALL logOk('insert seleccion', 'el insert de seleccion fue exitoso');
 
