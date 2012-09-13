@@ -22,7 +22,7 @@ FOR EACH ROW BEGIN
 
     -- TANTEADOR.nroCuarto no puede aparecer más de 4 veces por TANTEADOR.idPartido (el tanteador se genera con los 4 cuartos cuando se genera un partido)
     SET totalCuartos = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido);
-    IF (totalCuartos > 4)  THEN
+    IF (totalCuartos = 4)  THEN
         CALL `el total de cuartos no puede ser superior a 4`;
     END IF;
 

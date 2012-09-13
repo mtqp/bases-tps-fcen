@@ -1,5 +1,5 @@
 
--- source truncateDb.sql;
+source truncateDb.sql;
 
 -- Acá iran los DML --
 
@@ -524,27 +524,27 @@ INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, 
 -- ARGENTINA
 -- GINOBILI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 1, 3, 1, 'ALERO', 22, 1);
+(2, 6, 3, 1, 'ALERO', 22, 1);
 
 -- SCOLA
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 2, 3, 1, 'PIVOT', 26, 1);
+(2, 7, 3, 1, 'PIVOT', 26, 1);
 
 -- NOCIONI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 3, 3, 1, 'BASE', 2, 1);
+(2, 8, 3, 1, 'BASE', 2, 1);
 
 -- PRIGIONI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 4, 3, 1, 'ALERO', 1, 1);
+(2, 9, 3, 1, 'ALERO', 1, 1);
 
 -- DELFINO
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 5, 5, 1, 'PIVOT', 6, 1);
+(2, 10, 5, 1, 'PIVOT', 6, 1);
 
 -- JASEN
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(2, 6, 3, 1, 'BASE', 182, 0);
+(2, 5, 3, 1, 'BASE', 182, 0);
 
 -- BRASIL
 -- Tyson
@@ -672,23 +672,23 @@ INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, 
 
 -- CHILE
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(5, 31, 4, 1, 'ALERO', 24, 1);
+(5, 36, 4, 1, 'ALERO', 24, 1);
 
 -- SCOLA
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(5, 32, 8, 1, 'PIVOT', 22, 1);
+(5, 37, 8, 1, 'PIVOT', 22, 1);
 
 -- NOCIONI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(5, 33, 3, 1, 'BASE', 17, 1);
+(5, 38, 3, 1, 'BASE', 17, 1);
 
 -- PRIGIONI
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(5, 34, 3, 1, 'ALERO', 13, 1);
+(5, 39, 3, 1, 'ALERO', 13, 1);
 
 -- DELFINO
 INSERT INTO participacion (jugoPartido, participaJugador, asistencias, rebotes, posicion, puntos, esTitular) values
-(5, 35, 6, 1, 'PIVOT', 15, 1);
+(5, 40, 6, 1, 'PIVOT', 15, 1);
 
 -- SEXTO PARTIDO A (BRASIL - CHILE)
 -- BRASIL

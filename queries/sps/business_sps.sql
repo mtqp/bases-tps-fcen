@@ -79,7 +79,7 @@ JOIN jugador
 ON participaJugador = idJugador
 JOIN integrante
 ON idJugador = idIntegrante
-ORDER BY cantidadPartidos;
+ORDER BY cantidadPartidos desc;
 END&&
 
 -- delimiter &&
@@ -174,14 +174,14 @@ WHERE
   (
     CASE WHEN resultadosEquipo1.arbitro IS NOT NULL THEN
      CASE WHEN resultadosEquipo1.total >= 2 THEN
-        resultadosEquipo1.ganados < resultadosEquipo1.total AND resultadosEquipo1.ganados > 0
+      resultadosEquipo1.ganados < resultadosEquipo1.total AND resultadosEquipo1.ganados > 0
       ELSE
         TRUE
       END
     ELSE
       TRUE
     END
-    OR
+    AND
     CASE WHEN resultadosEquipo2.arbitro IS NOT NULL THEN
       CASE WHEN resultadosEquipo2.total >= 2 THEN
         resultadosEquipo2.ganados < resultadosEquipo2.total AND resultadosEquipo2.ganados > 0
@@ -217,3 +217,4 @@ GROUP BY arbitro.idArbitro, arbitro.nombreArbitro;
 END&&
 
 delimiter ;
+
