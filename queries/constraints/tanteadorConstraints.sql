@@ -26,11 +26,6 @@ FOR EACH ROW BEGIN
         CALL `el total de cuartos no puede ser superior a 4`;
     END IF;
 
-    SET cuartoRepetido = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido AND nroCuarto = NEW.nroCuarto);
-    IF (cuartoRepetido = 1)  THEN
-        CALL `el cuarto correspondiente ya fue ingresado`;
-    END IF; 
-    
     -- NO se permite ingresar un tanteador en el cuarto cuatro con un score <> 0
     IF 
     (
@@ -72,12 +67,6 @@ FOR EACH ROW BEGIN
         CALL `el total de cuartos no puede ser superior a 4`;
     END IF;
 
-    SET cuartoRepetido = (SELECT count(1) FROM tanteador WHERE idPartido = NEW.idPartido AND nroCuarto = NEW.nroCuarto);
-    IF (cuartoRepetido = 1)  THEN
-        CALL `el cuarto correspondiente ya fue ingresado`;
-    END IF; 
-
-    
     -- se calcula la posicion solo si se hace el 1er update sobre los scordes
     -- sino, rompo
     IF (NEW.nroCuarto = 4) THEN
