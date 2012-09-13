@@ -12,7 +12,7 @@ BEGIN
     -- Si PARTIDO.juegaEnEtapa = ‘FASE_GRUPOS’’entonces 
        -- PARTIDO.equipoSeleccion1.grupo = PARTIDO.equipoSeleccion2.grupo
     
-	IF (@etapaFaseGrupo = etapaSP) THEN
+	IF (etapaFaseGrupo = etapaSP) THEN
 		IF EXISTS
 			(SELECT COUNT(1), grupo
 			    FROM seleccion

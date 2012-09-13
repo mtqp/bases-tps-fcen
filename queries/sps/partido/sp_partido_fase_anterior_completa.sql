@@ -59,7 +59,7 @@ BEGIN
             WHERE 
                 juegaEnEtapa = faseAnterior
             HAVING
-                COUNT(1) = @countPartidosMax
+                COUNT(1) = countPartidosMax
         )
         THEN
             CALL `La fase anterior no esta completa`;
