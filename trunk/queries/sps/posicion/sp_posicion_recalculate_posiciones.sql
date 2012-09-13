@@ -41,21 +41,20 @@ BEGIN
                         JOIN partido
                             ON idSeleccion = equipoSeleccion1
                         WHERE
-                            idPartido = idPartidoSP );
+                            idPartido = @idPartidoSP );
 
     SET posEquip2 = ( SELECT ubicaPosicion 
                         FROM seleccion 
                         JOIN partido
                             ON idSeleccion = equipoSeleccion2
                         WHERE
-                            idPartido = idPartidoSP );
+                            idPartido = @idPartidoSP );
 
     IF (scoreEquipSP1 > scoreEquipSP2)
     THEN
         -- ------------- --
         -- Gano equipo 1 --
         -- ------------- --
-        call `gano el puto equipo 1`;
         UPDATE posicion
         SET
               puntos = puntos + @puntajeGanador
@@ -65,7 +64,7 @@ BEGIN
             , tantosAFavor = tantosAFavor + @scoreEquip1
             , tantosEnContra = tantosEnContra + @scoreEquipSP2
         WHERE
-            idPosicion = posEquip1;
+            idPosicion = @posEquip1;
 
         UPDATE posicion
         SET
@@ -76,13 +75,12 @@ BEGIN
             , tantosAFavor      = tantosAFavor   + @scoreEquipSP2
             , tantosEnContra    = tantosEnContra + @scoreEquipSP1
         WHERE
-            idPosicion = posEquip2;
+            idPosicion = @posEquip2;
 
     ELSE
         -- ------------- --
         -- Gano equipo 2 --
         -- ------------- --
-        call `gano el forro de los del equipo 2`;
         UPDATE posicion
         SET
               puntos = puntos + @puntajeGanador
@@ -92,7 +90,7 @@ BEGIN
             , tantosAFavor   = tantosAFavor   + @scoreEquipSP2
             , tantosEnContra = tantosEnContra + @scoreEquipSP1
         WHERE
-            idPosicion = posEquip2;
+            idPosicion = @posEquip2;
 
         UPDATE posicion
         SET
@@ -103,7 +101,7 @@ BEGIN
             , tantosAFavor   = tantosAFavor   + @scoreEquipSP1
             , tantosEnContra = tantosEnContra + @scoreEquipSP2
         WHERE
-            idPosicion = posEquip1;
+            idPosicion = @posEquip1;
     
     END IF;
 
