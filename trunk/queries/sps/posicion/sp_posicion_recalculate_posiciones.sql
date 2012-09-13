@@ -8,25 +8,25 @@ BEGIN
     DECLARE posEquip1 INT;
     DECLARE posEquip2 INT;
     DECLARE puntajeGanador INT;
-    DECLARE nombreEtapa VARCHAR(50);
-    
-    SET nombreEtapa = ( SELECT nombreEtapa 
+    DECLARE nombreEtapaSP VARCHAR(50);
+        
+    SET nombreEtapaSP = ( SELECT nombreEtapa 
                         FROM etapa
                         JOIN partido
                             ON idEtapa = juegaEnEtapa
                         WHERE
                             idPartido = idPartidoSP );
      
-    IF (nombreEtapa = 'FASE_GRUPOS') THEN
+    IF (nombreEtapaSP = 'FASE_GRUPOS') THEN
         SET puntajeGanador = 1;    
     ELSE
-        IF (nombreEtapa = '5T0_PUESTO') THEN
+        IF (nombreEtapaSP = '5TO_PUESTO') THEN
             SET puntajeGanador = 3;
         ELSE
-            IF (nombreEtapa = '3ER_PUESTO') THEN
+            IF (nombreEtapaSP = '3ER_PUESTO') THEN
                 SET puntajeGanador = 7;
             ELSE
-                IF (nombreEtapa = 'SEMIFINAL') THEN
+                IF (nombreEtapaSP = 'SEMIFINAL') THEN
                     SET puntajeGanador = 11;
                 ELSE
                     -- ES LA FINAL
