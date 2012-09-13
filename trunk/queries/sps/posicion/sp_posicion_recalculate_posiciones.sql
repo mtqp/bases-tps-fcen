@@ -3,7 +3,7 @@ delimiter &&
 
 DROP PROCEDURE IF EXISTS sp_posicion_recalculate_posiciones &&
 
-CREATE PROCEDURE sp_posicion_recalculate_posiciones (idPartidoSP INT, scoreEquipSP1, scoreEquipoSP2 INT)
+CREATE PROCEDURE sp_posicion_recalculate_posiciones (idPartidoSP INT, scoreEquipSP1 INT, scoreEquipoSP2 INT)
 BEGIN
     DECLARE posEquip1 INT;
     DECLARE posEquip2 INT;
@@ -32,9 +32,9 @@ BEGIN
               puntos = puntos + 1
             , partidosJugados = partidosJugados + 1
             , partidosGanados = partidosGanados + 1
-            --partidosPerdidos += 0
-            , tantosAFavor = tantosAFavor + scoreEquip1
-            , tantosEnContra = tantosEnContra + scoreEquipSP2
+            -- partidosPerdidos += 0
+            , tantosAFavor = tantosAFavor + @scoreEquip1
+            , tantosEnContra = tantosEnContra + @scoreEquipSP2
         WHERE
             idPosicion = posEquip1;
 
@@ -43,14 +43,14 @@ BEGIN
             -- puntos += 0
               partidosJugados = partidosJugados + 1
             -- partidosGanados += 0
-            , partidosPerdidos = partidosPerdidos + 1
-            , tantosAFavor = tantosAFavor + scoreEquipSP2
-            , tantosEnContra = tantosEnContra + scoreEquipSP1
+            , partidosPerdidos  = partidosPerdidos + 1
+            , tantosAFavor      = tantosAFavor   + @scoreEquipSP2
+            , tantosEnContra    = tantosEnContra + @scoreEquipSP1
         WHERE
             idPosicion = posEquip2;
 
     ELSE
-        -- ------------- --
+       -- ------------- --
         -- Gano equipo 2 --
         -- ------------- --
         UPDATE posicion
@@ -59,8 +59,8 @@ BEGIN
             , partidosJugados = partidosJugados + 1
             , partidosGanados = partidosGanados + 1
             -- , partidosPerdidos += 0
-            , tantosAFavor = tantosAFavor + scoreEquipSP2
-            , tantosEnContra = tantosEnContra + scoreEquipSP1
+            , tantosAFavor   = tantosAFavor   + @scoreEquipSP2
+            , tantosEnContra = tantosEnContra + @scoreEquipSP1
         WHERE
             idPosicion = posEquip2;
 
@@ -70,8 +70,8 @@ BEGIN
               partidosJugados = partidosJugados + 1
              -- partidosGanados += 0
             , partidosPerdidos = partidosPerdidos + 1
-            , tantosAFavor = tantosAFavor + scoreEquipSP1
-            , tantosEnContra = tantosEnContra + scoreEquipSP2
+            , tantosAFavor   = tantosAFavor   + @scoreEquipSP1
+            , tantosEnContra = tantosEnContra + @scoreEquipSP2
         WHERE
             idPosicion = posEquip1;
     
