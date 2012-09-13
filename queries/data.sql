@@ -93,53 +93,53 @@ INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apel
 
 -- BOLIVIA -- (12 jugadores, 1 cuerpo tecnico) 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 201, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+(2, 201, 'Juanito', 'Gomez', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 202, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+(2, 202, 'Tronqui', 'Lola', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 203, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+(2, 203, 'Carpe', 'Diem', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 204, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+(2, 204, 'Pablo', 'Lolo', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 205, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+(2, 205, 'Samba', 'Yon', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 206, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+(2, 206, 'Nicolino', 'Noche', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 207, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+(2, 207, 'Kevin', 'Yojansen', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 208, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+(2, 208, 'Hernan', 'Puertas', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 209, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+(2, 209, 'Esteban', 'Cado', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(2, 210, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+(2, 210, 'Dulces', 'Sueños', '1992-08-24', 'JUGADOR');
 
 -- BRASIL --
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(3, 301, 'Emanuel', 'Ginobili', '1992-08-24', 'JUGADOR');
+(3, 301, 'Paulo', 'Mourinho', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(3, 302, 'Juan', 'Scola', '1992-08-24', 'JUGADOR');
+(3, 302, 'Fidel', 'Sacolo', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(3, 303, 'Andres', 'Nocioni', '1992-08-24', 'JUGADOR');
+(3, 303, 'Irio', 'Bousa', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(3, 304, 'Pablo', 'Prigioni', '1992-08-24', 'JUGADOR');
+(3, 304, 'Trello', 'Marisato', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(3, 305, 'Carlos', 'Delfino', '1992-08-24', 'JUGADOR');
+(3, 305, 'Marpelo', 'DeSouza', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
-(3, 306, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
+(3, 306, 'Gorlin', 'Trochado', '1992-08-24', 'JUGADOR');
 
 INSERT INTO integrante (perteneceSeleccion, nroPasaporte, nombreIntegrante, apellido, fechaNacimiento, tipoIntegrante) values
 (3, 307, 'Hernan', 'Jasen', '1992-08-24', 'JUGADOR');
@@ -360,6 +360,35 @@ INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEs
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario, duracion) values(5, 3, 1, 2, '2012-08-10',1, 55);
 
 
+-- RESULTADOS
+-- GRUPO A
+UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 1;
+UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 3 where nrocuarto = 4 and idPartido = 2;
+UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 3;
+UPDATE tanteador set scoreEquip1 = 0, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 4;
+UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 5;
+UPDATE tanteador set scoreEquip1 = 4, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 6;
+
+-- GRUPO B
+UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 7;
+UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 8;
+UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 3 where nrocuarto = 4 and idPartido = 9;
+UPDATE tanteador set scoreEquip1 = 4, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 10;
+UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 11;
+UPDATE tanteador set scoreEquip1 = 0, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 12;
+
+-- 5TO_PUESTO
+UPDATE tanteador set scoreEquip1 = 0, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 13;
+
+-- SEMIFINALES
+UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 14;
+UPDATE tanteador set scoreEquip1 = 3, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 15;
+
+-- 3ER_PUESTO
+UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 16;
+
+-- FINAL
+UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 17;
 
 -- EQUIPOS
 INSERT INTO equipo (nombreEquipo) values ('Atenas');

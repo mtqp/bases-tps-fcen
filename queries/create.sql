@@ -3,13 +3,13 @@
 -- Solo la primera vez.
 -- create database db_tp1 
 
--- DROP DATABASE db_tp1;
--- CREATE DATABASE db_tp1;
--- USE db_tp1;
+DROP DATABASE db_tp1;
+CREATE DATABASE db_tp1;
+USE db_tp1;
 
-DROP DATABASE marianin;
-CREATE DATABASE marianin;
-USE marianin;
+-- DROP DATABASE marianin;
+-- CREATE DATABASE marianin;
+-- USE marianin;
 
 -- Para que habilite las check constraints.
 SET sql_mode='STRICT_ALL_TABLES';
@@ -266,6 +266,9 @@ source sps.sql;
 
 -- Ejecutar las constraints
 source business_constraints.sql;
+
+-- Ejecitar vistas adicionales
+source vistas.sql
 
 -- Carga de datos
 source data.sql;
