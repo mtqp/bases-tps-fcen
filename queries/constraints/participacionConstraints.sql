@@ -12,9 +12,7 @@ DROP TRIGGER IF EXISTS check_participacion_bi $$
 --    PARTICIPACION.jugoPartido.equipoSeleccion1 puede aparecer a lo sumo 5 veces con PARTICIPACION.esTitular = true
 --    PARTICIPACION.jugoPartido.equipoSeleccion2 puede aparecer a lo sumo 5 veces con PARTICIPACION.esTitular = true
 --    No puede haber dos PARTICIPACION.participaJugador tal que PARTICIPACION.esTitular = true y  PARTICIPACION.participaJugador.IdIntegrante.perteneceSeleccion  sean iguales y PARTICIPACION.posicion sean iguales.
---    PARTICIPACION.rebotes >= 0
---    PARTICIPACION.asistencias >= 0
---    PARTICIPACION.puntos >= 0
+
 
 Si PARTICIPACION.esTitular = false => PARTICIPACION.posicion is null  Donde 
 
