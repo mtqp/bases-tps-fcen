@@ -38,8 +38,8 @@ BEGIN
     END IF;
 
     -- Chequea que la fase anterior no tenga fecha/horario posterior al que se va a insertar
-    SET fechaFaseMax    = (SELECT MAX(fecha) FROM partido WHERE juegaEnEtapa = @faseAnterior);
-    SET horarioFaseMax  = (SELECT MAX(horario) FROM partido WHERE fechaSP = @fechaFaseMax);
+    SET fechaFaseMax    = (SELECT MAX(fecha) FROM partido WHERE juegaEnEtapa = faseAnterior);
+    SET horarioFaseMax  = (SELECT MAX(horario) FROM partido WHERE fechaSP = fechaFaseMax);
 
     IF EXISTS 
     (
@@ -47,13 +47,13 @@ BEGIN
         SELECT * 
         FROM partido 
         WHERE
-            fechaSP < @fechaFaseMax
+            fechaSP < fechaFaseMax
         UNION
         -- Igual dia, Hora posterior
         SELECT * 
         FROM partido
         WHERE
-            horarioSP < @horarioFaseMax
+            horarioSP < horarioFaseMax
     )
     THEN
         CALL `Existe un partido de fase anterior con fecha mayor`;

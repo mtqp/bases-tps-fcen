@@ -15,7 +15,7 @@ BEGIN
                         JOIN partido
                             ON idEtapa = juegaEnEtapa
                         WHERE
-                            idPartido = @idPartidoSP );
+                            idPartido = idPartidoSP );
      
     IF (nombreEtapa = 'FASE_GRUPOS') THEN
         SET puntajeGanador = 1;    
@@ -41,14 +41,14 @@ BEGIN
                         JOIN partido
                             ON idSeleccion = equipoSeleccion1
                         WHERE
-                            idPartido = @idPartidoSP );
+                            idPartido = idPartidoSP );
 
     SET posEquip2 = ( SELECT ubicaPosicion 
                         FROM seleccion 
                         JOIN partido
                             ON idSeleccion = equipoSeleccion2
                         WHERE
-                            idPartido = @idPartidoSP );
+                            idPartido = idPartidoSP );
 
     IF (scoreEquipSP1 > scoreEquipSP2)
     THEN
@@ -57,14 +57,14 @@ BEGIN
         -- ------------- --
         UPDATE posicion
         SET
-              puntos = puntos + @puntajeGanador
+              puntos = puntos + puntajeGanador
             , partidosJugados = partidosJugados + 1
             , partidosGanados = partidosGanados + 1
             -- partidosPerdidos += 0
-            , tantosAFavor = tantosAFavor + @scoreEquip1
-            , tantosEnContra = tantosEnContra + @scoreEquipSP2
+            , tantosAFavor = tantosAFavor       + scoreEquipSP1
+            , tantosEnContra = tantosEnContra   + scoreEquipSP2
         WHERE
-            idPosicion = @posEquip1;
+            idPosicion = posEquip1;
 
         UPDATE posicion
         SET
@@ -72,10 +72,10 @@ BEGIN
               partidosJugados = partidosJugados + 1
             -- partidosGanados += 0
             , partidosPerdidos  = partidosPerdidos + 1
-            , tantosAFavor      = tantosAFavor   + @scoreEquipSP2
-            , tantosEnContra    = tantosEnContra + @scoreEquipSP1
+            , tantosAFavor      = tantosAFavor   + scoreEquipSP2
+            , tantosEnContra    = tantosEnContra + scoreEquipSP1
         WHERE
-            idPosicion = @posEquip2;
+            idPosicion = posEquip2;
 
     ELSE
         -- ------------- --
@@ -83,14 +83,14 @@ BEGIN
         -- ------------- --
         UPDATE posicion
         SET
-              puntos = puntos + @puntajeGanador
+              puntos = puntos + puntajeGanador
             , partidosJugados = partidosJugados + 1
             , partidosGanados = partidosGanados + 1
             -- , partidosPerdidos += 0
-            , tantosAFavor   = tantosAFavor   + @scoreEquipSP2
-            , tantosEnContra = tantosEnContra + @scoreEquipSP1
+            , tantosAFavor   = tantosAFavor   + scoreEquipSP2
+            , tantosEnContra = tantosEnContra + scoreEquipSP1
         WHERE
-            idPosicion = @posEquip2;
+            idPosicion = posEquip2;
 
         UPDATE posicion
         SET
@@ -98,10 +98,10 @@ BEGIN
               partidosJugados = partidosJugados + 1
              -- partidosGanados += 0
             , partidosPerdidos = partidosPerdidos + 1
-            , tantosAFavor   = tantosAFavor   + @scoreEquipSP1
-            , tantosEnContra = tantosEnContra + @scoreEquipSP2
+            , tantosAFavor   = tantosAFavor   + scoreEquipSP1
+            , tantosEnContra = tantosEnContra + scoreEquipSP2
         WHERE
-            idPosicion = @posEquip1;
+            idPosicion = posEquip1;
     
     END IF;
 
