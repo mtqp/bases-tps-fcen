@@ -1,5 +1,5 @@
 
-source truncateDb.sql;
+-- source truncateDb.sql;
 
 -- Acá iran los DML --
 
