@@ -27,6 +27,7 @@
 \usepackage{hyperref}
 \usepackage{rotating}
 \usepackage{ulem}
+\usepackage[dash]{dashundergaps}
 
 
 %\selectlanguage{spanish}
@@ -102,27 +103,107 @@
 
 % END Ejemplos de uso
 
-\newpage
-\section{Tecnolog\'ias utilizadas}
-Hemos utilizado para la confecci\'on del trabajo pr\'actico el motor de base de datos Mysql
+\newpage 
+\section{Tecnolog\'ia utilizada en la implementaci\'on}
 
-\newpage
-	
+    Se utiliz\'o el motor de base de datos MySql, el cual es open source y su utilizaci\'on es simple.\\
+
+    Durante el desarrollo se observ\'o la imposibilidad que posee el motor de implementar check constraints. 
+    Para poder simular esta funcionalidad se utilizaron triggers, uno previo a la inserci\'on de un nuevo registro y otro previo a la actualizaci\'on para las constraints adicionales as\'i como tambi\'en para las que se desprendieron del modelo, que tambi\'en fueron inclu\'idas en los triggers.
+    Era deseable que si la check constraint fallara, el insert o update se vea cancelado, y ning\'un dato sea persistido.\\
+
+    La forma que se encontr\'o para emular este comportamiento es llamando a un procedimiento almacenado inexistente. 
+    Se produce as\'i una excepci\'on y el motor efect\'ua un rollback de los cambios efectuados en el trigger y cancela la operaci\'on de inserci\'on o actualizaci\'on.
+    Tuvimos que hacer esto por la imposibilidad del motor de contar con una sentencia para mostrar un mensaje.\\
+
+    Se agreg\'o en la base una tabla de LOG, la cual no se impacta en el modelo relacional. Pose\'ia inicialmente como objetivo la persistencia de un log sobre las inconsistencias generadas en los triggers. El inconveniente que surg\'ia es que al llamar a un procedimiento inexistente para cancelar la finalizaci\'on de un triggers, se efectuaba rollback sobre todos los cambios efectuados dentro del trigger, incluso los de la tabla de LOG (de hacerse un insert o update). Como alternativa se opt\'o por loguear las ejecuciones exitosas y visualizar por l\'inea de comandos las fallidas.
+    Al tener varias condiciones a validar por trigger, estos se tornaron muy largos. La l\'ogica m\'as compleja fue extra\'ida en procedimientos almacenados. 
+    Cada uno de ellos efect\'ua una llamada a uno existente si encuentra un error.\\
+
+    Otro problema que encontramos fue que las claves for\'aneas no estaban habilitadas, investigando al respecto encontramos que para que funcionen las tablas deben estar creadas con el par\'ametro ENGINE en tipo InnoDB. \\
+
+Estas fueron algunas complicaciones con las que nos encontramos al trabajar con este motor de base de datos.
+
+
+\newpage 
+\section{Detalles sobre el entregable}
+A continuaci\'on se detalla el contenido del entregable, as\'i como su correcta utilizaci\'on.\\
+
+\noindent{\textbf{Directorios:}}
+
+	\begin{itemize}
+		\item{\textbf{queries:}}
+			\subitem{\emph{create.sql:}}
+				Contiene la creaci\'on de las tablas, claves primarias y for\'aneas. 
+				Se encarga autom\'aticamente de llamar a sps.sql, business\_constraints.sql, vistas.sql y data.sql (que carga los datos) en ese orden.
+
+				\textbf{NOTA:} El nombre de la base de datos utilizada es db\_tp1. Considerar a la hora de correr este script que se borra la base de datos antes mencionada. 
+				Validar antes de correrlo que no exista previamente una base con ese nombre en el servidor a correr ya que se podr\'ia perder informaci\'on.
+
+			\subitem{\emph{sps.sql:}} Se encarga de llamar a todos los store procedures dentro del directorio sps y ejecutar su creaci\'on.
+
+			\subitem{\emph{business\_constraints.sql:}} Se encarga de llamar a todos los archivos que generan los triggers inclu\'idos dentro del directorio llamado constraints.
+				vistas.sql: ejecuta la creaci\'on de los procedimientos almacenados para el an\'alisis de los datos de manera m\'as simple y ordenada, si bien no son vistas propiamente dichas. 
+				Algunas vistas disponibles:\\
+
+				    \subitem{\textbf{partidosDeFase(idFase):}} muestra todos los partidos de esa fase.
+				    \subitem{\textbf{partidosDeFaseArbitro(idFase):}} muestra todos los partidos de esa fase y los \'arbitros asignados para cada uno de ellos.\\
+
+					Las fases v\'alidas son $1,2,3,4,5$ correspondientes a las fases\\
+					FASE\_GRUPO, 5TO\_PUESTO, SEMIFINAL, 3ER\_PUESTO, FINAL respectivamente.
+
+			\subitem{\emph{data.sql:}} Efect\'ua la carga de datos, cumpliendo con las restricciones ya inicializadas.
+
+			\subitem{\emph{breakers.sql:}} Tiene como objeto invalidar las restricciones que se agregaron a la base. Su ejecuci\'on deberia mostrar los mensajes de error de cada constraint.
+
+		    	\subitem{\emph{queries/contraints:} }Directorio que contiene todas las constraints implementadas a trav\'es de triggers, 
+				algunos de estos archivos, ejecutan procedimientos almacenados.
+
+		    	\subitem{\emph{queries/sps:}} Directorio que contiene todos los procedimientos almacenados para constraints subdivididos por entidad.
+				Posee adem\'as dos archivos: business\_sps.sql y sp\_log\_ok.sql. El primero de ellos posee los procedimientos para la validaci\'on del \'arbitro requeridos por enunciado.
+				El segundo posee el procedimiento de mantenimiento de la tabla LOG.
+
+			    	\textbf{NOTA:} Existe un directorio adicional llamado generics que posee procedimientos de uso com\'un en varios triggers.
+
+	\end{itemize}
+\newpage 
+\section{Utilizaci\'on}
+\noindent{\textbf{Utilizaci\'on:}}
+    A continuaci\'on se detalla la utilizaci\'on de la base para un sistema operativo Linux, 
+    teniendo instalado Mysql server (para Ubuntu, el comando para descargarlo es sudo-apt get install mysql-server).\\
+
+\begin{itemize}
+    \item{Abrir una terminal.}
+    \item{Posicionarse sobre el directorio queries.}
+    \item{Escribir en la terminal: mysql -uroot -p[contrase\~{n}a] (contrase\~{n}a definida en la instalaci\'on del servidor).}
+    \item{Ejecutar dentro del mysql server el comando source create.sql.}
+\end{itemize}
+
+Se crear\'an la base de datos, sus tablas, triggers y store procedures. Las tablas ser\'an cargadas con informaci\'on y estar\'an listas para ser consultadas.\\
+
+\noindent{\textbf{Comandos \'utiles:}} (mysql server en Linux)
+
+\begin{itemize}
+    \item{show databases :} Muestra las bases de datos existentes en el servidor.
+    \item{use [db\_name] :} Setea a db\_name como base de datos a utilizar.
+    \item{desc [table\_name]:} Muestra el detalle de la tabla table\_name
+    \item{source [path]/file.sql:} Corre el script inclu\'ido dentro del archivo file
+    \item{exit:} Cierra el mysql server.
+\end{itemize}
+
+\begin{sidewaysfigure}
 \section{Modelo Entidad-Relacion}
+  \centering
+	\includegraphics[scale=0.42]{diagramas/DiagramaMER.png}\\
+\end{sidewaysfigure}
 
-	%\begin{sidewaysfigure}
 %	\begin{center}
 %		\includegraphics[scale=0.35]{diagramas/DiagramaMER.png}\\
 %	\end{center}
-	%\end{sidewaysfigure}
-	
-%\begin{figure}[h]
-%\centering
-%\includegraphics[width=3cm,height=3cm]{diagramas/DiagramaMER.png}
-%\end{figure}
-%\newpage 
 
+\newpage 
 \section{Modelo Logico Relacional}
+\label{sec:MR}
 
 \subsection{Entidad Selecci'on}
 \textbf{SELECCION}(\underline{idSeleccion}, \dashuline{hospedaHospedaje}, \dashuline{representaPais}, \dashuline{concentraEstadio}, \dashuline{ubicaPosicion}, cantIntegrantes, fechaArribo, grupo)\\
@@ -218,7 +299,7 @@ PK = \{ (idIntegrante) \} \\
 \noindent{ \textbf{References:}}
 
 \indent{INTEGRANTE.perteneceSeleccion debe estar en SELECCION.idSeleccion.} \\
-\indent{INTEGRANTE.idIntegrante debe estar en JUGADOR.idJugador o (exclusivo) CUERPOTECNICO.idCuerpoTecnico.} \\
+\indent{INTEGRANTE.idIntegrante puede estar en JUGADOR.idJugador o (exclusivo) CUERPOTECNICO.idCuerpoTecnico.} \\
 
 \indent{INTEGRANTE.perteneceSeleccion no puede ser nulo.} \\
 
@@ -322,7 +403,7 @@ PK = \{ (idPartido) \} \\
 
 \indent{PARTIDO.equipoSeleccion1 $<>$ PARTIDO.equipoSeleccion2.} \\
 \indent{Si PARTIDO.juegaEnEtapa $==$ ``FASE\_GRUPOS`` $\Rightarrow$  PARTIDO.equipoSeleccion1.grupo $==$ PARTIDO.equipoSeleccion2.grupo.} \\
-\indent{Si PARTIDO.juegaEnEtapa $==$ ``FASE\_GRUPOS`` $\Rightarrow$  $\#$ PARTIDO $<=$ 6.} \\
+\indent{Si PARTIDO.juegaEnEtapa $==$ ``FASE\_GRUPOS`` $\Rightarrow$  $\#$ PARTIDO $<=$ 12.} \\
 \indent{Si PARTIDO.juegaEnEtapa $==$ ``5TO\_PUESTO`` $\Rightarrow$  $\#$ PARTIDO $<$= 1.} \\
 \indent{Si PARTIDO.juegaEnEtapa $==$ ``3ER\_PUESTO`` $\Rightarrow$  $\#$ PARTIDO $<=$ 1.} \\
 \indent{Si PARTIDO.juegaEnEtapa $==$ ``SEMIFINAL`` $\Rightarrow$  $\#$ PARTIDO $<=$ 2.} \\
@@ -454,12 +535,19 @@ PARTICIPACION.jugoPartido debe estar en PARTIDO.idPartido. \\
 \noindent{ \textbf{Constraints:}}
 
 PARTICIPACION.jugoPartido.equipoSeleccion1 puede aparecer a lo sumo 5 veces con PARTICIPACION.esTitular $==$ true. \\
+(Esta resticci\'on no fue modelada en la implementaci\'on f\'isica)\\
+
 \indent{PARTICIPACION.jugoPartido.equipoSeleccion2 puede aparecer a lo sumo 5 veces con PARTICIPACION.esTitular $==$ true.} \\
+(Esta resticci\'on no fue modelada en la implementaci\'on f\'isica)\\
+
 \indent{No puede haber dos PARTICIPACION.participaJugador tal que PARTICIPACION.esTitular $==$ true y  PARTICIPACION.participaJugador.IdIntegrante.perteneceSeleccion  sean iguales y PARTICIPACION.posicion sean iguales.} \\
 \indent{PARTICIPACION.rebotes $>=$ 0.} \\
+(Esta resticci\'on no fue modelada en la implementaci\'on f\'isica)\\
+
 \indent{PARTICIPACION.asistencias $>=$ 0.} \\ 
 \indent{PARTICIPACION.puntos $>=$ 0.}  \\
-\indent{Si PARTICIPACION.esTitular $==$ false $\Rightarrow$ PARTICIPACION.posicion is null.}   
+\indent{Si PARTICIPACION.esTitular $==$ false $\Rightarrow$ PARTICIPACION.posicion is null.} 
+(Esta resticci\'on no fue modelada en la implementaci\'on f\'isica)\\
 
 \subsection{Entidad Sanci'on}
 \textbf{SANCION}(\underline{idSancion}, \dashuline{aplicaParticipacion}, \dashuline{sancionadaPorArbitro}, \dashuline{esDeTipo})
@@ -496,34 +584,75 @@ PK = \{ (idTipoSancion) \} \\
 
 \indent{Ninguna.}
 
+\newpage 
+\section{Esquema de partidos}
+    A continuaci\'on se detalla cu\'ales son los partidos, selecciones y resultados obtenidos utilizando la carga de datos suministrada en el informe (data.sql).\\
 
+\begin{figure}[hb]
+	\begin{center}
+		\includegraphics[scale=0.6]{diagramas/grupos.png}\\
+		\caption{Grupos del torneo}
+	\end{center}
+\end{figure}
 
- 
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.6]{diagramas/partidoDeFase.png}\\
+	\caption{Partidos de Fase de grupos}
+\end{figure}
 
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.6]{diagramas/partido5toPuesto.png}\\
+	\caption{Partido de 5to puesto}
+\end{figure}
 
-
-
-
-
-
-
-
-
-
-
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.6]{diagramas/partidoSemi3erYFinal.png}\\
+	\caption{Partido de 5to puesto}
+\end{figure}
 
 \newpage 
-\section{Supuestos asumidos}
-Asumimos que s'olo vamos a guardar los hospedajes que nos indiquen de los jugadores, no otros. \\
-\indent{Asumimos que s'olo vamos a querer guardar los equipos en que jueguen los jugadores de la selecci'on.}
+\section{Decisiones tomadas y supuestos asumidos}
+
+    Existe la entidad Posici\'on aunque tenga informaci\'on redundante, ya que consideramos que importantes los atributos de esta entidad en el torneo, ya que definen estos definen la existencia de un torneo. Adem\'as, queremos poder consultar de  manera eficiente sin tener que calcular el resultado en el momento.\\
+
+    Para el c\'alculo de la tabla de posiciones se defini\'o arbitrariamente los siguientes puntajes por partidos ganados:\\
+
+\indent{Partido ganado en \textbf{FASE\_GRUPO} $\Rightarrow$ 1 punto.}\\
+\indent{Partido ganado en \textbf{5TO\_PUESTO} $\Rightarrow$ 3 puntos.}\\
+\indent{Partido ganado en \textbf{SEMIFINAL} $\Rightarrow$ 7 puntos.}\\
+\indent{Partido ganado en \textbf{3ER\_PUESTO} $\Rightarrow$ 11 puntos.}\\
+\indent{Partido ganado en \textbf{FINAL} $\Rightarrow$ 19 puntos.}\\
+
+    Internamente se insertan 4 las filas en el tanteador por cada vez que se inserta un partido.\\
+
+    El c\'alculo de la tabla de posiciones se hace internamente al hacer update de los valores del \'ultimo cuarto en el tanteador al terminar un partido. 
+    De esta manera y para preservar consistencia, una vez insertado estos resultados, ellos no pueden ser editados. Cuando el \'ultimo partido (la final) haya sido jugado y terminado, la entidad posici\'on contar\'a con toda la informaci\'on sobre el campeonato.\\
+
+    Se modela la entidad \textbf{TipoSancion} para agrupar los tipos de sanciones ya que consideramos que probable que en un futuro pueda agregarse una sanci\'on nueva.
+    Los hospedajes salvados, corresponden a los indicados por los jugadores.\\
+
+    S\'olo se guardan los equipos correspondientes a los jugadores de la selecciones.
+
 
 \newpage 
 \section{Dise\~{n}o f\'isico}
-Detalle grafico o escrito de las tablas de mysql
 
-\newpage 
-\section{Restricciones adicionales al modelo}
-Las 1000 restricciones que pusimos.
+A continuaci\'on se detalla mediante un gr\'afico cu\'al fue el dise\~{n}o de base de datos elegido para representar el modelo relacional.
+
+ 
+\begin{figure}[hb]
+  \centering
+  \includegraphics[scale=0.37]{diagramas/DiagramaFisico.png}\\
+\end{figure}
+
+%	\begin{center}
+%		\includegraphics[scale=0.45]{diagramas/DiagramaFisico.png}\\
+%	\end{center}
+
+
 
 \newpage 
 \section{Breakers}
@@ -532,7 +661,15 @@ Los breakers son sentencias de inserts dise\~{n}adas espec\'ificamente para pone
 El archivo breakers.sql permite ejecutarlas y ver como todas ellas se verifican.
 
 \newpage 
-\section{Triggers y Store Procedures de restricciones}
+\section{Restricciones al modelo}
+
+\subsection{Restricciones pedidas por la c\'atedra}
+
+\subsection{Restricciones adicionales al modelo}
+	Contamos con XXX restricciones al modelo de entre las cuales se encuentran las dictadas por el Modelo de entidad relaci\'on y por restricciones propias agregadas
+	descriptas en la secci\'on de Modelo l\'ogico relacional~\ref{sec:MR}
+
+\subsection{Store Procedures}
 
 
 \newpage 
