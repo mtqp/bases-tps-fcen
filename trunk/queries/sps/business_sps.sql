@@ -84,23 +84,23 @@ END&&
 
 DROP PROCEDURE IF EXISTS sp_posibles_arbitros_por_partidos &&
 
-CREATE PROCEDURE sp_posibles_arbitros_por_partidos(idPartido INT)
+CREATE PROCEDURE sp_posibles_arbitros_por_partidos(idPartidoSP INT)
 BEGIN
 DECLARE  equipo1   INT;
 DECLARE  equipo2   INT;
-DECLARE  fecha     DATE;
+DECLARE  fechaSP   DATE;
  
 SET equipo1 = (SELECT 
   equipoSeleccion1
-  FROM partido WHERE idPartido = @idPartido);
+  FROM partido WHERE idPartido = idPartidoSP);
 
 SET equipo2 = (SELECT 
   equipoSeleccion2
-  FROM partido WHERE idPartido = @idPartido);
+  FROM partido WHERE idPartido = idPartidoSP);
 
-SET fecha = (SELECT 
+SET fechaSP = (SELECT 
   fecha
-  FROM partido WHERE idPartido = @idPartido);
+  FROM partido WHERE idPartido = idPartidoSP);
 
 SELECT arbitro.idArbitro, arbitro.nombreArbitro 
 FROM arbitro
@@ -230,7 +230,7 @@ AND NOT EXISTS (
   JOIN arbitra
   ON arbitra.idPartidoArb = partido.idPartido
   WHERE arbitra.idArbitroArb = arbitro.idArbitro
-  AND partido.fecha = fecha
+  AND partido.fecha = fechaSP
 )
 GROUP BY arbitro.idArbitro, arbitro.nombreArbitro;
 END&&

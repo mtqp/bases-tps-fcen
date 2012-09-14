@@ -67,7 +67,9 @@ FOR EACH ROW BEGIN
 
     CALL sp_partido_ordenados_por_fecha (NEW.juegaEnEtapa, NEW.fecha, NEW.horario);
 
-    CALL sp_partido_mismo_grupo_fase_grupo (NEW.juegaEnEtapa, NEW.equipoSeleccion1, NEW.equipoSeleccion2);
+    IF(OLD.equipoSeleccion1 <> NEW.equipoSeleccion1 OR OLD.equipoSeleccion2 <> NEW.equipoSeleccion2) THEN
+    	CALL sp_partido_mismo_grupo_fase_grupo (NEW.juegaEnEtapa, NEW.equipoSeleccion1, NEW.equipoSeleccion2);
+	END IF;
 
     CALL sp_partido_mismo_horario (NEW.horario, NEW.fecha);
     
