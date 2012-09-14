@@ -398,16 +398,6 @@ INSERT INTO equipo (nombreEquipo) values ('San Antonio');
 INSERT INTO equipo (nombreEquipo) values ('Lakers');
 INSERT INTO equipo (nombreEquipo) values ('Boston');
 
--- PAIS
-INSERT INTO pais (nombrePais) values ('Argentina');
-INSERT INTO pais (nombrePais) values ('Bolivia');
-INSERT INTO pais (nombrePais) values ('Brasil');
-INSERT INTO pais (nombrePais) values ('Chile');
-INSERT INTO pais (nombrePais) values ('Colombia');
-INSERT INTO pais (nombrePais) values ('Paraguay');
-INSERT INTO pais (nombrePais) values ('Peru');
-INSERT INTO pais (nombrePais) values ('Uruguay');
-
 -- JUGADORES
 
 -- ARGENTINA
