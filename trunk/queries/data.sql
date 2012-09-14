@@ -340,7 +340,7 @@ INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEs
 
 -- FASE_GRUPOS (GRUPO B)
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario, duracion) values(1, 5, 6, 2, '2012-08-01',2, 55);
-INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario, duracion) values(1, 5, 7, 2, '2012-08-02',2, 55);
+INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario, duracion) values(1, 5, 7, 2, '2012-08-01',5, 55);
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario, duracion) values(1, 5, 8, 2, '2012-08-03',2, 55);
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario, duracion) values(1, 6, 7, 2, '2012-08-04',2, 55);
 INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEstadio, fecha, horario, duracion) values(1, 6, 8, 2, '2012-08-05',2, 55);
@@ -1023,12 +1023,17 @@ INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('AtanezURU'   ,8); -- 
 -- ARBITRA --
 
 -- Invalid
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','1'); -- Brasilero
+-- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','1'); -- Brasilero
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','2'); -- Boliviano
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','3'); -- Boliviano
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','4'); -- Chileno
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','5'); -- Argentino
-INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','6'); -- Argentino
+-- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','4'); -- Chileno
+-- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','5'); -- Argentino
+-- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('1','6'); -- Argentino
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values (8,5); -- URUGUAYO
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values (8,6); -- URUGUAYO
+
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values(1,8); -- Argentino (se pisa fecha con partido 7)
+
 
 -- SANCION --
 INSERT INTO sancion (aplicaParticipacion, sancionadaPorArbitro, esDeTipo) values(1,4,1);
