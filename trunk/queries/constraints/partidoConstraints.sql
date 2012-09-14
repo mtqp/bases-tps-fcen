@@ -20,7 +20,7 @@ FOR EACH ROW BEGIN
 
     CALL sp_partido_cantidad_por_fase (NEW.juegaEnEtapa);
 
-    CALL sp_partido_fase_anterior_completa (NEW.juegaEnEtapa); --  (SI ESTO NO VA ORDENADO CON EL DE ABAJO, SE ROMPE TODO)
+    CALL sp_partido_fase_anterior_completa (NEW.juegaEnEtapa); 
 
     CALL sp_partido_ordenados_por_fecha (NEW.juegaEnEtapa, NEW.fecha, NEW.horario);
 
@@ -28,7 +28,7 @@ FOR EACH ROW BEGIN
 
     CALL sp_partido_mismo_horario (NEW.horario, NEW.fecha);
 
-    CALL logOk('insert', CONCAT('ok insert partido con id: ', 'dsp concatenar el id partido'));-- (NEW.idPartido AS CHAR)));
+    CALL logOk('before insert partido', 'before insert partido exitoso');
 
 END$$
 
@@ -43,7 +43,7 @@ FOR EACH ROW BEGIN
     INSERT INTO tanteador VALUES (3,NEW.idPartido, 0,0);
     INSERT INTO tanteador VALUES (4,NEW.idPartido, 0,0);
     
-    CALL logOk('after insert partido', CONCAT('ok after insert partido con id: ', 'dsp concatenar el id partido'));-- (NEW.idPartido AS CHAR)));
+    CALL logOk('after insert partido', 'after insert partido exitoso');
 
 END$$
 
@@ -63,7 +63,7 @@ FOR EACH ROW BEGIN
 
     CALL sp_partido_cantidad_por_fase (NEW.juegaEnEtapa);
 
-    CALL sp_partido_fase_anterior_completa (NEW.juegaEnEtapa); --  (SI ESTO NO VA ORDENADO CON EL DE ABAJO, SE ROMPE TODO)
+    CALL sp_partido_fase_anterior_completa (NEW.juegaEnEtapa);
 
     CALL sp_partido_ordenados_por_fecha (NEW.juegaEnEtapa, NEW.fecha, NEW.horario);
 
@@ -73,7 +73,7 @@ FOR EACH ROW BEGIN
 
     CALL sp_partido_mismo_horario (NEW.horario, NEW.fecha);
     
-    CALL logOk('update', CONCAT('ok update partido con id: ', 'dsp concatenar el id partido'));-- (NEW.idPartido AS CHAR)));
+    CALL logOk('insert partido', 'insert partido exitoso');
 
 END$$
 

@@ -40,19 +40,4 @@ FOR EACH ROW BEGIN
     CALL logOk('insert integrante','insert integrante exitoso');
 END$$
 
--- DROP TRIGGER IF EXISTS check_integrante_ai $$
-
--- CREATE TRIGGER check_integrante_ai
--- AFTER INSERT ON integrante
--- FOR EACH ROW BEGIN
-    -- Por si los jugadores se insertan automaticamente 
-	-- IF (NEW.tipoIntegrante = 'JUGADOR') THEN
-    --    INSERT INTO jugador VALUES (NEW.idIntegrante, null);
-    -- END IF;
-    
-    -- IF (NEW.tipoIntegrante = 'CUERPOTECNICO') THEN
-    --    INSERT INTO cuerpotecnico VALUES (NEW.idIntegrante, null);
-    -- END IF;
--- END$$
-
 DELIMITER ;

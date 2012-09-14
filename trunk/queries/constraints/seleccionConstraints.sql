@@ -1,6 +1,6 @@
 -- ACA VAN TODAS LAS CONSTRAINTS DE SELECCION
 
-select "[!!!MISSING CORRECT SP_SELECCION_FECHA_ARRIBO_INVALIDADA!!!!] creando constraints de seleccion" from DUAL;
+select "creando constraints de seleccion" from DUAL;
 
 DELIMITER $$
 
