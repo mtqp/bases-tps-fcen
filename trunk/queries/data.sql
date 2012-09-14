@@ -1013,7 +1013,7 @@ INSERT INTO arbitro (nombreArbitro,pertenecePais) values ('AtanezURU'   ,8); -- 
 -- ARBITRA --
 
 -- Invalid
--- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','1'); -- Brasilero
+INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('4','1'); -- Brasilero
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','2'); -- Boliviano
 INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','3'); -- Boliviano
 -- INSERT INTO arbitra (idArbitroArb,idPartidoArb) values ('7','4'); -- Chileno
