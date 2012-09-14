@@ -15,8 +15,4 @@ for sqlFile in sqlfiles:
 
 sourceFile.close()
 
-#import os
-#os.chdir("./../sps")
-#for files in os.listdir("."):
-#    if files.endswith(".sql"):
-#        print files
+

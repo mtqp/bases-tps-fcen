@@ -12,42 +12,46 @@ FROM
 	SELECT COUNT(DISTINCT(participaJugador)) jugadores, seleccion1.representaPais representaPais
 	FROM seleccion
 	JOIN partido
-	ON equipoSeleccion1 = idSeleccion
+	    ON equipoSeleccion1 = idSeleccion
 	JOIN participacion
-	ON jugoPartido = idPartido
+	    ON jugoPartido = idPartido
 	JOIN jugador
-	ON participaJugador = idJugador
+	    ON participaJugador = idJugador
 	JOIN integrante
-	ON idJugador = idIntegrante
+	    ON idJugador = idIntegrante
 	JOIN seleccion seleccion1
-	ON seleccion1.idSeleccion = perteneceSeleccion
-	AND equipoSeleccion1 = seleccion1.idSeleccion
-	WHERE esTitular = 1
-	GROUP BY seleccion1.representaPais
+	    ON seleccion1.idSeleccion = perteneceSeleccion
+	    AND equipoSeleccion1 = seleccion1.idSeleccion
+	WHERE 
+	    esTitular = 1
+	GROUP BY 
+	    seleccion1.representaPais
 	UNION 
 	-- cuento todos los jugadores por pais que fueron titulares correspondientes a la segunda seleccion
 	SELECT COUNT(DISTINCT(participaJugador)) jugadores, seleccion2.representaPais representaPais
 	FROM seleccion
 	JOIN partido
-	ON equipoSeleccion2 = idSeleccion
+	    ON equipoSeleccion2 = idSeleccion
 	JOIN participacion
-	ON jugoPartido = idPartido
+    	ON jugoPartido = idPartido
 	JOIN jugador
-	ON participaJugador = idJugador
+	    ON participaJugador = idJugador
 	JOIN integrante
-	ON idJugador = idIntegrante
+	    ON idJugador = idIntegrante
 	JOIN seleccion seleccion2
-	ON seleccion2.idSeleccion = perteneceSeleccion
-	AND equipoSeleccion2 = seleccion2.idSeleccion
-	WHERE esTitular = 1
-	GROUP BY seleccion2.representaPais
+	    ON seleccion2.idSeleccion = perteneceSeleccion
+	    AND equipoSeleccion2 = seleccion2.idSeleccion
+	WHERE 
+	    esTitular = 1
+	GROUP BY 
+	    seleccion2.representaPais
 ) selecciones 
 JOIN
 (
 	-- cuento todos los jugadores por pais
 	SELECT COUNT(idIntegrante) total_jugadores, representaPais idJugadoresPais FROM seleccion
 	JOIN integrante 
-	ON perteneceseleccion = idseleccion AND tipoIntegrante = 'JUGADOR'
+	    ON perteneceseleccion = idseleccion AND tipoIntegrante = 'JUGADOR'
 	GROUP BY representaPais
 ) equipos
 -- que el total de jugadores se igual al total de titulares
@@ -55,7 +59,7 @@ ON total_jugadores = jugadores
 -- del mismo pais
 AND representaPais = idJugadoresPais
 JOIN pais 
-ON idJugadoresPais = idPais;
+    ON idJugadoresPais = idPais;
 END&&
 
 -- delimiter &&
