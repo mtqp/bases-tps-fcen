@@ -118,7 +118,7 @@
 
     Se agreg\'o en la base una tabla de LOG, la cual no se impacta en el modelo relacional. Pose\'ia inicialmente como objetivo la persistencia de un log sobre las inconsistencias generadas en los triggers. El inconveniente que surg\'ia es que al llamar a un procedimiento inexistente para cancelar la finalizaci\'on de un triggers, se efectuaba rollback sobre todos los cambios efectuados dentro del trigger, incluso los de la tabla de LOG (de hacerse un insert o update). Como alternativa se opt\'o por loguear las ejecuciones exitosas y visualizar por l\'inea de comandos las fallidas.
     Al tener varias condiciones a validar por trigger, estos se tornaron muy largos. La l\'ogica m\'as compleja fue extra\'ida en procedimientos almacenados. 
-    Cada uno de ellos efect\'ua una llamada a uno existente si encuentra un error.\\
+    Cada uno de ellos efect\'ua una llamada a uno inexistente si encuentra un error.\\
 
     Otro problema que encontramos fue que las claves for\'aneas no estaban habilitadas, investigando al respecto encontramos que para que funcionen las tablas deben estar creadas con el par\'ametro ENGINE en tipo InnoDB. \\
 
@@ -184,11 +184,11 @@ Se crear\'an la base de datos, sus tablas, triggers y store procedures. Las tabl
 \noindent{\textbf{Comandos \'utiles:}} (mysql server en Linux)
 
 \begin{itemize}
-    \item{show databases :} Muestra las bases de datos existentes en el servidor.
-    \item{use [db\_name] :} Setea a db\_name como base de datos a utilizar.
-    \item{desc [table\_name]:} Muestra el detalle de la tabla table\_name
-    \item{source [path]/file.sql:} Corre el script inclu\'ido dentro del archivo file
-    \item{exit:} Cierra el mysql server.
+    \item{\textbf{show databases} :} Muestra las bases de datos existentes en el servidor.
+    \item{\textbf{use [db\_name]} :} Setea a db\_name como base de datos a utilizar.
+    \item{\textbf{desc [table\_name]}:} Muestra el detalle de la tabla table\_name
+    \item{\textbf{source [path]/file.sql}:} Corre el script inclu\'ido dentro del archivo file
+    \item{\textbf{exit:}} Cierra el mysql server.
 \end{itemize}
 
 \begin{sidewaysfigure}
@@ -236,7 +236,7 @@ SELECCION.hospedaHospedaje debe estar en LUGARHOSPEDAJE.idHospedaje.\\
 \indent{SELECCION.fechaArribo $<=$ PARTIDO.fecha.}\\
 \indent{$\#$ SELECCION.cantIntegrantes debe ser igual a la cantidad de integrantes relacionados.}
 
-
+\newpage
 \subsection{Entidad Posici'on}
 \textbf{POSICION}(\underline{idPosicion}, puntos, partidosJugados, partidosGanados, partidosPerdidos, tantosAFavor, tantosEnContra)\\
 
@@ -273,6 +273,7 @@ LUGARHOSPEDAJE.idHospedaje debe estar en SELECCION.hospedaHospedaje. \\
 
 \indent{Ninguna.}
 
+\newpage
 \subsection{Entidad Pa'is}
 \textbf{PAIS}(\underline{idPais}, nombrePais)\\
 
@@ -308,7 +309,7 @@ PK = \{ (idIntegrante) \} \\
 \indent{INTEGRANTE.tipoIntegrante IN \{ ``Jugador``, ``CuerpoTecnico`` \} .} \\
 \indent{A\~{N}O(SYSDATE) $-$ A\~{N}O(INTEGRANTE.fechaNacimiento) $>=$ 18.} 
 
-
+\newpage
 \subsection{Entidad Jugador}
 \textbf{JUGADOR}(\underline{\dashuline{idJugador}}, \dashuline{estaEnEquipo})\\
 
@@ -347,6 +348,7 @@ PK = \{ (idCuerpoTecnico) \} \\
 
 \indent{Ninguna.}
 
+\newpage
 \subsection{Entidad Funci'on}
 \textbf{FUNCION}(\underline{idFuncion}, nombreFuncion) \\
 
@@ -377,6 +379,7 @@ PK = \{ (idEquipo) \} \\
 
 \indent{Ninguna}
 
+\newpage
 \subsection{Entidad Partido}
 \textbf{PARTIDO}(\underline{idPartido}, \dashuline{juegaEnEtapa}, \dashuline{equipoSeleccion1}, \dashuline{equipoSeleccion2}, \dashuline{juegaEnEstadio}, duracion, fecha, horario) \\
 
@@ -447,6 +450,7 @@ ETAPA.idEtapa puede no estar en PARTIDO.juegaEnEtapa. \\
 
 ETAPA.nombreEtapa debe ser o bien FASE\_GRUPOS o 5TO\_PUESTO, o 3ER\_PUESTO o SEMIFINAL, o FINAL. 
 
+\newpage
 \subsection{Entidad Tanteador}
 \textbf{TANTEADOR}(\underline{nroCuarto}, \underline{\dashuline{idPartido}}, scoreEquip1, scoreEquip2)
 
@@ -471,6 +475,7 @@ Los valores posibles de TANTEADOR.nroCuatro son \{1 ,2 , 3, 4\}. \\
 
 \indent{TANTEADOR.nroCuarto no puede aparecer m'as de 4 veces por  TANTEADOR.idPartido (el tanteador se genera con los 4 cuartos cuando se genera un partido). }  
 
+\newpage
 \subsection{Entidad Arbitro}
 \textbf{ARBITRO}(\underline{idArbitro}, \dashuline{pertenecePais}, nombreArbitro)
 
@@ -515,6 +520,7 @@ ARBITRA.idArbitroArb debe estar en ARBITRO.idArbitro. } \\
 
 (ARBITRO.idArbitro $==$ ARBITRA.idArbitroArb) and (ARBITRA.idPartidoArb $==$ PARTIDO.idPartido) $\Rightarrow$  (ARBITRO.pertenecePais $<>$ PARTIDO.seleccionEquipo1.representaPais and ARBITRO.pertenecePais $<>$ PARTIDO.seleccionEquipo2.representaPais). 
 
+\newpage
 \subsection{Entidad Participaci'on}
 \textbf{PARTICIPACION}(\underline{idParticipacion}, \dashuline{jugoPartido}, \dashuline{participaJugador}, asistencias, rebotes, posicion, puntos, esTitular)
 
@@ -525,7 +531,7 @@ PK = \{ (idParticipacion) \} \\
 \noindent{ \textbf{References:}}
 
 PARTICIPACION.jugoPartido debe estar en PARTIDO.idPartido. \\
-\indent{PARTICIPACION.participaJugador debe estar en JUGADOR.idIntegrante.} \\
+\indent{PARTICIPACION.participaJugador debe estar en JUGADOR.idJugador.} \\
 \indent{PARTICIPACION.idParticipacion puede no estar en SANCION.aplicaParticipacion.} \\
 \indent{PARTICIPACION.posicion puede ser o bien BASE o ESCOLTA o ALERO o ALA-PIVOT o PIVOT o nulo.} \\
 
@@ -571,7 +577,8 @@ SANCION.aplicaParticipacion debe estar en PARTICIPACION.idParticipacion.} \\
 \indent{ARBITRA.idArbitroArb $==$ SANCION.sancionadaPorArbitro  and ARBITRA.idPartidoArb $==$  SANCION.aplicaParticipacion.jugoPartido.} 
 
 \subsection{Entidad TipoSanci'on}
-\textbf{TIPOSANCION}(\underline{idTipoSancion}, nombreSancion)
+\textbf{TIPOSANCION}(\underline{idTipoSancion}, nombreSancion)\\
+
 PK = \{ (idTipoSancion) \} \\
 \indent{CC = \{ (idTipoSancion) \} } \\
 \indent{FK = \{\} } \\
@@ -593,18 +600,19 @@ PK = \{ (idTipoSancion) \} \\
 		\includegraphics[scale=0.6]{diagramas/grupos.png}\\
 		\caption{Grupos del torneo}
 	\end{center}
-\end{figure}
 
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.6]{diagramas/partidoDeFase.png}\\
-	\caption{Partidos de Fase de grupos}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.6]{diagramas/partido5toPuesto.png}\\
-	\caption{Partido de 5to puesto}
+	\begin{center}
+		\includegraphics[scale=0.6]{diagramas/partidoDeFase.png}\\
+		\caption{Partidos de Fase de grupos}
+	\end{center}
+$\qquad$
+$\qquad$
+$\qquad$
+$\qquad$
+	\begin{center}
+		\includegraphics[scale=0.6]{diagramas/partido5toPuesto.png}\\
+		\caption{Partido de 5to puesto}
+	\end{center}
 \end{figure}
 
 \begin{figure}
@@ -616,7 +624,12 @@ PK = \{ (idTipoSancion) \} \\
 \newpage 
 \section{Decisiones tomadas y supuestos asumidos}
 
-    Existe la entidad Posici\'on aunque tenga informaci\'on redundante, ya que consideramos que importantes los atributos de esta entidad en el torneo, ya que definen estos definen la existencia de un torneo. Adem\'as, queremos poder consultar de  manera eficiente sin tener que calcular el resultado en el momento.\\
+	Se agreg\'o la entidad Posici\'on, entidad que posee todos sus atributos redundates (estos pueden ser inferidos del modelo relacional sin la entidad Posici\'on, de manera no trivial). \\
+	Se decidi\'o agregarla ya que la informaci\'on suministrada define el resultado final del Torneo de Basquet.\\
+
+La informaci\'on que suministra, depende de la cantidad de partidos jugados, la etapa de cada uno de ellos y qui\'en fue el ganador.\\
+
+Teniendo esta entidad redundante en el modelo, las consultas sobre el resultado final del Torneo se simplifican considerablemente, y no deben ser recalculadas para cada una de ellas.
 
     Para el c\'alculo de la tabla de posiciones se defini\'o arbitrariamente los siguientes puntajes por partidos ganados:\\
 
@@ -660,22 +673,47 @@ A continuaci\'on se detalla mediante un gr\'afico cu\'al fue el dise\~{n}o de ba
 Los breakers son sentencias de inserts dise\~{n}adas espec\'ificamente para poner a prueba las restricciones del modelo.
 El archivo breakers.sql permite ejecutarlas y ver como todas ellas se verifican.
 
-\newpage 
 \section{Restricciones al modelo}
 
 \subsection{Restricciones pedidas por la c\'atedra}
 
+\begin{itemize}
+	\item{Una consulta que devuelva todos los nombres de los pa\'ises cuyos equipos utilizaron a todos sus jugadores en alg\'un partido como titulares.\\
+	    	Esta restricci\'on se encuentra modelada en el archivo \textbf{business\_sps.sql} y el store procedure se llama \textbf{sp\_paises\_todos\_titulares()}
+	}
+
+	\item{Un reporte con los nombres de los jugadores, la cantidad de partidos en que particip\'o y los promedios de puntos, asistencias y rebotes. 
+		El reporte debe estar ordenado por  cantidad de partidos en que participo cada jugador.\\
+		Esta restricci\'on se encuentra modelada en el archivo \textbf{business\_sps.sql} y el store procedure se llama \textbf{sp\_estadisticas\_por\_jugador()}
+	}
+
+	\item{A medida que va avanzando un torneo, se van cargando en la BD los pr\'oximos
+		partidos, y asignando \'arbitros a los mismos. Un \'arbitro no puede dirigir un partido si:
+		\begin{itemize}
+			\item{Dirigi\'o a alguno de los equipos 2 o m\'as veces, y en todos los partidos el equipo obtuvo el mismo resultado (gan\'o o perdi\'o, no hay empate)}
+			\item{Dirigi\'o una sola vez a cada equipo con resultados opuestos.}
+			\item{Est\'a asignado a dirigir un partido en la misma fecha}
+		\end{itemize}
+		Se pide realizar un stored procedure que dado un partido, devuelva los \'arbitros candidatos a dirigirlo. \\
+		Esta restricci\'on se encuentra modelada en el archivo \textbf{business\_sps.sql} y el store procedure se llama \textbf{sp\_posibles\_arbitros\_por\_partidos(idPartidoSP INT)}
+	}
+
+	\item{Implementar una restricci\'on que impida que en la base de datos se pueda asignar un \'arbitro en un partido que sea del mismo pa\'is
+	     	que alguno de los equipos que participa. \\
+	     	Esta restricci\'on se encuentra modelada en el archivo \textbf{arbitraConstraints.sql} y el trigger se llama \textbf{check\_arbitra\_bi}
+	}
+
+	\item{Implementaci\'on de alguna restricci\'on adicional que surja del dise\~{n}o. 
+		En el archivo \textbf{business\_constraints.sql} se encuentran detalladas todas las constraints adicionales que se han creado.
+	}
+
+\end{itemize}
+
+\newpage
 \subsection{Restricciones adicionales al modelo}
-	Contamos con XXX restricciones al modelo de entre las cuales se encuentran las dictadas por el Modelo de entidad relaci\'on y por restricciones propias agregadas
+
+	Contamos con m\'as de 40 restricciones al modelo de entre las cuales se encuentran las dictadas por el Modelo de entidad relaci\'on y por restricciones propias agregadas
 	descriptas en la secci\'on de Modelo l\'ogico relacional~\ref{sec:MR}
 
-\subsection{Store Procedures}
-
-
-\newpage 
-\section{Datos de prueba}
-Imagen de datos.sql y el fixture de los partidos con los puntajes
-
-Todo el trabajo pr\'actico cuenta con 
 
 \end{document}
