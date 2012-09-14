@@ -362,33 +362,33 @@ INSERT INTO partido (juegaEnEtapa, equipoSeleccion1, equipoSeleccion2, juegaEnEs
 
 -- RESULTADOS
 -- GRUPO A
-UPDATE tanteador set scoreEquip1 = 100, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 1;
-UPDATE tanteador set scoreEquip1 = 100, scoreEquip2 = 3 where nrocuarto = 4 and idPartido = 2;
-UPDATE tanteador set scoreEquip1 = 100, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 3;
-UPDATE tanteador set scoreEquip1 = 0, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 4;
-UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 5;
-UPDATE tanteador set scoreEquip1 = 4, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 6;
+UPDATE tanteador set scoreEquip1 = 98, scoreEquip2 = 90 where nrocuarto = 4 and idPartido = 1;
+UPDATE tanteador set scoreEquip1 = 100, scoreEquip2 = 80 where nrocuarto = 4 and idPartido = 2;
+UPDATE tanteador set scoreEquip1 = 67, scoreEquip2 = 50 where nrocuarto = 4 and idPartido = 3;
+UPDATE tanteador set scoreEquip1 = 49, scoreEquip2 = 85 where nrocuarto = 4 and idPartido = 4;
+UPDATE tanteador set scoreEquip1 = 70, scoreEquip2 = 90 where nrocuarto = 4 and idPartido = 5;
+UPDATE tanteador set scoreEquip1 = 93, scoreEquip2 = 68 where nrocuarto = 4 and idPartido = 6;
 
 -- GRUPO B
-UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 7;
-UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 8;
-UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 3 where nrocuarto = 4 and idPartido = 9;
-UPDATE tanteador set scoreEquip1 = 4, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 10;
-UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 11;
-UPDATE tanteador set scoreEquip1 = 0, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 12;
+UPDATE tanteador set scoreEquip1 = 76, scoreEquip2 = 79 where nrocuarto = 4 and idPartido = 7;
+UPDATE tanteador set scoreEquip1 = 81, scoreEquip2 = 71 where nrocuarto = 4 and idPartido = 8;
+UPDATE tanteador set scoreEquip1 = 80, scoreEquip2 = 94 where nrocuarto = 4 and idPartido = 9;
+UPDATE tanteador set scoreEquip1 = 115, scoreEquip2 = 60 where nrocuarto = 4 and idPartido = 10;
+UPDATE tanteador set scoreEquip1 = 65, scoreEquip2 = 60 where nrocuarto = 4 and idPartido = 11;
+UPDATE tanteador set scoreEquip1 = 56, scoreEquip2 = 78 where nrocuarto = 4 and idPartido = 12;
 
 -- 5TO_PUESTO
-UPDATE tanteador set scoreEquip1 = 0, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 13;
+UPDATE tanteador set scoreEquip1 = 60, scoreEquip2 = 79 where nrocuarto = 4 and idPartido = 13;
 
 -- SEMIFINALES
-UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 14;
-UPDATE tanteador set scoreEquip1 = 3, scoreEquip2 = 2 where nrocuarto = 4 and idPartido = 15;
+UPDATE tanteador set scoreEquip1 = 91, scoreEquip2 = 86 where nrocuarto = 4 and idPartido = 14;
+UPDATE tanteador set scoreEquip1 = 111, scoreEquip2 = 100 where nrocuarto = 4 and idPartido = 15;
 
 -- 3ER_PUESTO
-UPDATE tanteador set scoreEquip1 = 1, scoreEquip2 = 0 where nrocuarto = 4 and idPartido = 16;
+UPDATE tanteador set scoreEquip1 = 78, scoreEquip2 = 70 where nrocuarto = 4 and idPartido = 16;
 
 -- FINAL
-UPDATE tanteador set scoreEquip1 = 2, scoreEquip2 = 1 where nrocuarto = 4 and idPartido = 17;
+UPDATE tanteador set scoreEquip1 = 121, scoreEquip2 = 120 where nrocuarto = 4 and idPartido = 17;
 
 -- EQUIPOS
 INSERT INTO equipo (nombreEquipo) values ('Atenas');
