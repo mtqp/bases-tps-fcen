@@ -1,17 +1,15 @@
-package ubadb.core.components.bufferManager.bufferPool.replacementStrategies.LRU;
+package ubadb.core.components.bufferManager.bufferPool;
 
 import java.util.Date;
 
 import ubadb.core.common.Page;
-import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
 import ubadb.core.exceptions.BufferFrameException;
 
-public class LRUBufferFrame extends BufferFrame {
+public class ReferenceBufferFrame extends BufferFrame {
 	private Date referenceDate;
 
-	public LRUBufferFrame(Page page) {
+	public ReferenceBufferFrame(Page page) {
 		super(page);
-		referenceDate = new Date();
 	}
 
 	public Date getReferenceDate() {

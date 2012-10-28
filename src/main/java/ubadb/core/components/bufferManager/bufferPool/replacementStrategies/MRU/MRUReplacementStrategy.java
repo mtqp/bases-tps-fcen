@@ -5,23 +5,24 @@ import java.util.Date;
 
 import ubadb.core.common.Page;
 import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
+import ubadb.core.components.bufferManager.bufferPool.ReferenceBufferFrame;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.PageReplacementStrategy;
 import ubadb.core.exceptions.PageReplacementStrategyException;
 
 public class MRUReplacementStrategy implements PageReplacementStrategy {
 	public BufferFrame findVictim(Collection<BufferFrame> bufferFrames)
 			throws PageReplacementStrategyException {
-		MRUBufferFrame victim = null;
-		Date oldestReplaceablePageDate = null;
+		ReferenceBufferFrame victim = null;
+		Date recentReplaceablePageDate = null;
 
 		for (BufferFrame bufferFrame : bufferFrames) {
-			MRUBufferFrame mruBufferFrame = (MRUBufferFrame) bufferFrame;
+			ReferenceBufferFrame mruBufferFrame = (ReferenceBufferFrame) bufferFrame;
 			if (mruBufferFrame.canBeReplaced()
-					&& (oldestReplaceablePageDate == null || mruBufferFrame
+					&& (recentReplaceablePageDate == null || mruBufferFrame
 							.getReferenceDate()
-							.after(oldestReplaceablePageDate))) {
+							.after(recentReplaceablePageDate))) {
 				victim = mruBufferFrame;
-				oldestReplaceablePageDate = mruBufferFrame.getReferenceDate();
+				recentReplaceablePageDate = mruBufferFrame.getReferenceDate();
 			}
 		}
 
@@ -33,6 +34,6 @@ public class MRUReplacementStrategy implements PageReplacementStrategy {
 	}
 
 	public BufferFrame createNewFrame(Page page) {
-		return new MRUBufferFrame(page);
+		return new ReferenceBufferFrame(page);
 	}
 }
