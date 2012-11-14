@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
-import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.fifo.FIFOReplacementStrategy;
 import ubadb.core.exceptions.PageReplacementStrategyException;
 import ubadb.core.testDoubles.DummyObjectFactory;
 import ubadb.core.util.TestUtil;
@@ -16,12 +15,12 @@ import ubadb.core.util.TestUtil;
 
 public class LRUReplacementStrategyTest
 {
-	private FIFOReplacementStrategy strategy;
+	private LRUReplacementStrategy strategy;
 	
 	@Before
 	public void setUp()
 	{
-		strategy = new FIFOReplacementStrategy();
+		strategy = new LRUReplacementStrategy();
 	}
 	
 	@Test(expected=PageReplacementStrategyException.class)
@@ -58,7 +57,7 @@ public class LRUReplacementStrategyTest
 		Thread.sleep(TestUtil.PAUSE_INTERVAL);
 		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
 		
-		assertEquals(frame0,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
+		assertEquals(frame2,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
 	}
 
 	@Test
@@ -69,6 +68,42 @@ public class LRUReplacementStrategyTest
 		BufferFrame frame1 = strategy.createNewFrame(DummyObjectFactory.PAGE);
 		Thread.sleep(TestUtil.PAUSE_INTERVAL);
 		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		
+		frame0.pin();
+		
+		assertEquals(frame2,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
+	}
+	
+	@Test
+	public void testMultiplePagesToReplaceWithPinAndUnpin() throws Exception
+	{
+		BufferFrame frame0 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame0.pin();
+		frame0.unpin();
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);	//Add a sleep so that frame dates are different
+		BufferFrame frame1 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame1.pin();
+		frame1.unpin();
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);
+		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame2.pin();
+		frame2.unpin();
+		
+		assertEquals(frame0,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
+	}
+
+	@Test
+	public void testMultiplePagesToReplaceButOldestOnePinnedWithPinAndUnpin() throws Exception
+	{
+		BufferFrame frame0 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);	//Add a sleep so that frame dates are different
+		BufferFrame frame1 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame1.pin();
+		frame1.unpin();
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);
+		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame2.pin();
+		frame2.unpin();
 		
 		frame0.pin();
 		

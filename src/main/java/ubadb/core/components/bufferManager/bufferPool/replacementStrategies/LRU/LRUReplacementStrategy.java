@@ -16,13 +16,13 @@ public class LRUReplacementStrategy implements PageReplacementStrategy {
 		Date oldestReplaceablePageDate = null;
 
 		for (BufferFrame bufferFrame : bufferFrames) {
-			ReferenceBufferFrame mruBufferFrame = (ReferenceBufferFrame) bufferFrame;
-			if (mruBufferFrame.canBeReplaced()
-					&& (oldestReplaceablePageDate == null || mruBufferFrame
+			ReferenceBufferFrame lruBufferFrame = (ReferenceBufferFrame) bufferFrame;
+			if (lruBufferFrame.canBeReplaced()
+					&& (oldestReplaceablePageDate == null || lruBufferFrame
 							.getReferenceDate().before(
 									oldestReplaceablePageDate))) {
-				victim = mruBufferFrame;
-				oldestReplaceablePageDate = mruBufferFrame.getReferenceDate();
+				victim = lruBufferFrame;
+				oldestReplaceablePageDate = lruBufferFrame.getReferenceDate();
 			}
 		}
 
