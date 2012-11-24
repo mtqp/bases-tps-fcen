@@ -17,6 +17,13 @@ public class MRUReplacementStrategy implements PageReplacementStrategy {
 
 		for (BufferFrame bufferFrame : bufferFrames) {
 			ReferenceBufferFrame mruBufferFrame = (ReferenceBufferFrame) bufferFrame;
+			
+			// Si encuentra una pagina que nunca fue referenciada, la devuelve y sale del for sin seguir buscando
+			if(mruBufferFrame.canBeReplaced() && mruBufferFrame.getReferenceDate() == null ) {
+				victim = mruBufferFrame;
+				break;
+			}
+			
 			if (mruBufferFrame.canBeReplaced()
 					&& (recentReplaceablePageDate == null || mruBufferFrame
 							.getReferenceDate()
@@ -24,6 +31,7 @@ public class MRUReplacementStrategy implements PageReplacementStrategy {
 				victim = mruBufferFrame;
 				recentReplaceablePageDate = mruBufferFrame.getReferenceDate();
 			}
+			
 		}
 
 		if (victim == null)
