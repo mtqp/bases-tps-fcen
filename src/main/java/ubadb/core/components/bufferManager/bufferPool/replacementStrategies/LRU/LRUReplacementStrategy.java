@@ -17,6 +17,13 @@ public class LRUReplacementStrategy implements PageReplacementStrategy {
 
 		for (BufferFrame bufferFrame : bufferFrames) {
 			ReferenceBufferFrame lruBufferFrame = (ReferenceBufferFrame) bufferFrame;
+			
+			// Si encuentra una pagina que nunca fue referenciada, la devuelve y sale del for sin seguir buscando
+			if(lruBufferFrame.canBeReplaced() && lruBufferFrame.getReferenceDate() == null ) {
+				victim = lruBufferFrame;
+				break;
+			}
+			
 			if (lruBufferFrame.canBeReplaced()
 					&& (oldestReplaceablePageDate == null || lruBufferFrame
 							.getReferenceDate().before(
@@ -24,6 +31,7 @@ public class LRUReplacementStrategy implements PageReplacementStrategy {
 				victim = lruBufferFrame;
 				oldestReplaceablePageDate = lruBufferFrame.getReferenceDate();
 			}
+			
 		}
 
 		if (victim == null)
