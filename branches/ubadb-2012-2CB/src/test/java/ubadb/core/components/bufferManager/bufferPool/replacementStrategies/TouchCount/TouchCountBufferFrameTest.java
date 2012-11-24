@@ -35,7 +35,7 @@ public class TouchCountBufferFrameTest
 		TouchCountBufferFrame bufferFrame = new TouchCountBufferFrame(DummyObjectFactory.PAGE, 3);
 		bufferFrame.pin();
 		int tc0 = bufferFrame.getTouchCount();
-		Thread.sleep(3000L); //Sleep to ensure they spend 3 seconds
+		Thread.sleep(TestUtil.SLEEP_THREE_SECONDS); //Sleep to ensure they spend 3 seconds
 		bufferFrame.unpin();
 		// Aumento en 1 el touchCount pues pasaron 3 segundos
 		assertTrue(tc0 == bufferFrame.getTouchCount() - 1);  
