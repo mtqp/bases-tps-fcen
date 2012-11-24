@@ -34,10 +34,14 @@ public class TouchCountBufferFrame extends BufferFrame {
 
 	private void incrementTouchCountIfNeeded() {
 		Date current = new Date();
-		int seconds = (int) ((current.getTime() - lastTouchedDate.getTime()) / 1000);
+		long a = current.getTime();
+		long lastTouchedNumber = 0;
+		if(lastTouchedDate != null)  lastTouchedNumber = lastTouchedDate.getTime();
+		int seconds = (int) ((current.getTime() - lastTouchedNumber) / 1000);
 		if (seconds >= this.secondsToIncrementCount) {
 			touchCount++;
 			lastTouchedDate = current;
 		}
+		System.out.print("seconds" + seconds + "secondsToIncrementCount" + this.secondsToIncrementCount);
 	}
 }
