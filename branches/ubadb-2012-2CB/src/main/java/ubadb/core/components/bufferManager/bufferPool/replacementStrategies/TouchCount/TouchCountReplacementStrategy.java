@@ -4,34 +4,45 @@ import java.util.Collection;
 import ubadb.core.common.Page;
 import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.PageReplacementStrategy;
+import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.LRU.LRUReplacementStrategy;
 import ubadb.core.exceptions.PageReplacementStrategyException;
 
-public class TouchCountReplacementStrategy implements PageReplacementStrategy {
+public class TouchCountReplacementStrategy extends LRUReplacementStrategy implements PageReplacementStrategy{
 
-	private static int TOUCH_COUNT_INTERVAL_SECONDS = 3;
+	private int countIntervalSeconds = 3;
 
-	public BufferFrame findVictim(Collection<BufferFrame> bufferFrames)
-			throws PageReplacementStrategyException {
+	public TouchCountReplacementStrategy(int countIntervalSeconds){
+		this.countIntervalSeconds = countIntervalSeconds;
+	}
+	
+	/*
+	 * Devuelve la pagina con touch_count minimo, en caso de haber mas de uno
+	 * devuelve el de date de referencia mas vieja. --> Es la misma implementacion que una LRU
+	 */
+	public BufferFrame findVictim(Collection<BufferFrame> bufferFrames)	throws PageReplacementStrategyException {
+		return super.findVictim(bufferFrames);
+	}
+	
+	@Deprecated
+	public BufferFrame findVictimOLD(Collection<BufferFrame> bufferFrames)	throws PageReplacementStrategyException {
 		TouchCountBufferFrame victim = null;
-		int minTouchCount = Integer.MAX_VALUE;
+		int minTouchCount = 0;
 
 		for (BufferFrame bufferFrame : bufferFrames) {
 			TouchCountBufferFrame touchCountBufferFrame = (TouchCountBufferFrame) bufferFrame;
-			if (touchCountBufferFrame.canBeReplaced()
-					&& minTouchCount > touchCountBufferFrame.getTouchCount()) {
+			if (touchCountBufferFrame.canBeReplaced() && touchCountBufferFrame.getPinCount() < minTouchCount) {
 				victim = touchCountBufferFrame;
-				minTouchCount = touchCountBufferFrame.getTouchCount();
+				minTouchCount = touchCountBufferFrame.getPinCount();
 			}
 		}
 
 		if (victim == null)
-			throw new PageReplacementStrategyException(
-					"No page can be removed from pool");
+			throw new PageReplacementStrategyException("No page can be removed from pool");
 		else
 			return victim;
 	}
 
 	public BufferFrame createNewFrame(Page page) {
-		return new TouchCountBufferFrame(page, TOUCH_COUNT_INTERVAL_SECONDS);
+		return new TouchCountBufferFrame(page, countIntervalSeconds);
 	}
 }

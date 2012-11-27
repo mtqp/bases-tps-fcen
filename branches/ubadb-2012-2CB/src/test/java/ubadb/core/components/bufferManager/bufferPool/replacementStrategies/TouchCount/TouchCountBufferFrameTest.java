@@ -14,7 +14,7 @@ public class TouchCountBufferFrameTest
 		TouchCountBufferFrame bufferFrame = new TouchCountBufferFrame(DummyObjectFactory.PAGE, 3);
 		bufferFrame.pin();
 		
-		assertTrue(bufferFrame.getTouchCount() > 0);
+		assertTrue(bufferFrame.getPinCount() > 0);
 	}
 	
 	@Test
@@ -22,22 +22,22 @@ public class TouchCountBufferFrameTest
 	{
 		TouchCountBufferFrame bufferFrame = new TouchCountBufferFrame(DummyObjectFactory.PAGE, 3);
 		bufferFrame.pin();
-		int tc0 = bufferFrame.getTouchCount();
+		int tc0 = bufferFrame.getPinCount();
 		bufferFrame.unpin();
 		// tc0 y bufferFrame.getTouchCount() son iguales porque no pasaron 3 segundos entre el
 		// evento del pin y el unpin
-		assertTrue(tc0 == bufferFrame.getTouchCount());
+		assertTrue(tc0 == bufferFrame.getPinCount());
 	}
 	
 	@Test
 	public void testTouchCountPinUnpingDistinct() throws Exception
 	{
 		TouchCountBufferFrame bufferFrame = new TouchCountBufferFrame(DummyObjectFactory.PAGE, 3);
+		int tc0 = bufferFrame.getPinCount();
 		bufferFrame.pin();
-		int tc0 = bufferFrame.getTouchCount();
 		Thread.sleep(TestUtil.SLEEP_THREE_SECONDS); //Sleep to ensure they spend 3 seconds
 		bufferFrame.unpin();
 		// Aumento en 1 el touchCount pues pasaron 3 segundos
-		assertTrue(tc0 == bufferFrame.getTouchCount() - 1);  
+		assertTrue(tc0 == bufferFrame.getPinCount());  
 	}
 }
