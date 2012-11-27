@@ -3,12 +3,10 @@ package ubadb.core.components.bufferManager.bufferPool.replacementStrategies.Tou
 import java.util.Date;
 
 import ubadb.core.common.Page;
-import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
+import ubadb.core.components.bufferManager.bufferPool.ReferenceBufferFrame;
 import ubadb.core.exceptions.BufferFrameException;
 
-public class TouchCountBufferFrame extends BufferFrame {
-	private Date lastTouchedDate;
-	private int touchCount = 0;
+public class TouchCountBufferFrame extends ReferenceBufferFrame {
 	private int secondsToIncrementCount;
 
 	public TouchCountBufferFrame(Page page, int secondsToIncrementCount) {
@@ -16,32 +14,43 @@ public class TouchCountBufferFrame extends BufferFrame {
 		this.secondsToIncrementCount = secondsToIncrementCount;
 	}
 
-	// llamo al correcto y me fijo si tengo que actualizar el touchCount
 	public void pin() {
-		super.pin();
-		incrementTouchCountIfNeeded();
-	}
-
-	public int getTouchCount() {
-		return this.touchCount;
-	}
-
-	// llamo al correcto y me fijo si tengo que actualizar el touchCount
-	public void unpin() throws BufferFrameException {
-		super.unpin();
-		incrementTouchCountIfNeeded();
-	}
-
-	private void incrementTouchCountIfNeeded() {
-		Date current = new Date();
-		long a = current.getTime();
-		long lastTouchedNumber = 0;
-		if(lastTouchedDate != null)  lastTouchedNumber = lastTouchedDate.getTime();
-		int seconds = (int) ((current.getTime() - lastTouchedNumber) / 1000);
-		if (seconds >= this.secondsToIncrementCount) {
-			touchCount++;
-			lastTouchedDate = current;
+		if(canIncrementTouchCount()){
+			super.pin();
 		}
+	}
+
+	public void unpin() throws BufferFrameException {
+		if(canIncrementTouchCount()){
+			super.unpin();
+		}
+	}
+ 
+	public void setPin(int pinValue) throws BufferFrameException{
+		if(pinValue<0)
+			throw new BufferFrameException("Cannot set pinValue less than zero");
+		
+		while(pinValue != this.getPinCount())
+		{
+			if(pinValue > this.getPinCount())
+				this.pin();
+			else
+				this.unpin();
+		}
+	}
+	
+	private boolean canIncrementTouchCount() {
+		Date current = new Date();
+
+		long lastTouchedNumber = 0;
+		
+		int seconds = this.secondsToIncrementCount;
+		if(getReferenceDate() != null){
+			lastTouchedNumber = getReferenceDate().getTime();
+			seconds = (int) ((current.getTime() - lastTouchedNumber) / 1000);
+		}
+		
 		System.out.print("seconds" + seconds + "secondsToIncrementCount" + this.secondsToIncrementCount);
+		return (seconds >= this.secondsToIncrementCount);
 	}
 }
