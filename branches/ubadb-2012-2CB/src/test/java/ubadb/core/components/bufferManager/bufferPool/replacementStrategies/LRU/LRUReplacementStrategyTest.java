@@ -57,17 +57,26 @@ public class LRUReplacementStrategyTest
 		
 		assertEquals(frame0,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
 	}
-
+	/*
+	 * Test mejorado para que si o si tenga que tomar el frame1 ya que con el pin guarda la fecha, 
+	 * sino tomaba el 1ro no bloqueado de la lista. 
+	 */
 	@Test
 	public void testMultiplePagesToReplaceButOldestOnePinned() throws Exception
 	{
+
 		BufferFrame frame0 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame0.pin();
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);	//Add a sleep so that frame dates are different
 		BufferFrame frame1 = strategy.createNewFrame(DummyObjectFactory.PAGE);
-		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
-		
 		frame1.pin();
+		frame1.unpin();
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);
+		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame2.pin();
+		frame2.unpin();
 		
-		assertEquals(frame0,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
+		assertEquals(frame1,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
 	}
 	
 	@Test
