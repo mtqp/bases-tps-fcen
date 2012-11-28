@@ -8,34 +8,33 @@ import ubadb.core.exceptions.BufferFrameException;
 
 public class TouchCountBufferFrame extends ReferenceBufferFrame {
 	private int secondsToIncrementCount;
-
+	private int touchCount;
+	
 	public TouchCountBufferFrame(Page page, int secondsToIncrementCount) {
 		super(page);
 		this.secondsToIncrementCount = secondsToIncrementCount;
+		touchCount = 0;
 	}
 
 	public void pin() {
+		super.pin();
 		if(canIncrementTouchCount()){
-			super.pin();
+			this.touchCount++;
 		}
 	}
 
-	public void unpin() throws BufferFrameException {
-		if(canIncrementTouchCount()){
-			super.unpin();
-		}
+	public int getTouchCount(){
+		return touchCount;
 	}
- 
-	public void setPin(int pinValue) throws BufferFrameException{
-		if(pinValue<0)
-			throw new BufferFrameException("Cannot set pinValue less than zero");
-		
-		while(pinValue != this.getPinCount())
-		{
-			if(pinValue > this.getPinCount())
-				this.pin();
-			else
-				this.unpin();
+	
+	public void setTouchCount(int touchCountvalue){
+		this.touchCount = touchCountvalue;
+	}
+	
+	public void unpin() throws BufferFrameException {
+		super.unpin();
+		if(canIncrementTouchCount()){
+			this.touchCount++;
 		}
 	}
 	

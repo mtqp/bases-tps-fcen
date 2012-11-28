@@ -30,9 +30,9 @@ public class TouchCountReplacementStrategy extends LRUReplacementStrategy implem
 
 		for (BufferFrame bufferFrame : bufferFrames) {
 			TouchCountBufferFrame touchCountBufferFrame = (TouchCountBufferFrame) bufferFrame;
-			if (touchCountBufferFrame.canBeReplaced() && touchCountBufferFrame.getPinCount() < minTouchCount) {
+			if (touchCountBufferFrame.canBeReplaced() && touchCountBufferFrame.getTouchCount() < minTouchCount) {
 				victim = touchCountBufferFrame;
-				minTouchCount = touchCountBufferFrame.getPinCount();
+				minTouchCount = touchCountBufferFrame.getTouchCount();
 			}
 		}
 
