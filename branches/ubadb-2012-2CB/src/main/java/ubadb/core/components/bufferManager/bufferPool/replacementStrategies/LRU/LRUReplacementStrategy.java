@@ -35,8 +35,7 @@ public class LRUReplacementStrategy implements PageReplacementStrategy {
 		}
 
 		if (victim == null)
-			throw new PageReplacementStrategyException(
-					"No page can be removed from pool");
+			throw new PageReplacementStrategyException("No page can be removed from pool");
 		else
 			return victim;
 	}

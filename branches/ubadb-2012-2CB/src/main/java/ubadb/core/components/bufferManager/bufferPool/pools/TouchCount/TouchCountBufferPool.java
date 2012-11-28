@@ -106,13 +106,8 @@ public class TouchCountBufferPool implements BufferPool {
 		TouchCountBufferFrame frameToCold = (TouchCountBufferFrame) this.framesPool.get(this.midPoint);
 		TouchCountBufferFrame frameToHot = (TouchCountBufferFrame) this.framesPool.get(indexFrame);
 		
-		try {
-			frameToCold.setPin(this.agingCoolCount);
-			frameToHot.setPin(0);
-		} catch (BufferFrameException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		frameToCold.setTouchCount(this.agingCoolCount);
+		frameToHot.setTouchCount(0);
 		
 		this.framesPool.remove(indexFrame);
 		this.framesPool.add(frameToHot);
@@ -147,7 +142,7 @@ public class TouchCountBufferPool implements BufferPool {
 			 */
 			
 			TouchCountBufferFrame touchCountBufferFrame = ((TouchCountBufferFrame)this.framesPool.get(newMidPoint));
-			touchCountBufferFrame.setPin(0);
+			touchCountBufferFrame.setTouchCount(0);
 		}
 		else {
 			/*
@@ -155,7 +150,7 @@ public class TouchCountBufferPool implements BufferPool {
 			 */
 			
 			TouchCountBufferFrame touchCountBufferFrame = ((TouchCountBufferFrame)this.framesPool.get(this.midPoint));
-			touchCountBufferFrame.setPin(this.agingCoolCount);
+			touchCountBufferFrame.setTouchCount(this.agingCoolCount);
 		}
 		
 		this.midPoint = newMidPoint;
