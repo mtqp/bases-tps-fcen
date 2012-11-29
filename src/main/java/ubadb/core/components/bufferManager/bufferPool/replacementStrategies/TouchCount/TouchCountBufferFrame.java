@@ -17,10 +17,11 @@ public class TouchCountBufferFrame extends ReferenceBufferFrame {
 	}
 
 	public void pin() {
-		super.pin();
 		if(canIncrementTouchCount()){
 			this.touchCount++;
 		}
+		
+		super.pin();
 	}
 
 	public int getTouchCount(){
@@ -32,10 +33,11 @@ public class TouchCountBufferFrame extends ReferenceBufferFrame {
 	}
 	
 	public void unpin() throws BufferFrameException {
-		super.unpin();
 		if(canIncrementTouchCount()){
 			this.touchCount++;
 		}
+		
+		super.unpin();
 	}
 	
 	private boolean canIncrementTouchCount() {
