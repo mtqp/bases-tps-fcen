@@ -12,6 +12,8 @@ public class TouchCountReplacementStrategy implements PageReplacementStrategy{
 	private int countIntervalSeconds = 3;
 	private int agingHotCriteria = 2;
 
+	public TouchCountReplacementStrategy(){}
+	
 	public TouchCountReplacementStrategy(int countIntervalSeconds, int agingHotCriteria){
 		this.countIntervalSeconds = countIntervalSeconds;
 		this.agingHotCriteria = agingHotCriteria;
