@@ -51,7 +51,7 @@ public class TouchCountBufferFrame extends ReferenceBufferFrame {
 			seconds = (int) ((current.getTime() - lastTouchedNumber) / 1000);
 		}
 		
-		System.out.print("seconds" + seconds + "secondsToIncrementCount" + this.secondsToIncrementCount);
+		//System.out.println("seconds: " + seconds + " | secondsToIncrementCount: " + this.secondsToIncrementCount);
 		return (seconds >= this.secondsToIncrementCount);
 	}
 }

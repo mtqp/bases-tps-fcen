@@ -9,7 +9,6 @@ import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
 import ubadb.core.components.bufferManager.bufferPool.BufferPool;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.PageReplacementStrategy;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.TouchCount.TouchCountBufferFrame;
-import ubadb.core.exceptions.BufferFrameException;
 import ubadb.core.exceptions.BufferPoolException;
 
 /**
@@ -81,42 +80,6 @@ public class TouchCountBufferPool implements BufferPool {
 		return countPagesInPool() < maxBufferPoolSize;
 	}
 
-	/**
-	 * Aplica el algoritmo de reorganizacion de los frames, pasando de cold a
-	 * hot region los que superan el umbral
-	 */
-	public void reorganizeFrames() {
-		List<Integer> newHotIndexes = new ArrayList<>();
-
-		for (int i = 0; i < this.framesPool.size(); i++) {
-			boolean isInColdRegion = i < this.midPoint;
-
-			if (!isInColdRegion)
-				break;
-
-			TouchCountBufferFrame touchCountBufferFrame = (TouchCountBufferFrame) this.framesPool
-					.get(i);
-
-			if (touchCountBufferFrame.getPinCount() >= this.agingHotCriteria)
-				newHotIndexes.add(i);
-		}
-
-		for (int newHotIndexFrame : newHotIndexes)
-			MoveFrameToHot(newHotIndexFrame);
-	}
-
-	private void MoveFrameToHot(int indexFrame) {
-		TouchCountBufferFrame frameToCold = (TouchCountBufferFrame) this.framesPool
-				.get(this.midPoint);
-		TouchCountBufferFrame frameToHot = (TouchCountBufferFrame) this.framesPool
-				.get(indexFrame);
-
-		frameToCold.setTouchCount(this.agingCoolCount);
-		frameToHot.setTouchCount(0);
-
-		this.framesPool.remove(indexFrame);
-		this.framesPool.add(frameToHot);
-	}
 
 	public BufferFrame addNewPage(Page page) throws BufferPoolException {
 		if (!hasSpace(page.getPageId()))
@@ -124,51 +87,17 @@ public class TouchCountBufferPool implements BufferPool {
 		else if (isPageInPool(page.getPageId()))
 			throw new BufferPoolException("Page already exists in the pool");
 		else {
-			BufferFrame bufferFrame = pageReplacementStrategy
-					.createNewFrame(page);
+			BufferFrame bufferFrame = pageReplacementStrategy.createNewFrame(page);
 			this.framesPool.add(midPoint, bufferFrame);
-			try {
-
-				this.reloadMidPointerOnAddingFrame();
-			} catch (BufferFrameException e) {
-				throw new BufferPoolException(e.getMessage());
-			}
+			this.reloadMidPointerAfterFramesPoolChanged();
 
 			return bufferFrame;
 		}
 	}
 
-	private void reloadMidPointerOnAddingFrame() throws BufferFrameException {
+	private void reloadMidPointerAfterFramesPoolChanged()  {
 		int hotElements = CalculateElementsCountInHotRegion();
-		int diference = Math.abs(this.midPoint
-				- (this.framesPool.size() - hotElements));
-		if (diference > 1)
-			throw new BufferFrameException(
-					"No se permite mover mas de un elemento.");
-
-		boolean needAdd = diference == 1;
-		if (needAdd)
-			MoveColdToHot();
-
 		this.midPoint = this.framesPool.size() - hotElements;
-	}
-
-	// chequear contra la respuesta de Diego en el email que enviamos
-	private void MoveColdToHot() throws BufferFrameException {
-		int maxTouchCount = 0;
-		TouchCountBufferFrame maxFrame = null;
-		for (int index = 0; index < this.midPoint; index++) {
-			TouchCountBufferFrame frame = (TouchCountBufferFrame) this.framesPool.get(index);
-			if (frame.getTouchCount() > maxTouchCount) {
-				maxTouchCount = frame.getTouchCount();
-				maxFrame = frame;
-			}
-		}
-		
-		if (maxFrame == null)
-			throw new BufferFrameException("No se encontro frame para mover.");
-			
-		MoveColdBufferToHot(maxFrame);
 	}
 
 	private void MoveColdBufferToHot(TouchCountBufferFrame maxFrame) {
@@ -181,27 +110,8 @@ public class TouchCountBufferPool implements BufferPool {
 		if (isPageInPool(pageId)) {
 			BufferFrame frame = findBufferInPool(pageId);
 			this.framesPool.remove(frame);
-			try {
-					int frameToRemoveIndex = FindFrameIndex(frame);
-					boolean isInColdRegion = frameToRemoveIndex < this.midPoint;
-					int oldElementsCount = CalculateElementsCountInHotRegion();
-					this.framesPool.remove(frameToRemoveIndex);
-					if (!isInColdRegion)
-						this.reloadMidPointerOnAddingFrame();
-					else
-					{
-						int newElementsCount = CalculateElementsCountInHotRegion();
-						// Esto vale por la precondicion de que a lo sumo un elemento pasa a la region fria
-						if (oldElementsCount != newElementsCount)
-						{
-							TouchCountBufferFrame frameToCold = (TouchCountBufferFrame)this.framesPool.get(this.midPoint);
-							frameToCold.setTouchCount(this.agingCoolCount);
-							this.midPoint ++;
-						}
-					}
-			} catch (Exception e) {
-				throw new BufferPoolException(e.getMessage());
-			}
+			this.reloadMidPointerAfterFramesPoolChanged();
+			
 		} else
 			throw new BufferPoolException("Cannot remove an unexisting page");
 	}
@@ -212,31 +122,16 @@ public class TouchCountBufferPool implements BufferPool {
 		return (int) Math.floor(value);
 	}
 
-	private int FindFrameIndex(BufferFrame frame) {
-		int frameToRemoveIndex = 0;
-		for(int index = 0; index < this.framesPool.size(); index++)
-		{
-			if (this.framesPool.get(index).getPage().equals(frame.getPage()))
-			{
-				frameToRemoveIndex = index;
-				break;
-			}
-		}
-		return frameToRemoveIndex;
-	}
-
 	public BufferFrame findVictim(PageId pageIdToBeAdded)
 			throws BufferPoolException {
 		try {
-			BufferFrame victim = pageReplacementStrategy
-					.findVictim(this.framesPool);
+			BufferFrame victim = pageReplacementStrategy.findVictim(this.framesPool);
 
 			List<TouchCountBufferFrame> buffersToMoveToHot = findBuffersToMove(victim);
 
 			for (TouchCountBufferFrame frameToHot : buffersToMoveToHot) {
 
-				TouchCountBufferFrame frameToCold = ((TouchCountBufferFrame) this.framesPool
-						.get(this.midPoint));
+				TouchCountBufferFrame frameToCold = ((TouchCountBufferFrame) this.framesPool.get(this.midPoint));
 				frameToCold.setTouchCount(this.agingCoolCount);
 
 				MoveColdBufferToHot(frameToHot);
@@ -253,6 +148,7 @@ public class TouchCountBufferPool implements BufferPool {
 	private List<TouchCountBufferFrame> findBuffersToMove(BufferFrame victim) {
 
 		List<TouchCountBufferFrame> buffersToMoveToHot = new ArrayList<TouchCountBufferFrame>();
+		
 		for (BufferFrame bufferFrame : this.framesPool) {
 
 			if (bufferFrame.getPage().equals(victim.getPage())) {
