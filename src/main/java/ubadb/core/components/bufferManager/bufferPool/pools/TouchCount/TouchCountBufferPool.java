@@ -19,7 +19,7 @@ public class TouchCountBufferPool implements BufferPool {
 
 	private List<BufferFrame> framesPool;
 	private PageReplacementStrategy pageReplacementStrategy;
-	private final int hotPercentage; // Es el porcentaje de frames en la lista
+	private final double hotPercentage; // Es el porcentaje de frames en la lista
 										// de hot que debe mantenerse
 										// invariante.
 	private final int agingHotCriteria; // Umbral bajo el cual acepto que el
@@ -30,8 +30,12 @@ public class TouchCountBufferPool implements BufferPool {
 
 	/* Apunta al elemento HOT mas cercano a la cold region */
 	private int midPoint;
-
-	public TouchCountBufferPool(int maxBufferPoolSize, int percentHotDefault,
+	
+	public TouchCountBufferPool(int maxBufferPoolSize, double percentHotDefault, PageReplacementStrategy pageReplacementStrategy) {
+		this(maxBufferPoolSize, percentHotDefault, 3, 1 ,pageReplacementStrategy);
+	}
+	
+	public TouchCountBufferPool(int maxBufferPoolSize, double percentHotDefault,
 			int agingHotCriteria, int agingCoolCount,
 			PageReplacementStrategy pageReplacementStrategy) {
 		this.maxBufferPoolSize = maxBufferPoolSize;
@@ -41,6 +45,7 @@ public class TouchCountBufferPool implements BufferPool {
 		CheckParametersBoundaries();
 		this.pageReplacementStrategy = pageReplacementStrategy;
 		this.framesPool = new ArrayList<BufferFrame>();
+		this.midPoint = 0;
 	}
 
 	private void CheckParametersBoundaries() {
@@ -88,7 +93,11 @@ public class TouchCountBufferPool implements BufferPool {
 			throw new BufferPoolException("Page already exists in the pool");
 		else {
 			BufferFrame bufferFrame = pageReplacementStrategy.createNewFrame(page);
-			this.framesPool.add(midPoint, bufferFrame);
+			if(midPoint == this.framesPool.size()){
+				this.framesPool.add(bufferFrame);
+			}else{
+				this.framesPool.add(midPoint, bufferFrame);
+			}
 			this.reloadMidPointerAfterFramesPoolChanged();
 
 			return bufferFrame;
@@ -117,13 +126,24 @@ public class TouchCountBufferPool implements BufferPool {
 	}
 
 	private int CalculateElementsCountInHotRegion() {
-		double hotPercentage = this.hotPercentage / 100;
+		double hotPercentage = this.hotPercentage / 100.0;
 		double value = (double) this.framesPool.size() * hotPercentage;
 		return (int) Math.floor(value);
 	}
 
-	public BufferFrame findVictim(PageId pageIdToBeAdded)
-			throws BufferPoolException {
+	/**
+	 * Precondición: el pageId no está en el bufferPool y el bufferPool no tiene espacio.
+	 */
+	public BufferFrame findVictim(PageId pageIdToBeAdded) throws BufferPoolException {
+		
+		if(hasSpace(pageIdToBeAdded)){
+			throw new BufferPoolException("The buffer still has space");
+		}
+		
+		if(isPageInPool(pageIdToBeAdded)){
+			throw new BufferPoolException("The page is already in the buffer");
+		}
+		
 		try {
 			BufferFrame victim = pageReplacementStrategy.findVictim(this.framesPool);
 
@@ -140,8 +160,7 @@ public class TouchCountBufferPool implements BufferPool {
 			return victim;
 
 		} catch (Exception e) {
-			throw new BufferPoolException(
-					"Cannot find a victim page for removal", e);
+			throw new BufferPoolException("Cannot find a victim page for removal", e);
 		}
 	}
 
@@ -166,5 +185,9 @@ public class TouchCountBufferPool implements BufferPool {
 
 	public int countPagesInPool() {
 		return this.framesPool.size();
+	}
+	
+	public int getMidPointer(){
+		return midPoint;
 	}
 }
