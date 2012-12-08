@@ -2,6 +2,7 @@ package ubadb.core.components.bufferManager.bufferPool.replacementStrategies.Tou
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Before;
@@ -21,6 +22,12 @@ public class TouchCountReplacementStrategyTest
 		int countIntervalSeconds = 1;
 		int agingHotCriteria = 2;
 		strategy = new TouchCountReplacementStrategy(countIntervalSeconds, agingHotCriteria);
+	}
+	
+	@Test(expected=PageReplacementStrategyException.class)
+	public void testEmptyBuffer() throws Exception
+	{
+		strategy.findVictim(new ArrayList());
 	}
 	
 	@Test(expected=PageReplacementStrategyException.class)

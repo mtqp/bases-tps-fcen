@@ -54,4 +54,9 @@ public class TouchCountBufferFrame extends ReferenceBufferFrame {
 		//System.out.println("seconds: " + seconds + " | secondsToIncrementCount: " + this.secondsToIncrementCount);
 		return (seconds >= this.secondsToIncrementCount);
 	}
+	
+	@Override
+	public String toString() {
+		return "Id: " + getPage().getPageId().getNumber(); 
+	}
 }

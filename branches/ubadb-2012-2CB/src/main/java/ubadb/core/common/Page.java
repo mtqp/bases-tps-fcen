@@ -55,4 +55,9 @@ public class Page
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "PageId: " + getPageId().getNumber();
+	}
 }
