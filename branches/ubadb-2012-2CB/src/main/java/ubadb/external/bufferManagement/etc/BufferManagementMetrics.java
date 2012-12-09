@@ -31,6 +31,8 @@ public class BufferManagementMetrics
 
 	public void showSummary()
 	{
+		System.out.println("Hits: " + (this.countRequests()-faultsCount));
+		System.out.println("Misses: " + faultsCount);
 		System.out.println("Hit rate: " + calculateHitRate());
 	}
 }

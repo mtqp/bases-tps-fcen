@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Random;
 
 import ubadb.core.common.TransactionId;
+import ubadb.external.bufferManagement.etc.PageReference;
 import ubadb.external.bufferManagement.etc.PageReferenceTrace;
 import ubadb.external.bufferManagement.etc.PageReferenceTraceSerializer;
+import ubadb.external.bufferManagement.etc.PageReferenceType;
 import ubadb.external.bufferManagement.traceGenerators.BNLJTraceGenerator;
+import ubadb.external.bufferManagement.traceGenerators.BufferPoolTraceGenerator;
 import ubadb.external.bufferManagement.traceGenerators.FileScanTraceGenerator;
 import ubadb.external.bufferManagement.traceGenerators.IndexScanTraceGenerator;
 import ubadb.external.bufferManagement.traceGenerators.MixedTraceGenerator;
@@ -19,8 +22,36 @@ public class MainTraceGenerator
 	public static void main(String[] args) throws Exception
 	{
 //		basicDataSet();
-		complexDataSet();
+		//complexDataSet();
+		pathologicalDataSet();
 	}
+
+	private static void pathologicalDataSet() throws Exception
+	{
+		PageReferenceTraceSerializer serializer = new PageReferenceTraceSerializer();
+		
+		int transactionId = 1;
+		int bufferPoolLength = 10;
+		int missCountAfterBufferFull = 10;
+		String lruPathological = "lruPathological-Music.trace";
+		String fileNameLRU = "generated/lruPathological-Music.trace";
+		
+		PageReferenceTrace traceA1 = new BufferPoolTraceGenerator().generateLRUPathologicalSet(transactionId, lruPathological, bufferPoolLength, missCountAfterBufferFull); 
+		serialize(fileNameLRU, traceA1, serializer);
+		
+		String mruPathological = "mruPathological-Music.trace";
+		String fileNameMRU = "generated/" + mruPathological;
+		PageReferenceTrace traceA2 = new BufferPoolTraceGenerator().generateMRUPathologicalSet(transactionId, mruPathological, bufferPoolLength, missCountAfterBufferFull); 
+		serialize(fileNameMRU, traceA2, serializer);
+		
+		String lruVSTouchCount = "lruVSTouchCount-Music.trace";
+		String fileNameLRUTouch = "generated/" + lruVSTouchCount;
+		int agingHotCriteria = 5;
+		PageReferenceTrace traceA3 = new BufferPoolTraceGenerator().generateLRUAllMissVersusTouchCountAllHit(transactionId, lruVSTouchCount, bufferPoolLength, agingHotCriteria);
+		serialize(fileNameLRUTouch, traceA3, serializer);
+		
+	}
+	
 	
 	private static void basicDataSet() throws Exception
 	{

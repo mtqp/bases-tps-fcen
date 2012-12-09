@@ -1,9 +1,7 @@
 package ubadb.external.bufferManagement.traceGenerators;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ubadb.core.common.PageId;
 import ubadb.core.common.TableId;
@@ -12,6 +10,10 @@ import ubadb.external.bufferManagement.etc.PageReferenceTrace;
 
 public class BufferPoolTraceGenerator extends PageReferenceTraceGenerator
 {
+	/*[Objetivo del trace]
+	 * Ver que al intercambiar entre la mas nueva y una que no esta en el buffer siempre
+	 * se obtiene un miss
+	 */
 	public PageReferenceTrace generateMRUPathologicalSet(long transactionNumber, String fileName, int bufferPoolLength, int missCountAfterBufferFull)
 	{
 		/*
@@ -46,6 +48,10 @@ public class BufferPoolTraceGenerator extends PageReferenceTraceGenerator
 		return buildRequestAndRelease(new TransactionId(transactionNumber), pages);
 	}
 	
+	/*[Objetivo del trace]
+	 * Ver que al pedir siempre la pagina mas vieja en el buffer pool, el algoritmo
+	 * siempre obtendra un miss
+	 */
 	public PageReferenceTrace generateLRUPathologicalSet(long transactionNumber, String fileName, int bufferPoolLength, int missCountAfterBufferFull)
 	{
 		/*
@@ -86,58 +92,66 @@ public class BufferPoolTraceGenerator extends PageReferenceTraceGenerator
 	//TODO: ojo que el pin y el unpin aumenta el touch count, hay que ver que pasa con el agingHotCriteria
 	//cuando esta en 2...
 	
-	public PageReferenceTrace generateLRUPathologicalVersusAllsHitTouchCountSet(long transactionNumber, String fileName, int bufferPoolLength, int missCountAfterBufferFull, int agingHotCriteria)
+	//TODO:ojo que puede no aumentar el touch count por los tres putos miliseconds
+	
+	/* [Objetivo del trace]
+	 * Mostrar que el peso en cantidad de requests de una pagina hace que el touch count mantenga esas paginas en la cache
+	 * mientras que LRU no las mantiene por no haber sido las ultimas referenciadas (Pesos vs. Tiempo de referencia)
+	 */
+	public PageReferenceTrace generateLRUAllMissVersusTouchCountAllHit(long transactionNumber, String fileName, int bufferPoolLength, int agingHotCriteria)
 	{
+		if(bufferPoolLength % 2 != 0 || agingHotCriteria <= 4)
+			return null;
+		
 		/* [referencePages]
 		 * Genera bufferPoolLength paginas distintas
 		 * Esto obliga al bufferPool a que se llene
 		 */
-		List<PageId> referencePages = generateSequentialPages(fileName, 0, bufferPoolLength);
+		List<PageId> pages = generateSequentialPages(fileName, 0, bufferPoolLength);
+		List<PageId> referencePages = new ArrayList<PageId>();
 		
-		/* [pages]
-		 * Contiene las bufferPoolLength + 1 paginas utilizadas para ver el caso
-		 * SIN REPETIDOS.
-		 */
-		List<PageId> pages = new ArrayList<PageId>(referencePages);
-		
-		int newPageId = bufferPoolLength;
-		PageId overflowPage = new PageId(newPageId, new TableId(fileName));
-		pages.add(overflowPage);
-		
-		int lruPageId = 0;
-		int missCount = 0;
-		while(missCount<missCountAfterBufferFull)
+		for(int i=0;i<pages.size();i++)
 		{
-			PageId lruPage = pages.get(lruPageId);
-			setHotStateToPage(agingHotCriteria, referencePages, lruPage);
+			PageId page = pages.get(i);
+			referenceNTimes(referencePages, page, 1);
+		}
+		
+		for(int i=0;i<pages.size();i=i+2)
+		{
+			PageId page = pages.get(i);
+			referenceNTimes(referencePages, page, agingHotCriteria);
+		}
+		
+		for(int i=1;i<pages.size();i=i+2)
+		{
+			PageId page = pages.get(i);
+			referenceNTimes(referencePages, page, 1);
+		}
+		
+		/* Luego de los 3 fors anteriores el orden de los elementos en las listas son
+		 * TouchCount = [0,2,4,6,8,9,7,5,3,1]
+		 * LRU = [0,1,2,3,4,5,6,7,8,9]
+		 */
 
-			/*
-			 * Debe eliminar una pagina, como la pagina LRU tiene touchCount > agingHotCriteria
-			 * la pasa a la zona Hot, en cambio LRU la desaloja
-			 */
-			referencePages.add(overflowPage);
-			referencePages.add(lruPage);
-			
-			overflowPage = lruPage; //Cargo como la pagina que voy a necesitar a la que acabo de desalojar
-			
-			lruPageId++;
-			lruPageId = lruPageId % pages.size();
-			missCount++;
+		List<PageId> overflowsPages = generateSequentialPages(fileName, bufferPoolLength, bufferPoolLength + (bufferPoolLength/2));
+		referencePages.addAll(overflowsPages);
+		
+		/*
+		 * Pido las paginas pares, TouchCount debe dar Hit en todas,
+		 * LRU miss en todas.
+		 */
+		for(int i=0;i<pages.size();i=i+2)
+		{
+			PageId page = pages.get(i);
+			referenceNTimes(referencePages, page, 1);
 		}
 		
 		return buildRequestAndRelease(new TransactionId(transactionNumber), referencePages);
-	}	
+	}
 	
-	private void setHotStateToPage(int agingHotCriteria, List<PageId> pages,
-			PageId lruPage) {
-		for(int i=0;i<agingHotCriteria;i++)
-		{
-			/*
-			 * Referencio la pagina LRU para que este en condiciones
-			 * subir a la hot area
-			 */
-			
-			pages.add(lruPage);
-		}
+	private void referenceNTimes(List<PageId> references, PageId page, int nTimes)
+	{
+		for(int i=0;i<nTimes;i++)
+			references.add(page);
 	}
 }

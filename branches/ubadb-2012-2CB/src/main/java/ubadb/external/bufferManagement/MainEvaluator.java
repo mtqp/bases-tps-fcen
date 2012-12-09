@@ -5,6 +5,8 @@ import ubadb.core.components.bufferManager.BufferManagerImpl;
 import ubadb.core.components.bufferManager.bufferPool.BufferPool;
 import ubadb.core.components.bufferManager.bufferPool.pools.single.SingleBufferPool;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.PageReplacementStrategy;
+import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.LRU.LRUReplacementStrategy;
+import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.TouchCount.TouchCountReplacementStrategy;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.fifo.FIFOReplacementStrategy;
 import ubadb.core.components.catalogManager.CatalogManager;
 import ubadb.core.components.catalogManager.CatalogManagerImpl;
@@ -24,17 +26,29 @@ public class MainEvaluator
 	{
 		try
 		{
-			PageReplacementStrategy pageReplacementStrategy = new FIFOReplacementStrategy();
-			String traceFileName = "generated/a.trace";
-			int bufferPoolSize = 100;
-			
-			evaluate(pageReplacementStrategy, traceFileName, bufferPoolSize);
+			evaluateLRUReplacementStrategy("generated/lruVSTouchCount-Music.trace");
 		}
 		catch(Exception e)
 		{
 			System.out.println("FATAL ERROR (" + e.getMessage() + ")");
 			e.printStackTrace();
 		}
+	}
+
+	private static void evaluateLRUReplacementStrategy(String traceFileName) throws Exception,
+		InterruptedException, BufferManagerException {
+		PageReplacementStrategy pageReplacementStrategy = new LRUReplacementStrategy();
+		int bufferPoolSize = 100;
+		
+		evaluate(pageReplacementStrategy, traceFileName, bufferPoolSize);
+	}
+	
+	private static void evaluateFIFOReplacementStrategy(String traceFileName) throws Exception,
+			InterruptedException, BufferManagerException {
+		PageReplacementStrategy pageReplacementStrategy = new FIFOReplacementStrategy();
+		int bufferPoolSize = 100;
+		
+		evaluate(pageReplacementStrategy, traceFileName, bufferPoolSize);
 	}
 
 	private static void evaluate(PageReplacementStrategy pageReplacementStrategy, String traceFileName, int bufferPoolSize) throws Exception, InterruptedException, BufferManagerException
