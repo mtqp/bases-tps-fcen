@@ -3,6 +3,7 @@ package ubadb.external.bufferManagement;
 import ubadb.core.components.bufferManager.BufferManager;
 import ubadb.core.components.bufferManager.BufferManagerImpl;
 import ubadb.core.components.bufferManager.bufferPool.BufferPool;
+import ubadb.core.components.bufferManager.bufferPool.pools.TouchCount.TouchCountBufferPool;
 import ubadb.core.components.bufferManager.bufferPool.pools.single.SingleBufferPool;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.PageReplacementStrategy;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.LRU.LRUReplacementStrategy;
@@ -26,7 +27,8 @@ public class MainEvaluator
 	{
 		try
 		{
-			evaluateLRUReplacementStrategy("generated/lruVSTouchCount-Music.trace");
+			//evaluateLRUReplacementStrategy("generated/lruVSTouchCount-Music.trace");
+			evaluateTouchCountReplacementStrategy("generated/lruVSTouchCount-Music.trace", 1, 4);
 		}
 		catch(Exception e)
 		{
@@ -35,6 +37,19 @@ public class MainEvaluator
 		}
 	}
 
+		//TODO: validar que countIntervalSeconds no nos joda la vida y aging hot criteria
+	private static void evaluateTouchCountReplacementStrategy(String traceFileName, int countIntervalSeconds, int agingHotCriteria) throws Exception,
+	InterruptedException, BufferManagerException {
+		
+	PageReplacementStrategy pageReplacementStrategy = new TouchCountReplacementStrategy(countIntervalSeconds, agingHotCriteria);
+	int bufferPoolSize = 100;
+	int percentHotDefault = 50;
+	int agingCoolCount = 1;
+	BufferPool touchCountBufferPool = new TouchCountBufferPool(bufferPoolSize, percentHotDefault, agingHotCriteria, agingCoolCount, pageReplacementStrategy);
+	
+	evaluate(pageReplacementStrategy, touchCountBufferPool, traceFileName, bufferPoolSize);
+}
+	
 	private static void evaluateLRUReplacementStrategy(String traceFileName) throws Exception,
 		InterruptedException, BufferManagerException {
 		PageReplacementStrategy pageReplacementStrategy = new LRUReplacementStrategy();
@@ -53,9 +68,14 @@ public class MainEvaluator
 
 	private static void evaluate(PageReplacementStrategy pageReplacementStrategy, String traceFileName, int bufferPoolSize) throws Exception, InterruptedException, BufferManagerException
 	{
+		evaluate(pageReplacementStrategy, null, traceFileName, bufferPoolSize);
+	}
+	
+	private static void evaluate(PageReplacementStrategy pageReplacementStrategy, BufferPool bufferPool, String traceFileName, int bufferPoolSize) throws Exception, InterruptedException, BufferManagerException
+	{
 		FaultCounterDiskManagerSpy faultCounterDiskManagerSpy = new FaultCounterDiskManagerSpy();
 		CatalogManager catalogManager = new CatalogManagerImpl();
-		BufferManager bufferManager = createBufferManager(faultCounterDiskManagerSpy, catalogManager, pageReplacementStrategy, bufferPoolSize);
+		BufferManager bufferManager = createBufferManager(faultCounterDiskManagerSpy, catalogManager, pageReplacementStrategy, bufferPool, bufferPoolSize);
 		PageReferenceTrace trace = getTrace(traceFileName);
 		
 		for(PageReference pageReference : trace.getPageReferences())
@@ -96,10 +116,11 @@ public class MainEvaluator
 		return serializer.read(traceFileName);
 	}
 
-	private static BufferManager createBufferManager(DiskManager diskManager, CatalogManager catalogManager, PageReplacementStrategy pageReplacementStrategy, int bufferPoolSize)
+	private static BufferManager createBufferManager(DiskManager diskManager, CatalogManager catalogManager, PageReplacementStrategy pageReplacementStrategy, BufferPool bufferPool, int bufferPoolSize)
 	{
-		BufferPool singleBufferPool = new SingleBufferPool(bufferPoolSize, pageReplacementStrategy);
-		BufferManager bufferManager = new BufferManagerImpl(diskManager, catalogManager, singleBufferPool);
+		if(bufferPool == null)
+			bufferPool = new SingleBufferPool(bufferPoolSize, pageReplacementStrategy);
+		BufferManager bufferManager = new BufferManagerImpl(diskManager, catalogManager, bufferPool);
 		
 		return bufferManager;
 	}
