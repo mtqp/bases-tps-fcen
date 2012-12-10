@@ -3,6 +3,8 @@ package ubadb.core.components.bufferManager.bufferPool.replacementStrategies.LRU
 import java.util.Collection;
 import java.util.Date;
 
+import ConsoleOut.ConsoleOut;
+
 import ubadb.core.common.Page;
 import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
 import ubadb.core.components.bufferManager.bufferPool.ReferenceBufferFrame;
@@ -33,13 +35,15 @@ public class LRUReplacementStrategy implements PageReplacementStrategy {
 			}
 			
 		}
-
+		
 		if (victim == null)
 			throw new PageReplacementStrategyException("No page can be removed from pool");
-		else
-			return victim;
+		
+		ConsoleOut.printReferenceFramesAndVictim(victim, bufferFrames);
+		
+		return victim;
 	}
-
+	
 	public BufferFrame createNewFrame(Page page) {
 		return new ReferenceBufferFrame(page);
 	}

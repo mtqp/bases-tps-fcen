@@ -10,6 +10,7 @@ import ubadb.core.components.diskManager.DiskManager;
 import ubadb.core.exceptions.BufferManagerException;
 import ubadb.core.exceptions.BufferPoolException;
 import ubadb.core.exceptions.DiskManagerException;
+import ConsoleOut.ConsoleOut;
 
 public class BufferManagerImpl implements BufferManager {
 	private DiskManager diskManager;
@@ -100,13 +101,15 @@ public class BufferManagerImpl implements BufferManager {
 	protected BufferFrame addNewPageToBufferPool(Page pageFromDisk)
 			throws BufferPoolException, DiskManagerException {
 		if (!bufferPool.hasSpace(pageFromDisk.getPageId())) {
-			Page victimPage = bufferPool.findVictim(pageFromDisk.getPageId())
-					.getPage();
+			Page victimPage = bufferPool.findVictim(pageFromDisk.getPageId()).getPage();
 
+			ConsoleOut.pageRemoved(victimPage);
+			
 			flushPage(victimPage.getPageId());
 			removePage(victimPage.getPageId());
 		}
 
+		ConsoleOut.pageAdded(pageFromDisk);
 		return bufferPool.addNewPage(pageFromDisk);
 	}
 

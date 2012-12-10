@@ -42,6 +42,11 @@ public class SingleBufferPool implements BufferPool
 	
 	public boolean hasSpace(PageId pageToAddId)
 	{
+		/*
+		System.out.println("HasSpace()--> ");
+		System.out.println("--> countPagesInPool: " + countPagesInPool());
+		System.out.println("--> maxBufferPoolSize: " + maxBufferPoolSize);
+		*/
 		return countPagesInPool() < maxBufferPoolSize;
 	}
 

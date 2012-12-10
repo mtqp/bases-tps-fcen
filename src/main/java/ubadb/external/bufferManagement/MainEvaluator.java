@@ -7,6 +7,7 @@ import ubadb.core.components.bufferManager.bufferPool.pools.TouchCount.TouchCoun
 import ubadb.core.components.bufferManager.bufferPool.pools.single.SingleBufferPool;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.PageReplacementStrategy;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.LRU.LRUReplacementStrategy;
+import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.MRU.MRUReplacementStrategy;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.TouchCount.TouchCountReplacementStrategy;
 import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.fifo.FIFOReplacementStrategy;
 import ubadb.core.components.catalogManager.CatalogManager;
@@ -21,14 +22,21 @@ import ubadb.external.bufferManagement.etc.PageReferenceTraceSerializer;
 
 public class MainEvaluator
 {
-	private static final int PAUSE_BETWEEN_REFERENCES	= 0;
+	private static final int BUFFER_POOL_SIZE = 10;
+	private static final double SECONDS_PAUSE_BETWEEN_REFERENCES = 1.5;
+	private static final int AGING_HOT_CRITERIA = 5;
+	private static final int COUNT_INTERVAL_SECONDS = 1;
+	private static final String LINE = "------------------------------";
 	
 	public static void main(String[] args)
 	{
 		try
 		{
-			//evaluateLRUReplacementStrategy("generated/lruVSTouchCount-Music.trace");
-			evaluateTouchCountReplacementStrategy("generated/lruVSTouchCount-Music.trace", 1, 4);
+			processMRUPathological();
+			System.out.println(LINE);
+			processLRUPathological();
+			System.out.println(LINE);
+			processLRUVersusTouchCount();
 		}
 		catch(Exception e)
 		{
@@ -37,33 +45,109 @@ public class MainEvaluator
 		}
 	}
 
+	/*
+	---LRU 5 misses, TouchCount 5 hits---
+	---LRU---
+	Hits: 30
+	Misses: 20
+	Hit rate: 0.6
+	---TouchCount---
+	Hits: 35
+	Misses: 15
+	Hit rate: 0.7
+	 */
+	private static void processLRUVersusTouchCount() throws Exception,
+			InterruptedException, BufferManagerException {
+		System.out.println("---LRU 5 misses, TouchCount 5 hits---");
+		System.out.println("---LRU---");
+		evaluateLRUReplacementStrategy("generated/lruVSTouchCount-Music.trace");
+		System.out.println("---TouchCount---");
+		evaluateTouchCountReplacementStrategy("generated/lruVSTouchCount-Music.trace", COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA);
+	}
+
+	/*
+	---LRU Pathological---
+	---MRU---
+	Hits: 9
+	Misses: 11
+	Hit rate: 0.45
+	---LRU---
+	Hits: 0
+	Misses: 20
+	Hit rate: 0.0
+	---TouchCount---
+	Hits: 4
+	Misses: 16
+	Hit rate: 0.2
+	*/
+	private static void processLRUPathological() throws Exception,
+			InterruptedException, BufferManagerException {
+		System.out.println("---LRU Pathological---");
+		System.out.println("---MRU---");
+		evaluateMRUReplacementStrategy("generated/lruPathological-Music.trace");
+		System.out.println("---LRU---");
+		evaluateLRUReplacementStrategy("generated/lruPathological-Music.trace");
+		System.out.println("---TouchCount---");
+		evaluateTouchCountReplacementStrategy("generated/lruPathological-Music.trace", COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA);
+	}
+
+	/*
+	---MRU Pathological---
+	---MRU---
+	Hits: 0
+	Misses: 20
+	Hit rate: 0.0
+	---LRU---
+	Hits: 9
+	Misses: 11
+	Hit rate: 0.45
+	---TouchCount---
+	Hits: 9
+	Misses: 11
+	Hit rate: 0.45
+	*/
+	private static void processMRUPathological() throws Exception,
+			InterruptedException, BufferManagerException {
+		System.out.println("---MRU Pathological---");
+		System.out.println("---MRU---");
+		evaluateMRUReplacementStrategy("generated/mruPathological-Music.trace");
+		System.out.println("---LRU---");
+		evaluateLRUReplacementStrategy("generated/mruPathological-Music.trace");
+		System.out.println("---TouchCount---");
+		evaluateTouchCountReplacementStrategy("generated/mruPathological-Music.trace", COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA);
+	}
+
 		//TODO: validar que countIntervalSeconds no nos joda la vida y aging hot criteria
 	private static void evaluateTouchCountReplacementStrategy(String traceFileName, int countIntervalSeconds, int agingHotCriteria) throws Exception,
 	InterruptedException, BufferManagerException {
 		
-	PageReplacementStrategy pageReplacementStrategy = new TouchCountReplacementStrategy(countIntervalSeconds, agingHotCriteria);
-	int bufferPoolSize = 100;
-	int percentHotDefault = 50;
-	int agingCoolCount = 1;
-	BufferPool touchCountBufferPool = new TouchCountBufferPool(bufferPoolSize, percentHotDefault, agingHotCriteria, agingCoolCount, pageReplacementStrategy);
-	
-	evaluate(pageReplacementStrategy, touchCountBufferPool, traceFileName, bufferPoolSize);
-}
+		PageReplacementStrategy pageReplacementStrategy = new TouchCountReplacementStrategy(countIntervalSeconds, agingHotCriteria);
+		int percentHotDefault = 50;
+		int agingCoolCount = 1;
+		BufferPool touchCountBufferPool = new TouchCountBufferPool(BUFFER_POOL_SIZE, percentHotDefault, agingHotCriteria, agingCoolCount, pageReplacementStrategy);
+		
+		evaluate(pageReplacementStrategy, touchCountBufferPool, traceFileName, BUFFER_POOL_SIZE);
+	}
 	
 	private static void evaluateLRUReplacementStrategy(String traceFileName) throws Exception,
 		InterruptedException, BufferManagerException {
 		PageReplacementStrategy pageReplacementStrategy = new LRUReplacementStrategy();
-		int bufferPoolSize = 100;
 		
-		evaluate(pageReplacementStrategy, traceFileName, bufferPoolSize);
+		evaluate(pageReplacementStrategy, traceFileName, BUFFER_POOL_SIZE);
 	}
+	
+	private static void evaluateMRUReplacementStrategy(String traceFileName) throws Exception,
+	InterruptedException, BufferManagerException {
+	PageReplacementStrategy pageReplacementStrategy = new MRUReplacementStrategy();
+	
+	evaluate(pageReplacementStrategy, traceFileName, BUFFER_POOL_SIZE);
+}
 	
 	private static void evaluateFIFOReplacementStrategy(String traceFileName) throws Exception,
 			InterruptedException, BufferManagerException {
 		PageReplacementStrategy pageReplacementStrategy = new FIFOReplacementStrategy();
-		int bufferPoolSize = 100;
 		
-		evaluate(pageReplacementStrategy, traceFileName, bufferPoolSize);
+		evaluate(pageReplacementStrategy, traceFileName, BUFFER_POOL_SIZE);
 	}
 
 	private static void evaluate(PageReplacementStrategy pageReplacementStrategy, String traceFileName, int bufferPoolSize) throws Exception, InterruptedException, BufferManagerException
@@ -81,7 +165,7 @@ public class MainEvaluator
 		for(PageReference pageReference : trace.getPageReferences())
 		{
 			//Pause references to have different dates in LRU and MRU
-			Thread.sleep(PAUSE_BETWEEN_REFERENCES);
+			Thread.sleep((int)(SECONDS_PAUSE_BETWEEN_REFERENCES * 1000));
 			
 			switch(pageReference.getType())
 			{
