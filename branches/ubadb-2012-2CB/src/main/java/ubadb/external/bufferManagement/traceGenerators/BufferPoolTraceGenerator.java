@@ -11,6 +11,51 @@ import ubadb.external.bufferManagement.etc.PageReferenceTrace;
 
 public class BufferPoolTraceGenerator extends PageReferenceTraceGenerator
 {
+	public PageReferenceTrace generateBadMRUAndNotGodLRU(int bufferPoolLength, int agingHotCriteria)
+	{
+		/*
+		 * Lleno la cache con cosas que nunca mas se van a usar --> Muchos miss de MRU
+		 * Cada tanto cargo un file scan (siempre nuevo) de tamaño de la cache--> Muchos miss de LRU (que no se pasa a la HOT de touch count)
+		 * Llamo reiteradamente a una tabla de un cuarto del tamaño de la cache --> Muchos hits de TouchCount (tener mas de 50% de Hot no deberia cambiar tanto los resultados)
+		 */
+		
+		List<PageId> transaction = new ArrayList<>();
+			
+		List<PageId> initialCacheLoad = selectConsecutivesPages(bufferPoolLength, "Initial");
+		List<PageId> pagesWithHighTouchCount = selectConsecutivesPages(bufferPoolLength/4, "HighTouchCount");
+		
+		/*
+		 * Inhabilito gran parte de la cache de MRU ya que nunca se va a desalojar las paginas 
+		 * que no se vuelvan a referenciar
+		 */
+		for(int smallMRUEfficiency = 0 ; smallMRUEfficiency < 4; smallMRUEfficiency++)
+			transaction.addAll(initialCacheLoad);
+		
+		
+		int iterations = bufferPoolLength / 10;
+		
+		for(int i=0;i<iterations;i++)
+		{
+			/*
+			 * Causo el flush completo de la cache de LRU
+			 */
+			List<PageId> newFileScan = selectConsecutivesPages(bufferPoolLength, "CauseLRUFullFlush" + i);
+			transaction.addAll(newFileScan);
+			
+			for(int makeHot = 0; makeHot < (agingHotCriteria/2)+1; makeHot++)
+			{
+				/*
+				 * Aumento los hits de TouchCount
+				 */
+				transaction.addAll(pagesWithHighTouchCount);
+			}
+		}
+		
+		return buildRequestAndRelease(new TransactionId(1), transaction);
+	}
+	
+	
+	
 	public PageReferenceTrace generateReapeatedSmallQueriesWithOneBigFileScan(int bufferPoolLength)
 	{
 		int upperRandomBound = bufferPoolLength;
