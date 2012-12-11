@@ -23,15 +23,34 @@ public class MainTraceGenerator
 	{
 //		basicDataSet();
 		//complexDataSet();
-		pathologicalDataSet();
+		//pathologicalDataSet();
+		benchmarksDataSets();
 	}
 
+	private static void benchmarksDataSets() throws Exception
+	{
+		PageReferenceTraceSerializer serializer = new PageReferenceTraceSerializer();
+		
+		String smallQueriesAndBigFileScanPathological = "smallQueriesAndBigFileScanPathological1.trace";
+		String fileNameLRU = "generated/" + smallQueriesAndBigFileScanPathological;
+		
+		int bigbufferSize = 400;
+		PageReferenceTrace traceA1 = new BufferPoolTraceGenerator().generateReapeatedSmallQueriesWithBigFileScanPathological(bigbufferSize); 
+		serialize(fileNameLRU, traceA1, serializer);
+		
+		String fileNameOneBidFileScan = "generated/smallQueriesAndOneBigFileScan1.trace";
+		PageReferenceTrace trace2 = new BufferPoolTraceGenerator().generateReapeatedSmallQueriesWithOneBigFileScan(bigbufferSize);
+		serialize(fileNameOneBidFileScan, trace2, serializer);
+		
+	}
+	
 	private static void pathologicalDataSet() throws Exception
 	{
 		PageReferenceTraceSerializer serializer = new PageReferenceTraceSerializer();
 		
 		int transactionId = 1;
 		int bufferPoolLength = 10;
+		int bufferPoolLengthLong = 100;
 		int missCountAfterBufferFull = 10;
 		String lruPathological = "lruPathological-Music.trace";
 		String fileNameLRU = "generated/lruPathological-Music.trace";
@@ -49,6 +68,11 @@ public class MainTraceGenerator
 		int agingHotCriteria = 5;
 		PageReferenceTrace traceA3 = new BufferPoolTraceGenerator().generateLRUAllMissVersusTouchCountAllHit(transactionId, lruVSTouchCount, bufferPoolLength, agingHotCriteria);
 		serialize(fileNameLRUTouch, traceA3, serializer);
+		
+		String lruVSTouchCountLong = "lruVSTouchCountLong-Music.trace";
+		String fileNameLRUTouchLong = "generated/" + lruVSTouchCountLong;
+		PageReferenceTrace traceA4 = new BufferPoolTraceGenerator().generateLRUAllMissVersusTouchCountAllHit(transactionId, lruVSTouchCount, bufferPoolLengthLong, agingHotCriteria);
+		serialize(fileNameLRUTouchLong, traceA4, serializer);
 		
 	}
 	

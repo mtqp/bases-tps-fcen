@@ -2,6 +2,7 @@ package ubadb.external.bufferManagement.traceGenerators;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ubadb.core.common.PageId;
 import ubadb.core.common.TableId;
@@ -10,6 +11,121 @@ import ubadb.external.bufferManagement.etc.PageReferenceTrace;
 
 public class BufferPoolTraceGenerator extends PageReferenceTraceGenerator
 {
+	public PageReferenceTrace generateReapeatedSmallQueriesWithOneBigFileScan(int bufferPoolLength)
+	{
+		int upperRandomBound = bufferPoolLength;
+		int hugeSelectCount = 2*(bufferPoolLength+(bufferPoolLength/10));
+		int fivePercentSelectCount = (int) (0.05 * ((double)bufferPoolLength)); 
+		int fifteenPercentSelectCount = (int) (0.15 * ((double)bufferPoolLength));
+		int smallSelectCount = (int) (0.03 * ((double)bufferPoolLength));;
+		
+		List<PageId> pagesSelectMusic = selectConsecutivesPages(fivePercentSelectCount , "Music");
+		List<PageId> pagesArtists = selectConsecutivesPages(fivePercentSelectCount , "Artist");
+		List<PageId> pagesRecordCompanies = selectConsecutivesPages(fifteenPercentSelectCount, "Label");
+		List<PageId> bigFileScan = selectConsecutivesPages(hugeSelectCount, "Genre");
+		
+		List<PageId> transaction = new ArrayList<>();
+		
+		int iterations = bufferPoolLength / 6;
+		
+		for(int i=0;i<iterations;i++)
+		{
+			List<PageId> smallPagesArtists = selectRandomPages(smallSelectCount, "CountrySales", upperRandomBound);
+			
+			List<List<PageId>> allLoopItems = new ArrayList<List<PageId>>();
+			
+			allLoopItems.add(smallPagesArtists);
+			allLoopItems.add(pagesSelectMusic);
+			allLoopItems.add(pagesArtists);
+			allLoopItems.add(pagesRecordCompanies);
+			
+			transaction.addAll(randomizeAndFlatten(allLoopItems));
+			
+			if(i == (iterations/2))
+				transaction.addAll(bigFileScan);
+			
+		}
+		
+		return buildRequestAndRelease(new TransactionId(1), transaction);
+	}
+	
+
+	private List<PageId> randomizeAndFlatten(List<List<PageId>> items)
+	{
+		List<PageId> flattenItems = new ArrayList<PageId>();
+		
+		Random rand = new Random();
+		
+		while(!items.isEmpty())
+		{
+			int randIndex = rand.nextInt(items.size());
+			flattenItems.addAll(items.get(randIndex));
+			items.remove(randIndex);
+		}
+		
+		return flattenItems;
+	}
+	
+	public PageReferenceTrace generateReapeatedSmallQueriesWithBigFileScanPathological(int bufferPoolLength)
+	{
+		int smallQueriesWeight = 50;
+		
+		int upperRandomBound = bufferPoolLength;
+		int hugeSelectCount = bufferPoolLength + (bufferPoolLength/3);
+		int fiftyPercentSelectCount = (int) (0.5 * ((double)bufferPoolLength)); 
+		int fifteenPercentSelectCount = (int) (0.15 * ((double)bufferPoolLength));
+		int smallestSelectCount = 1;
+		
+		List<PageId> pagesSelectMusic = selectConsecutivesPages(fiftyPercentSelectCount , "Music");
+		List<PageId> pagesArtists = selectConsecutivesPages(fiftyPercentSelectCount , "Artist");
+		List<PageId> pagesRecordCompanies = selectConsecutivesPages(fifteenPercentSelectCount, "Label");
+		List<PageId> bigFileScan = selectConsecutivesPages(hugeSelectCount, "Genre");
+		
+		List<PageId> transaction = new ArrayList<>();
+		
+		/*
+		 * Cargo con mucho peso las consultas liviana
+		 * En touch count el peso las va a salvar
+		 * En LRU y MRU no
+		 */
+		for(int i=0;i<smallQueriesWeight;i++)
+		{
+			List<PageId> smallPagesArtists = selectRandomPages(smallestSelectCount, "CountrySales", upperRandomBound);
+			
+			transaction.addAll(smallPagesArtists);
+			transaction.addAll(pagesSelectMusic);
+			transaction.addAll(pagesArtists);
+			transaction.addAll(pagesRecordCompanies);
+			
+			if(i == (smallQueriesWeight/5) || i == (smallQueriesWeight/2))
+				transaction.addAll(bigFileScan);
+			
+		}
+		
+		return buildRequestAndRelease(new TransactionId(1), transaction);
+	}
+	
+	private List<PageId> selectRandomPages(int count, String table, int upperRandomBound)
+	{
+		Random rand = new Random();
+		
+		List<PageId> pages = new ArrayList<>();
+		
+		for(int i=0;i<count;i++)
+		{
+			int randomPageId = rand.nextInt(upperRandomBound);
+			pages.add(new PageId(randomPageId, new TableId(table)));
+		}
+		
+		return pages;
+	}
+	
+	private List<PageId> selectConsecutivesPages(int count, String table)
+	{
+		List<PageId> pages = generateSequentialPages(table, 0, count);
+		return pages;
+	}
+	
 	/*[Objetivo del trace]
 	 * Ver que al intercambiar entre la mas nueva y una que no esta en el buffer siempre
 	 * se obtiene un miss
