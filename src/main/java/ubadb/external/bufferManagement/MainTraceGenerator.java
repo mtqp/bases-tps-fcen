@@ -42,6 +42,12 @@ public class MainTraceGenerator
 		PageReferenceTrace trace2 = new BufferPoolTraceGenerator().generateReapeatedSmallQueriesWithOneBigFileScan(bigbufferSize);
 		serialize(fileNameOneBidFileScan, trace2, serializer);
 		
+		String generateBadMRUAndNotGodLRU = "generated/badMRUAndNotGodLRU1.trace";
+		int hotCriteria = 5;
+		int mediumBufferPool = 200;
+		PageReferenceTrace trace3 = new BufferPoolTraceGenerator().generateBadMRUAndNotGodLRU(mediumBufferPool,hotCriteria);
+		serialize(generateBadMRUAndNotGodLRU, trace3, serializer);
+		
 	}
 	
 	private static void pathologicalDataSet() throws Exception

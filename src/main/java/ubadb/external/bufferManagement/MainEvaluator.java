@@ -41,8 +41,11 @@ public class MainEvaluator
 			System.out.println(LINE);
 			processLRUVersusTouchCountLong();*/
 			System.out.println(LINE);
+			processBadMRUAndNotGodLRU();
+			/*
+			System.out.println(LINE);
 			processSmallQueriesAndOneBigFileScan();
-			/*System.out.println(LINE);
+			System.out.println(LINE);
 			processSmallQueriesAndBigFileScansPathological();*/
 		}
 		catch(Exception e)
@@ -52,6 +55,61 @@ public class MainEvaluator
 		}
 	}
 
+	/*
+	---MRU---
+	Hits: 600
+	Misses: 7200
+	Hit rate: 0.07692307692307693
+	---LRU---
+	Hits: 2971
+	Misses: 4829
+	Hit rate: 0.3808974358974359
+	---TouchCount (25% HOT)---
+	Hits: 3550
+	Misses: 4250
+	Hit rate: 0.4551282051282051
+	---TouchCount (50% HOT)---
+	Hits: 3550
+	Misses: 4250
+	Hit rate: 0.4551282051282051
+	---TouchCount (75% HOT)---
+	Hits: 3550
+	Misses: 4250
+	Hit rate: 0.4551282051282051
+	---TouchCount (90% HOT)---
+	Hits: 600
+	Misses: 7200
+	Hit rate: 0.07692307692307693
+	*/
+	private static void processBadMRUAndNotGodLRU() throws Exception
+	{
+		String fileName = "generated/badMRUAndNotGodLRU.trace";
+		
+		COUNT_INTERVAL_SECONDS = 0;
+		BUFFER_POOL_SIZE = 200;
+		AGING_HOT_CRITERIA = 5;
+		SECONDS_PAUSE_BETWEEN_REFERENCES = 0.5;
+		
+		System.out.println("---BadMRU - NotGodLRU - Better TouchCount---");
+		System.out.println("---MRU---");
+		evaluateMRUReplacementStrategy(fileName);
+		System.out.println("---LRU---");
+		evaluateLRUReplacementStrategy(fileName);
+		System.out.println("---TouchCount (25% HOT)---");
+		evaluateTouchCountReplacementStrategy(fileName, COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 25);
+		System.out.println("---TouchCount (50% HOT)---");
+		evaluateTouchCountReplacementStrategy(fileName, COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 50);
+		System.out.println("---TouchCount (75% HOT)---");
+		evaluateTouchCountReplacementStrategy(fileName, COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 75);
+		System.out.println("---TouchCount (90% HOT)---");
+		evaluateTouchCountReplacementStrategy(fileName, COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 90);
+	
+		AGING_HOT_CRITERIA = 5;
+		BUFFER_POOL_SIZE = 10;
+		SECONDS_PAUSE_BETWEEN_REFERENCES = 1.5;
+		COUNT_INTERVAL_SECONDS = 1;
+	}
+	
 	/*
 	 * Buffer de 400 items, todas consultas chiquitas un file scan grande, y de vuelta consultas chicas sobre las anteriores
 	 * Notar que la mejora en el touch count no es linea conforme aumenta el porcentaje de hot
@@ -319,10 +377,10 @@ public class MainEvaluator
 		for(PageReference pageReference : trace.getPageReferences())
 		{
 			//Pause references to have different dates in LRU and MRU
-			Thread.sleep((int)(SECONDS_PAUSE_BETWEEN_REFERENCES * 1000));
-			
-			if(line % 500 == 0)
+			if(line % 500 == 0){
 				System.out.print(line + " ");
+				Thread.sleep((int)(SECONDS_PAUSE_BETWEEN_REFERENCES * 1000));
+			}
 			line++;
 			
 			switch(pageReference.getType())
