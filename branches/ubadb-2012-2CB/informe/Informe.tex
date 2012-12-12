@@ -106,8 +106,6 @@
 
 \subsection{Introducci\'on}
 
-===Hacer referencia bien a la caché indicando que es y el termino caché del buffer de que buffer\\
-
 A lo largo de este trabajo analizaremos el algoritmo de \textit{Touch Count} dise\~{n}ado por \textit{Oracle} para administrar en memoria las p\'aginas que se
 traen de la base de datos con el objetivo de evitar los accesos a disco utilizando dicha memoria de a manera m\'as eficiente.\\
 
@@ -288,6 +286,7 @@ Como puede verse en el ejemplo anterior, las operaciones de \textit{agregar}, \t
 		El remover una p\'agina borrar\'a la p\'agina de la cach\'e y recalcular\'a la posici\'on del \textit{midpointer}.
 \end{itemize}
 
+Un caso particular respecto al Touch Count es que sucede cuando todas las p\'aginas poseen un touch count mayor al agingToHotCriteria
 
 
 Peor caso del TouchCount
@@ -444,7 +443,7 @@ parte de llenar la cach\'e con una traza inicial y luego repetirla nuevamente.
 A continuaci\'on se describe un escenario en el cual el algoritmo de Touch Count mejora con respecto a LRU.
 
 El ejemplo consiste en potenciar las p\'aginas que el Touch Count considera importantes, e intentar desalojarlas al mismo tiempo de la cach\'e en el
-algoritmo LRU.
+algoritmo LRU.\\
 
 Inicialmente se utilizar\'a una traza cualquiera para completar la cach\'e. En ambos algoritmos estar inicializaci\'on dar\'a \textit{Miss} ya que
 las p\'aginas no existir\'an.
@@ -452,15 +451,27 @@ las p\'aginas no existir\'an.
 Un escenario posible ser\'ia
 
 \begin{itemize}
-	\item{full scan sobre la tabla A: para cargar las p'aginas en la cach\'e (se asume que los datos de A no superan el tama\~{n}io de la cach\'e}
-	\item{varios file scan sobre la tabla A condicionando a los registros con id par: en ambos algoritmos habr\'a \textit{Hit}}
-	\item{file scan sobre la tabla A condicionando a los registros con id impar: en ambos algoritmos habr\'a \textit{Hit}}
-	\item{file scan sobre la tabla B: en ambos algoritmos habr\'a \textit{Miss}}
-	\item{file scan sobre la tabla A: condicionando a los registros con id par: s\'olo en Touch Count las p\'aginas todav\'ia exisit\'ran en cach\'e
-ya que las reiteradas referncias del punto 2 habr\'an hecho que Touch Count les diera un pero mayor y por ende las habr\'ia salvado en la \textit{regi\'on caliente}}
+	\item[1)] full scan sobre la tabla A: para cargar las p'aginas en la cach\'e (se asume que los datos de A no superan el tama\~{n}o de la cach\'e.
+	\item[2)] varios file scan sobre la tabla A condicionando a los registros con id par: en ambos algoritmos habr\'a \textit{Hit}.
+	\item[3)] file scan sobre la tabla A condicionando a los registros con id impar: en ambos algoritmos habr\'a \textit{Hit}.
+	\item[4)] file scan sobre la tabla B: en ambos algoritmos habr\'a \textit{Miss}.
+	\item[5)] file scan sobre la tabla A: condicionando a los registros con id par: s\'olo en Touch Count las p\'aginas todav\'ia exisit\'ran en cach\'e.
+ya que las reiteradas referncias del punto 2 habr\'an hecho que Touch Count les diera un pero mayor y por ende las habr\'ia salvado en la \textit{regi\'on caliente}.
 \end{itemize}
 
-Conclusion , peso vs ultima accedida.
+La conclusion que se intenta describir es que el Touch Count prioriza las p\'aginas por \textit{peso} mientras que LRU las prioriza por \'ultimo 
+acceso.\\
+
+Si una tabla tuvo sus p\'aginas accedidas recientemente, el algoritmo LRU tendr\'a sus p\'aginas como relevantes mientras que para Touch Count 
+solo lo ser\'an si son refenciadas en m\'as ocaciones. \\
+
+Por ello si una tabla fue accedida muchas veces, pero no ultimamente, 
+posiblemente no sean tenida en cuenta por el algoritmo LRU mientras que Touch Count las tendrá como relevantes ya que tuvieron una frecuencia alta de
+accesos. \\ 
+
+En conclusi\'on Touch Count se basa en que si una p\'agina fue accedida muchas veces es probable que vuelva a ser referenciada, por eso les 
+asigna un peso y pondera respecto a \'el. Por el contrario LRU se basa en que las p\'aginas m\'as recientes son las m\'as probables de volver a ser
+referenciadas y son \'estas las que decide priorizar.
 
 	\begin{center}
 	\includegraphics[scale=0.65]{diagramas/LRUvsTouchCountAll.png}\\
