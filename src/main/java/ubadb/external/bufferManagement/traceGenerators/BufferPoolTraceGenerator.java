@@ -250,11 +250,6 @@ public class BufferPoolTraceGenerator extends PageReferenceTraceGenerator
 		return buildRequestAndRelease(new TransactionId(transactionNumber), pages);
 	}
 
-	//TODO: ojo que el pin y el unpin aumenta el touch count, hay que ver que pasa con el agingHotCriteria
-	//cuando esta en 2...
-	
-	//TODO:ojo que puede no aumentar el touch count por los tres putos miliseconds
-	
 	/* [Objetivo del trace]
 	 * Mostrar que el peso en cantidad de requests de una pagina hace que el touch count mantenga esas paginas en la cache
 	 * mientras que LRU no las mantiene por no haber sido las ultimas referenciadas (Pesos vs. Tiempo de referencia)

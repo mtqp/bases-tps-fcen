@@ -42,15 +42,9 @@ public class TouchCountBufferPool implements BufferPool {
 		this.hotPercentage = percentHotDefault;
 		this.agingHotCriteria = agingHotCriteria;
 		this.agingCoolCount = agingCoolCount;
-		CheckParametersBoundaries();
 		this.pageReplacementStrategy = pageReplacementStrategy;
 		this.framesPool = new ArrayList<BufferFrame>();
 		this.midPoint = 0;
-	}
-
-	private void CheckParametersBoundaries() {
-		// TODO Auto-generated method stub
-		// checkear que sean validos los parametros del constructor lalalal
 	}
 
 	public boolean isPageInPool(PageId pageId) {
