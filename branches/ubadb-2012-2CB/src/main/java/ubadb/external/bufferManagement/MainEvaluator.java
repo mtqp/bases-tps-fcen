@@ -322,8 +322,6 @@ public class MainEvaluator
 		evaluateTouchCountReplacementStrategy("generated/mruPathological-Music.trace", COUNT_INTERVAL_SECONDS, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE);
 	}
 
-		//TODO: validar que countIntervalSeconds no nos joda la vida y aging hot criteria
-
 	private static void evaluateTouchCountReplacementStrategy(String traceFileName, int countIntervalSeconds, int agingHotCriteria, int poolSize) throws Exception,
 	InterruptedException, BufferManagerException {
 		int percentHotDefault = 50;
