@@ -107,7 +107,7 @@
 \subsection{Introducci\'on}
 
 A lo largo de este trabajo analizaremos el algoritmo de \textit{Touch Count} dise\~{n}ado por \textit{Oracle} para administrar en memoria las p\'aginas que se
-traen de la base de datos con el objetivo de evitar los accesos a disco utilizando dicha memoria de a manera m\'as eficiente.\\
+traen de la base de datos con el objetivo de evitar los accesos a disco y por consiguiente, obtener mejor\'ia en el rendimiento del motor.\\
 
 Inicialmente Oracle utilizaba para el algoritmo de manejo de \textit{cach\'e} lo que se conoce como algoritmo LRU (Least Recently Used). Este algoritmo, 
 descripto m\'as adelante se basa en priorizar en la cach\'e las p\'aginas de disco m\'as referenciadas descartando las menos usadas recientemente 
@@ -121,27 +121,23 @@ Para superar este problema, Oracle propuso un algoritmo modificado de LRU al que
   
 \subsection{Algoritmo \textit{Touch Count}}
 
-El algoritmo \textit{Touch Count} utiliza el mismo esp\'iritu que sus predecesores LRU y MRU, solo que en una mezcla de ambos. Por un lado priorizar\'a
-mantener en la cach\'e las p\'aginas m\'as referenciadas y descartar las menos pero a su modo, cualquier p\'agina que ingrese deber\'a competir 
-con otras existentes en la cach\'e por permanecer en la misma, para ello el algoritmo llevar\'a un conteo de cuantas veces fue referenciada. Este n\'umero
+El algoritmo \textit{Touch Count} utiliza las idea de los algoritmos de LRU y MRU. Prioriza mantener en la cach\'e las p\'aginas m\'as referenciadas y descartar las menos, manteniendo una lista LRU y reorden\'andola con un criterio que se asemeja con el desalojo de MRU: quien sea el m\'as referenciado se reubicar'a , para ello el algoritmo llevar\'a un conteo de cuantas veces fue referenciada. Este n\'umero
 de referencias a la p\'agina se denomina \textit{Touch Count}.
 
 \subsection{Problem\'atica que resuelve}
 
 Uno de los problemas que el \textit{Touch Count} resuelve es el de las r\'afagas de acceso a p\'aginas. En un full scan por ejemplo m\'ultiples p\'aginas
-son referenciadas y en algoritmos como 
-
-\subsection{Ventajas y desventajas}
+son referenciadas las que potencialmente pueden borrar la cach\'e. Que una p\'agina sea referenciada espor\'adicamente no implica que permanecer\'a en memoria, deber\'a volver a pedirla, que aumente su \textit{Touch Count} para as\'i poder alejarse de la zona fr\'ia donde es m\'as propensa a ser desalojada.
 
 \newpage 
 \section{Implementaci'on estrategias de reemplazo de p'aginas}
 
 \subsection{Algoritmo de LRU}
 
-El algoritmo LRU (Least Recently Used) funciona de la siguiente manera, intentando mantener en memoria las p\'aginas m\'as recientemente usadas
-y en caso de necesitar remover alguna elegir de entre alguna de las menos recientemente usadas.\\
+El algoritmo LRU (Least Recently Used) funciona de la siguiente manera, mantiente en memoria las p\'aginas m\'as recientemente usadas
+y en caso de necesitar remover alguna, elige la que se posee fecha de referencia m\'as vieja.\\
 
-El siguiente es un ejemplo de como las cach\'e se va actualizando mediante el algoritmo LRU.
+El siguiente es un ejemplo de como la cach\'e se va actualizando mediante el algoritmo LRU.\\
 
 El siguiente gr\'afico se lee de izquierda a derecha de arriba abajo. La primera hilera de n\'umeros corresponde a la traza de p\'aginas que intentan ser 
 accedidas. Debajo de ella aparece en forma vertical la cach\'e y como se va llenando a medida que c\'ada p\'agina de la traza es referenciada.\\ 
@@ -175,19 +171,19 @@ As\'i en el ejemplo,
 \end{itemize}
 
 Es interesante notar que una p\'agina no ser\'a desalojada hasta tanto se hayan referenciado al menos una vez a todas las otras, ya que de esta forma
-la p\'agina inicial se convertiría en la menos recientemente usada.\\
+la p\'agina inicial se convertir\'ia en la menos recientemente usada.\\
 
 \noindent{\emph{Cantidad de Hits:} 4} \\
 \emph{Cantidad de Miss:} 7, con un total de 3 \emph{Miss} iniciales y 4 \emph{Miss} a lo largo de la traza.\\
-\emph{Predicci\'on:} Este enfoque intenta predecir que p\'aginas que fueron referenciadas posiblemente lo sean en un per\'iodo corto de tiempo.\\
-\emph{Desventajas:} Una desventaja es que un full scan sobre una tabla barrer\'a por completo con todas las entradas de la cach\'e.\\
-\emph{Ventajas:} \\
+\emph{Predicci\'on:} Este enfoque se basa en el principio de vecindad temporal; p\'aginas que fueron referenciadas posiblemente lo sean en un per\'iodo corto de tiempo.\\
+\emph{Desventajas:} Una desventaja es que una consulta que traiga muchas p\'aginas que no vuelvan a ser utilizadas (ej: full scan sobre una tabla), la cual barrer\'a por gran parte, sino toda, las entradas existentes en la cach\'e.\\
+\emph{Ventajas:} En un contexto donde el principio de vecindad temporal es v\'alido, mientras un conjunto de p\'aginas se referencie con periocidad (en ventanas cortas de tiempo), existe una alta probabilidad que la p\'agina se encuentra en memoria.\\
 
 \newpage
 \subsection{Algoritmo de MRU}
 
 El algoritmo MRU (Most Recently Used) funciona a la inversa de \textit{LRU}, intentando mantener en memoria las p\'aginas menos recientemente usadas
-y en caso de necesitar remover alguna elegir de entre alguna de las m\'as recientemente usadas.
+y en caso de necesitar remover alguna eligiendo de entre alguna de las m\'as recientemente usadas.
 
 El siguiente es un ejemplo de como las cach\'e se va actualizando mediante el algoritmo LRU.
 
@@ -231,13 +227,13 @@ para ser desalojada en caso de un pr\'oximo \textit{Miss}.\\
 \emph{Cantidad de Miss:} 8, con un total de 3 \textit{Miss} iniciales y 5 \textit{Miss} a lo largo de la traza. \\
 \emph{Predicci\'on:} Este tipo de enfoque intenta basarse en que una vez referenciada una p\'agina no volver\'a a serlo al menos en un cierto per\'iodo
 de tiempo en el cual si podr\'ian llegar a serlo p\'aginas m\'as antiguas.\\
-\emph{Desventajas:} \\
-\emph{Ventajas:} \\
+\emph{Desventajas:} Si la cach\'e se encuentra llena con p\'aginas que no ser\'an referenciadas en un tiempo cercano y se consultan nuevas, deber'a continuamente estar desalojando una p\'agina para poder agregarlas (notar que en cada r\'afaga s\'olo quedar\'a la \'ultima de ellas\\
+\emph{Ventajas:} Las p\'aginas que se consultan de manera espor\'adica ser\'an r\'apidamente desalojadas sin afectar al resto de la cach\'e.\\
 
 \newpage
 \subsection{Algoritmo de Touch Count}
 
-Este algoritmo es la mejora del LRU implementada por \textit{Oracle} describiremos un poco de la estructura interna que utiliza el TouchCount.
+Este algoritmo es la mejora del LRU implementada por \textit{Oracle}. A continuaci\'on describiremos un poco de la estructura interna que utiliza el TouchCount.\\
 
 El algoritmo Touch Count cuenta con tres elementos principales: una lista, un puntero, y un contador de referencias denominado Touch Count. 
 La lista se utilizar\'a para manejar las p\'aginas y las prioridades que se le asignar\'an a cada
@@ -258,8 +254,9 @@ Por otro lado el algoritmo es configurable y cuenta con varios par\'ametros:
 	\item{\emph{hotPercent}: Indica el porcentaje de p\'aginas que se quieren mantener en la \textit{regi\'on caliente}. Si el porcentaje no
 da exacto se toma la cantidad de p\'aginas que conformen el porcentaje inmediato inferior. }
 	\item{\emph{agingTouchTime}: Es la cantidad m\'inima de tiempo a esperar antes de aumentar el Touch Count de una p\'agina ante otra referencia}
-	\item{\emph{agingToHotCriteria}: Es el valor al cual se establece al Touch Count de una p\'agina cuando \'esta pasa a la \textit{regi\'on caliente} }
-	\item{\emph{agingWhenMoveToHot}: Es el valor minimo de Touch Count que debe tener una p\'agina para que pueda ser enviada a la \textit{regi\'on caliente}}
+	\item{\emph{agingWhenMoveToHot}: Es el valor al cual se establece al Touch Count de una p\'agina cuando \'esta pasa a la \textit{regi\'on caliente} }
+	\item{\emph{agingToHotCriteria}: Es el valor minimo de Touch Count que debe tener una p\'agina para que pueda ser enviada a la \textit{regi\'on caliente}}
+	\item{\emph{agingCoolCount}: Es el valor de Touch Count que pasa a tener la p\'agina cuando se mueve de la zona caliente a la fr\'ia.}
 \end{itemize}
 
 Ahora describiremos su comportamiento en base a las operaciones que se realizan sobre la cach\'e.
@@ -268,7 +265,7 @@ Ahora describiremos su comportamiento en base a las operaciones que se realizan 
 	\includegraphics[scale=0.65]{diagramas/TouchCountAlgorithm2.png}\\
 \end{center}
 
-Como puede verse en el ejemplo anterior, las operaciones de \textit{agregar}, \textit{encontrar víctima} y \textit{remover} hacen algunas extras que lo que indican a simple vista.
+Como puede verse en el ejemplo anterior, las operaciones de \textit{agregar}, \textit{encontrar v\'ictima} y \textit{remover} hacen algunas extras que lo que indican a simple vista.
 
 \begin{itemize}
 	\item{Agregar una p\'agina:
@@ -276,26 +273,19 @@ Como puede verse en el ejemplo anterior, las operaciones de \textit{agregar}, \t
 		Si la cach\'e no posee espacio disponible proceder\'a a buscar una v\'ictima para removerla y agregar la nueva en la posici\'on del \textit{midPointer}.
 	}
 	\item{Encontrar v\'ictima: }
-		El algoritmo comienza buscando una v\'ictima que ser\'a la primera de la regi\'on fria que tenga touch count menor al \textit{agingToHotCriteria}
+		El algoritmo comienza buscando una v\'ictima que ser\'a la primera de la regi\'on fr\'ia que tenga Touch Count menor al \textit{agingToHotCriteria}
 		Una vez encontrada la v\'ictima, mover\'a todas las p\'aginas que al recorrer hayan superado el  \textit{agingToHotCriteria} al
-		final de la \textit{regi\'on caliente} asign\'andole un touch count de 0. Al mismo tiempo por movimiento de estos otra p\'agina pasar\'a
-		el umbral de la caliente a la fria como ocurre con la p\'agina 7 del ejemplo anterior al moverse la p\'agina 0 de la \textit{regi\'on fria}
-		a la \textit{regi\'on caliente}. A estas p\'aginas que pasan a la \textit{regi\'on fria} se les colocar\'a un touch count de 1.
+		final de la \textit{regi\'on caliente} asign\'andole un Touch Count de \textit{agingWhenMoveToHot}. Al mismo tiempo por movimiento de estos otra p\'agina pasar\'a
+		el umbral de la caliente a la fr\'ia como ocurre con la p\'agina 7 del ejemplo anterior al moverse la p\'agina 0 de la \textit{regi\'on fria}
+		a la \textit{regi\'on caliente}. A estas p\'aginas que pasan a la \textit{regi\'on fria} se les colocar\'a un touch count de \textit{agingCoolCount}.
 		
 	\item{Remover una p\'agina: }
 		El remover una p\'agina borrar\'a la p\'agina de la cach\'e y recalcular\'a la posici\'on del \textit{midpointer}.
 \end{itemize}
 
-Un caso particular respecto al Touch Count es que sucede cuando todas las p\'aginas poseen un touch count mayor al agingToHotCriteria
+Existe un caso particular sobre qu\'e p\'agina remover; cuando todas ellas poseen un Touch Count mayor o igual a \textit{agingToHotCriteria}. La informaci\'on recolectada no especifica qu\'e desici\'on tomar. Se opt\'o por buscar la p\'agina con Touch Count menor y en caso de existir m\'as de una, seleccionar la de fecha de referencia m\'as vieja.\\
 
-
-Peor caso del TouchCount
-
-Si se referencian set de datos diferentes (tablas diferentes) cada vez, no se aclcanzaran para las paginas un aging count suficiente
-para salvarlas y todo el tiempo estaremos pisando las p\'agina de la caché con p\'aginas nuevas (al menos en la cola de frias)
-
-Si nada se pasa del agingHot lo que esté en la Hot nunca se va a desaloar, sino que la cola cold ser\'a la que se renueve.
-Se le va a dar m\'as importancia a las p\'aginas con touch counte mayor al aging count m\'as nuevas.
+Por otro lado, si se referencian set de datos diferentes cada vez, las p\'aginas no alcanzar\'an el valor agingToHotCriteria suficiente para salvarse en el \'area caliente. De esta manera, la zona fr\'ia se comportar\'a como una LRU y las p\'aginas que queden, por el corrimiento del mid point maker, en la zona caliente; no ser\'an utilizadas desperdiciando as\'i espacio de memoria.\\
 
 \newpage
 \section{Test de Unidad}
@@ -305,27 +295,27 @@ Se le va a dar m\'as importancia a las p\'aginas con touch counte mayor al aging
 \subsubsection{findVictim tests}
 
 \noindent{\textbf{testNoPageToReplace:} testea que no puede obtenerse una v\'ictima porque todas las p\'aginas est\'an bloqueadas.}\\
-\textbf{resultado esperado:} lanzar una PageReplacementStrategyException indicando que \textit{No page can be removed from pool}.\\
+\textbf{resultado esperado:} lanzar una PageReplacementStrategyException indicando: \textit{No page can be removed from pool}.\\
 
 \noindent{\textbf{testOnlyOneToReplace:} testea con una \'unica p\'agina no bloqueada.}\\
 \textbf{resultado esperado:} devolver la p\'agina no bloqueada como v\'ictima.\\
 
-\noindent{\textbf{testMultiplePagesToReplace: } testea con todas p\'aginas no bloqueadas.}\\
+\noindent{\textbf{testMultiplePagesToReplace: } testea con todas p\'aginas no bloqueadas y no referenciadas.}\\
 \textbf{resultado esperado:} devolver la primera como v\'ictima.\\
 
-\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinned: testea con todas p\'aginas no bloqueadas salvo la \'ultima.}}\\
-\textbf{resultado esperado:} devolver la primera como v\'ictima.\\
+\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinned:} testea con todas p\'aginas no bloqueadas salvo la \'ultima.}\\
+\textbf{resultado esperado:} devolver la segunda como v\'ictima.\\
 
 \noindent{\textbf{testMultiplePagesToReplaceWithPinAndUnpin:} testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una.}  \\
-\textbf{resultado esperado:} devolver la primera como v\'ictima.\\
+\textbf{resultado esperado:} devolver la \'ultima como v\'ictima.\\
 
 \noindent{\textbf{testMultiplePagesToReplaceWithPinAndUnpinButOneDouble: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin,
 siendo que la segunda se le hizo un pin unpin m\'as.} \\
 \textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima.\\ 
 
 \noindent{\textbf{testMultiplePagesToReplaceButNewestOnePinnedWithPin: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una
-salvo la última a la que s\'olo se le hizo pin al final.}\\
-\textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima. \\
+salvo la \'ultima a la que s\'olo se le hizo pin al final.}\\
+\textbf{resultado esperado:} devolver la ante \'ultima p\'agina como v\'ictima. \\
 
 \noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinnedWithPin: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una
 salvo la primera a la que s\'olo se le hizo pin al final.}\\
@@ -342,7 +332,7 @@ salvo la primera a la que s\'olo se le hizo pin al final.}\\
 \noindent{\textbf{testOnlyOneToReplace:} testea con una \'unica p\'agina no bloqueada.}\\
 \textbf{resultado esperado:} devolver la p\'agina no bloqueada como v\'ictima.\\
 
-\noindent{\textbf{testMultiplePagesToReplace: } testea con todas p\'aginas no bloqueadas.}\\
+\noindent{\textbf{testMultiplePagesToReplace: } testea con todas p\'aginas no bloqueadas y no referenciadas.}\\
 \textbf{resultado esperado:} devolver la primera como v\'ictima.\\
 
 \noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinned: testea con todas p\'aginas no bloqueadas salvo la \'ultima.}}\\
@@ -351,7 +341,7 @@ salvo la primera a la que s\'olo se le hizo pin al final.}\\
 \noindent{\textbf{testMultiplePagesToReplaceWithPinAndUnpin:} testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una.}  \\
 \textbf{resultado esperado:} devolver la primera como v\'ictima.\\
 
-\noindent{\textbf{testMultiplePagesToReplaceWithPinAndUnpinFirstReferncedLast: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una
+\noindent{\textbf{testMultiplePagesToReplaceWithPinAndUnpinFirstReferencedLast: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una
 siendo la primera referenciada \'ultima.} \\
 \textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima.\\ 
 
@@ -359,19 +349,18 @@ siendo la primera referenciada \'ultima.} \\
 salvo la primera a la que s\'olo se le hizo pin al principio.}\\
 \textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima. \\
 
-\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinnedWithPinAndUnpinFirstReferencesLast: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una
-salvo la primera a la que s\'olo se le hizo pin al final.}\\
+\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinnedWithPinAndUnpinFirstReferencesLast: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una salvo la primera a la que s\'olo se le hizo pin al final.}\\
 \textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima. \\
 
 \subsection{TouchCountBufferPoolTest}
 
 \subsubsection{TouchCount tests}
 
-\noindent{\textbf{testFindVictimWithSpace:} testea con espacio en la cach\'e.}\\
-\textbf{resultado esperado:} lanzar una BufferPoolException indicando que \textit{The buffer still has space}. \\
+\noindent{\textbf{testFindVictimWithSpace:} testea la b\'usqueda de v\'ictima con espacio en la cach\'e.}\\
+\textbf{resultado esperado:} lanzar una BufferPoolException indicando: \textit{The buffer still has space}. \\
 
 \noindent{\textbf{testFindVictimWithExistingPage:} testea pasando como par\'ametro una p\'agina a agregar existente en la cach\'e.}\\
-\textbf{resultado esperado:} lanzar una BufferPoolException indicando que \textit{The page is already in the buffer}. \\.\\
+\textbf{resultado esperado:} lanzar una BufferPoolException indicando: \textit{The page is already in the buffer}. \\
 
 \noindent{\textbf{testFindVictimInOrder:} testea con todas p\'aginas no bloqueadas.}\\
 \textbf{resultado esperado:} devolver la primera como v\'ictima.\\
@@ -381,12 +370,12 @@ salvo la primera a la que s\'olo se le hizo pin al final.}\\
 
 \noindent{\textbf{testFindVictimMovingOneToHot:} testea con la primer p\'agina con alto touch count, la segunda con bajo touch count  
 y la tercera bloqueada.}\\
-\textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima, además la primera p\'agina debe tener touch count 0 (por haberse movido
+\textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima, adem\'as la primera p\'agina debe tener touch count 0 (por haberse movido
 a la \textit{regi\'on caliente}), la segunda debe tener touch count 1 (por haberse movido a la \textit{regi\'on fria}) y la tercera no debi\'o
 modificar su touch count puesto que no se movi\'o\\
 
 \noindent{\textbf{testFindVictimMovingTwoToHot:} testea con la primer y tercer p\'agina con alto touch count y la segunda con bajo touch count.}\\
-\textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima, además la primera p\'agina debe tener touch count 1 (por haberse movido
+\textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima, adem\'as la primera p\'agina debe tener touch count 1 (por haberse movido
 a la \textit{regi\'on caliente} primero y a la \textit{regi\'on fria} despu\'es), la segunda debe tener touch count 1 (por haberse movido a la 
 \textit{regi\'on fria}) y la tercera touch count 1 por haber terminado en la  \textit{regi\'on fria}.\\
 
@@ -423,17 +412,13 @@ as\'i sucesivamente.
 	\includegraphics[scale=0.65]{diagramas/MRUPathological.png}\\
 	\end{center}
 
-
+\subsection{ Peor caso LRU: Traza LRUPathological} 
 	En la siguiente traza para LRU, se intenta maximizar la cantidad de \textit{Miss} para el algoritmo. El patr\'on para lograrlo se basa
 en completar la cach\'e con una traza y luego repetirla varias veces de forma de desalojar las mismas p\'aginas que se mantuvieron al principio.
 Al completar la cach\'e se refencia una p\'agina nueva no existente, en el ejemplo la p\'agina 3, se desaloja la p\'agina m\'as antigua, la 0, que 
 justamente es la siguiente a ser referenciada por la traza y que vendr\'a a desalojar a la p\'agina 1, que ser\'a justamente la siguiente en ser 
 desalojada. De esta forma se ir\'an desalojando las p\'aginas que ser\'an inmediatamente referenciadas ocacionando una serie de \textit{Miss en cascada}. 
 
-de en que se basa
-parte de llenar la cach\'e con una traza inicial y luego repetirla nuevamente.  
-	
-\subsection{ Peor caso LRU}
 	\begin{center}
 	\includegraphics[scale=0.65]{diagramas/LRUPathological.png}\\
 	\end{center}
@@ -459,14 +444,14 @@ Un escenario posible ser\'ia
 ya que las reiteradas referncias del punto 2 habr\'an hecho que Touch Count les diera un pero mayor y por ende las habr\'ia salvado en la \textit{regi\'on caliente}.
 \end{itemize}
 
-La conclusion que se intenta describir es que el Touch Count prioriza las p\'aginas por \textit{peso} mientras que LRU las prioriza por \'ultimo 
+La conclusi\'on que se intenta describir es que el Touch Count prioriza las p\'aginas por \textit{peso} mientras que LRU las prioriza por \'ultimo 
 acceso.\\
 
 Si una tabla tuvo sus p\'aginas accedidas recientemente, el algoritmo LRU tendr\'a sus p\'aginas como relevantes mientras que para Touch Count 
 solo lo ser\'an si son refenciadas en m\'as ocaciones. \\
 
-Por ello si una tabla fue accedida muchas veces, pero no ultimamente, 
-posiblemente no sean tenida en cuenta por el algoritmo LRU mientras que Touch Count las tendrá como relevantes ya que tuvieron una frecuencia alta de
+Por ello si una tabla fue accedida muchas veces, pero no \'ultimamente, 
+posiblemente no sean tenida en cuenta por el algoritmo LRU mientras que Touch Count las tendr\'a como relevantes ya que tuvieron una frecuencia alta de
 accesos. \\ 
 
 En conclusi\'on Touch Count se basa en que si una p\'agina fue accedida muchas veces es probable que vuelva a ser referenciada, por eso les 
