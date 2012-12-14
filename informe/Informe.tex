@@ -28,6 +28,7 @@
 \usepackage{rotating}
 \usepackage{ulem}
 \usepackage[dash]{dashundergaps}
+\usepackage{multicol}
 
 
 %\selectlanguage{spanish}
@@ -111,7 +112,7 @@ traen de la base de datos con el objetivo de evitar los accesos a disco y por co
 
 Inicialmente Oracle utilizaba para el algoritmo de manejo de \textit{cach\'e} lo que se conoce como algoritmo LRU (Least Recently Used). Este algoritmo, 
 descripto m\'as adelante se basa en priorizar en la cach\'e las p\'aginas de disco m\'as referenciadas descartando las menos usadas recientemente 
-(definici\'on de LRU).
+(definici\'on de LRU).\\
 
 Un caso muy com\'un que presenta un problema a este algoritmo son los full scan, los cuales recorren todos los registros de una tabla coloc\'andolos en 
 la \textit{cach'e} y pisando todo historial previo. As\'i por ejemplo, si la cache del buffer tiene 300 bloques y un escaneo completo de una 
@@ -121,7 +122,7 @@ Para superar este problema, Oracle propuso un algoritmo modificado de LRU al que
   
 \subsection{Algoritmo \textit{Touch Count}}
 
-El algoritmo \textit{Touch Count} utiliza las idea de los algoritmos de LRU y MRU. Prioriza mantener en la cach\'e las p\'aginas m\'as referenciadas y descartar las menos, manteniendo una lista LRU y reorden\'andola con un criterio que se asemeja con el desalojo de MRU: quien sea el m\'as referenciado se reubicar'a , para ello el algoritmo llevar\'a un conteo de cuantas veces fue referenciada. Este n\'umero
+El algoritmo \textit{Touch Count} utiliza las idea de los algoritmos de LRU y MRU. Prioriza mantener en la cach\'e las p\'aginas m\'as referenciadas y descartar las menos, manteniendo una lista LRU y reorden\'andola con un criterio que se asemeja con el desalojo de MRU: quien sea el m\'as referenciado se reubicar'a, para ello el algoritmo llevar\'a un conteo de cuantas veces fue referenciada. Este n\'umero
 de referencias a la p\'agina se denomina \textit{Touch Count}.
 
 \subsection{Problem\'atica que resuelve}
@@ -139,7 +140,7 @@ y en caso de necesitar remover alguna, elige la que se posee fecha de referencia
 
 El siguiente es un ejemplo de como la cach\'e se va actualizando mediante el algoritmo LRU.\\
 
-El siguiente gr\'afico se lee de izquierda a derecha de arriba abajo. La primera hilera de n\'umeros corresponde a la traza de p\'aginas que intentan ser 
+El gr\'afico a continuaci\'on se lee de izquierda a derecha de arriba abajo. La primera hilera de n\'umeros corresponde a la traza de p\'aginas que intentan ser 
 accedidas. Debajo de ella aparece en forma vertical la cach\'e y como se va llenando a medida que c\'ada p\'agina de la traza es referenciada.\\ 
 
 Marcaremos con amarillo cuando ocurra un \textit{Hit} y con gris cuando ocurra un \textit{Miss}.
@@ -176,26 +177,29 @@ la p\'agina inicial se convertir\'ia en la menos recientemente usada.\\
 \noindent{\emph{Cantidad de Hits:} 4} \\
 \emph{Cantidad de Miss:} 7, con un total de 3 \emph{Miss} iniciales y 4 \emph{Miss} a lo largo de la traza.\\
 \emph{Predicci\'on:} Este enfoque se basa en el principio de vecindad temporal; p\'aginas que fueron referenciadas posiblemente lo sean en un per\'iodo corto de tiempo.\\
-\emph{Desventajas:} Una desventaja es que una consulta que traiga muchas p\'aginas que no vuelvan a ser utilizadas (ej: full scan sobre una tabla), la cual barrer\'a por gran parte, sino toda, las entradas existentes en la cach\'e.\\
-\emph{Ventajas:} En un contexto donde el principio de vecindad temporal es v\'alido, mientras un conjunto de p\'aginas se referencie con periocidad (en ventanas cortas de tiempo), existe una alta probabilidad que la p\'agina se encuentra en memoria.\\
+\emph{Desventajas:} Una desventaja es que una consulta que traiga muchas p\'aginas que no vuelvan a ser utilizadas (ej: full scan sobre una tabla), barrer\'a gran parte, sino toda, las entradas existentes en la cach\'e.\\
+\emph{Ventajas:} En un contexto donde el principio de vecindad temporal es v\'alido, mientras un conjunto de p\'aginas se referencie con 
+periocidad (en ventanas cortas de tiempo), existe una alta probabilidad que la p\'agina se encuentre en memoria.\\
 
 \newpage
 \subsection{Algoritmo de MRU}
 
 El algoritmo MRU (Most Recently Used) funciona a la inversa de \textit{LRU}, intentando mantener en memoria las p\'aginas menos recientemente usadas
-y en caso de necesitar remover alguna eligiendo de entre alguna de las m\'as recientemente usadas.
+y en caso de necesitar remover alguna eligiendo de entre alguna de las m\'as recientemente usadas.\\
 
-El siguiente es un ejemplo de como las cach\'e se va actualizando mediante el algoritmo LRU.
+El siguiente es un ejemplo de como las cach\'e se va actualizando mediante el algoritmo LRU.\\
+
+El gr\'afico a continuaci\'on se lee de izquierda a derecha de arriba abajo. La primera hilera de n\'umeros corresponde a la traza de p\'aginas que intentan ser 
+accedidas. Debajo de ella aparece en forma vertical la cach\'e y como se va llenando a medida que c\'ada p\'agina de la traza es referenciada.\\ 
+
+Marcaremos con amarillo cuando ocurra un \textit{Hit} y con gris cuando ocurra un \textit{Miss}.
+Cuando una p\'agina sea referenciada la marcaremos en la cach\'e en negrita para saber que fue la m\'as recientemente accedida.\\
 
 \begin{center}
 		\includegraphics[scale=0.65]{diagramas/MRUAlgorithm.png}\\
 \end{center}
 
-El gr\'afico anterior se lee de izquierda a derecha de arriba abajo. La primera hilera de n\'umeros corresponde a la traza de p\'aginas que intentan ser 
-accedidas. Debajo de ella aparece en forma vertical la cach\'e y como se va llenando a medida que c\'ada p\'agina de la traza es referenciada.\\ 
 
-Marcaremos con amarillo cuando ocurra un \textit{Hit} y con gris cuando ocurra un \textit{Miss}.
-Cuando una p\'agina sea referenciada la marcaremos en la cach\'e en negrita para saber que fue la m\'as recientemente accedida.\\
 
 As\'i en el ejemplo, 
 
@@ -227,15 +231,15 @@ para ser desalojada en caso de un pr\'oximo \textit{Miss}.\\
 \emph{Cantidad de Miss:} 8, con un total de 3 \textit{Miss} iniciales y 5 \textit{Miss} a lo largo de la traza. \\
 \emph{Predicci\'on:} Este tipo de enfoque intenta basarse en que una vez referenciada una p\'agina no volver\'a a serlo al menos en un cierto per\'iodo
 de tiempo en el cual si podr\'ian llegar a serlo p\'aginas m\'as antiguas.\\
-\emph{Desventajas:} Si la cach\'e se encuentra llena con p\'aginas que no ser\'an referenciadas en un tiempo cercano y se consultan nuevas, deber'a continuamente estar desalojando una p\'agina para poder agregarlas (notar que en cada r\'afaga s\'olo quedar\'a la \'ultima de ellas\\
+\emph{Desventajas:} Si la cach\'e se encuentra llena con p\'aginas que no ser\'an referenciadas en un tiempo cercano y se consultan nuevas, deber'a continuamente estar desalojando una p\'agina para poder agregarlas (notar que en cada r\'afaga s\'olo quedar\'a la \'ultima de ellas).\\
 \emph{Ventajas:} Las p\'aginas que se consultan de manera espor\'adica ser\'an r\'apidamente desalojadas sin afectar al resto de la cach\'e.\\
 
 \newpage
 \subsection{Algoritmo de Touch Count}
 
-Este algoritmo es la mejora del LRU implementada por \textit{Oracle}. A continuaci\'on describiremos un poco de la estructura interna que utiliza el TouchCount.\\
+Este algoritmo es la mejora del LRU implementada por \textit{Oracle}. A continuaci\'on describiremos un poco de la estructura interna que utiliza el \textit{Touch Count}.\\
 
-El algoritmo Touch Count cuenta con tres elementos principales: una lista, un puntero, y un contador de referencias denominado Touch Count. 
+El algoritmo Touch Count cuenta con tres elementos principales: una lista, un puntero, y un contador de referencias denominado \textit{Touch Count}. 
 La lista se utilizar\'a para manejar las p\'aginas y las prioridades que se le asignar\'an a cada
 una esta lista estar\'a dividida en dos \'areas o regiones. La regi\'on de la izquierda de la lista denominada \textit{regi\'on fria} y la regi\'on inmediata
 contigua denominada \textit{regi\'on caliente}.\\
@@ -253,10 +257,10 @@ Por otro lado el algoritmo es configurable y cuenta con varios par\'ametros:
 \begin{itemize}
 	\item{\emph{hotPercent}: Indica el porcentaje de p\'aginas que se quieren mantener en la \textit{regi\'on caliente}. Si el porcentaje no
 da exacto se toma la cantidad de p\'aginas que conformen el porcentaje inmediato inferior. }
-	\item{\emph{agingTouchTime}: Es la cantidad m\'inima de tiempo a esperar antes de aumentar el Touch Count de una p\'agina ante otra referencia}
-	\item{\emph{agingWhenMoveToHot}: Es el valor al cual se establece al Touch Count de una p\'agina cuando \'esta pasa a la \textit{regi\'on caliente} }
-	\item{\emph{agingToHotCriteria}: Es el valor minimo de Touch Count que debe tener una p\'agina para que pueda ser enviada a la \textit{regi\'on caliente}}
-	\item{\emph{agingCoolCount}: Es el valor de Touch Count que pasa a tener la p\'agina cuando se mueve de la zona caliente a la fr\'ia.}
+	\item{\emph{agingTouchTime}: Es la cantidad m\'inima de tiempo a esperar antes de aumentar el \textit{touch count}  de una p\'agina ante otra referencia.}
+	\item{\emph{agingWhenMoveToHot}: Es el valor al cual se establece al \textit{touch count} de una p\'agina cuando \'esta pasa a la \textit{regi\'on caliente.} }
+	\item{\emph{agingToHotCriteria}: Es el valor minimo de Touch Count que debe tener una p\'agina para que pueda ser enviada a la \textit{regi\'on caliente.}}
+	\item{\emph{agingCoolCount}: Es el valor de \textit{touch count} que pasa a tener la p\'agina cuando se mueve de la zona caliente a la fr\'ia.}
 \end{itemize}
 
 Ahora describiremos su comportamiento en base a las operaciones que se realizan sobre la cach\'e.
@@ -285,7 +289,7 @@ Como puede verse en el ejemplo anterior, las operaciones de \textit{agregar}, \t
 
 Existe un caso particular sobre qu\'e p\'agina remover; cuando todas ellas poseen un Touch Count mayor o igual a \textit{agingToHotCriteria}. La informaci\'on recolectada no especifica qu\'e desici\'on tomar. Se opt\'o por buscar la p\'agina con Touch Count menor y en caso de existir m\'as de una, seleccionar la de fecha de referencia m\'as vieja.\\
 
-Por otro lado, si se referencian set de datos diferentes cada vez, las p\'aginas no alcanzar\'an el valor agingToHotCriteria suficiente para salvarse en el \'area caliente. De esta manera, la zona fr\'ia se comportar\'a como una LRU y las p\'aginas que queden, por el corrimiento del mid point maker, en la zona caliente; no ser\'an utilizadas desperdiciando as\'i espacio de memoria.\\
+Por otro lado, si se referencian set de datos diferentes cada vez, las p\'aginas no alcanzar\'an el valor agingToHotCriteria suficiente para salvarse en el zona caliente. De esta manera, la zona fr\'ia se comportar\'a como una LRU y las p\'aginas que queden, por el corrimiento del mid point maker, en la zona caliente; no ser\'an utilizadas desperdiciando as\'i espacio de memoria.\\
 
 \newpage
 \section{Test de Unidad}
@@ -303,7 +307,7 @@ Por otro lado, si se referencian set de datos diferentes cada vez, las p\'aginas
 \noindent{\textbf{testMultiplePagesToReplace: } testea con todas p\'aginas no bloqueadas y no referenciadas.}\\
 \textbf{resultado esperado:} devolver la primera como v\'ictima.\\
 
-\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinned:} testea con todas p\'aginas no bloqueadas salvo la \'ultima.}\\
+\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinned:}} testea con todas p\'aginas no bloqueadas salvo la \'ultima.\\
 \textbf{resultado esperado:} devolver la segunda como v\'ictima.\\
 
 \noindent{\textbf{testMultiplePagesToReplaceWithPinAndUnpin:} testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una.}  \\
@@ -335,7 +339,7 @@ salvo la primera a la que s\'olo se le hizo pin al final.}\\
 \noindent{\textbf{testMultiplePagesToReplace: } testea con todas p\'aginas no bloqueadas y no referenciadas.}\\
 \textbf{resultado esperado:} devolver la primera como v\'ictima.\\
 
-\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinned: testea con todas p\'aginas no bloqueadas salvo la \'ultima.}}\\
+\noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinned:}} testea con todas p\'aginas no bloqueadas salvo la \'ultima.\\
 \textbf{resultado esperado:} devolver la primera como v\'ictima.\\
 
 \noindent{\textbf{testMultiplePagesToReplaceWithPinAndUnpin:} testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una.}  \\
@@ -354,7 +358,7 @@ salvo la primera a la que s\'olo se le hizo pin al principio.}\\
 
 \subsection{TouchCountBufferPoolTest}
 
-\subsubsection{TouchCount tests}
+\subsubsection{\textit{Touch Count} tests}
 
 \noindent{\textbf{testFindVictimWithSpace:} testea la b\'usqueda de v\'ictima con espacio en la cach\'e.}\\
 \textbf{resultado esperado:} lanzar una BufferPoolException indicando: \textit{The buffer still has space}. \\
@@ -423,7 +427,7 @@ desalojada. De esta forma se ir\'an desalojando las p\'aginas que ser\'an inmedi
 	\includegraphics[scale=0.65]{diagramas/LRUPathological.png}\\
 	\end{center}
 
-\subsection{ LRU vs TouchCount}
+\subsection{ LRU vs \textit{Touch Count}}
 
 A continuaci\'on se describe un escenario en el cual el algoritmo de Touch Count mejora con respecto a LRU.
 
@@ -459,16 +463,198 @@ asigna un peso y pondera respecto a \'el. Por el contrario LRU se basa en que la
 referenciadas y son \'estas las que decide priorizar.
 
 	\begin{center}
-	\includegraphics[scale=0.65]{diagramas/LRUvsTouchCountAll.png}\\
+		\includegraphics[scale=0.65]{diagramas/LRUvsTouchCountAll.png}\\
 	\end{center}
 
 	%\begin{center}
 	%\includegraphics[scale=0.65]{diagramas/LRUvsTouchCount2.png}\\
 	%\end{center}
 
-	\subsection{ Mejor caso LRU}
-	\subsection{ Mejor caso MRU}
-	\subsection{ Mejor caso \textit{Touch Count}}
-	\subsection{ Peor caso \textit{Touch Count}}
+\subsection{Traza: badMRUAndNotGodLRU}
+
+Esta traza se gener\'o llevando al extremo las diferencias entre los algortimos.\\
+
+Como vimos anteriormente el algoritmo de MRU no quita una p\'agina de la cach\'e hasta que esta no posea la referencia m\'as reciente. 
+Inmediatamente se desprende que las p\'aginas que puedan llegar a la cach\'e y sean poco utilizadas tienen altas chances de evitar el desalojo.\\
+
+El algoritmo de LRU si bien corrige el caso de MRU reci\'en mencionado, presenta como inconveniente que grandes pedidos de p\'aginas que producen
+miss realizados de manera espor\'adica terminan barriendo la cach\'e, perdiendo p\'aginas que potencialmente pueden ser reutilizadas.\\
+
+Touch count puede ser \'util para evitar ambos problemas: la parte fr\'ia act\'ua como una LRU, corrigiendo el problema de MRU. Por otro lado, 
+da peso a las p\'aginas que son m\'as usadas evitando que por ejemplo, los file scans grandes las terminen por excluir de la cach\'e.\\
+
+De esta manera y utilizando una cach\'e de 200 p\'aginas, se realizaron 7800 pedidos de la siguiente manera:\\
+
+\begin{itemize}
+    
+	\item{Se llena la cach\'e y se vuelve a pedir cada p\'agina de la cach\'e tres veces (generando 200 miss y 600 hits).
+Estas p\'aginas no vuelven a ser pedidas y al no pedir una misma p\'agina dos veces consecutivas, la cantidad de hits final m\'axima para MRU
+ser\'a de 600.}\\
+
+    \item{Se crea un ciclo donde la cach\'e se llena con p\'aginas siempre nuevas, provocando que LRU realice un flush completo. 
+A su vez se referencia a un conjunto (fijo y distinto de todas las anteriores) de 50 p\'aginas (25\% de la cach\'e) agingHotCriteria + 1 veces, 
+con el objeto de mantener en cach\'e en el algoritmo de \textit{Touch Count}.}\\ 
+
+\end{itemize}
+
+La traza se corre con el algoritmo de MRU, LRU y \textit{Touch Count}, este \'ultimo aceptando r\'afagas (para simplificar el problema) y 
+con cuatro porcentajes de hot region (25\%, 50\%, 75\%, 90\%).\\
+
+A continuaci\'on se detallan los resultados obtenidos.\\
+
+\newpage
+
+\begin{multicols}{2}
+\noindent{\textbf{MRU}}\\
+\textbf{Hits}: 600\\
+\textbf{Misses}: 7200\\
+\textbf{Hit rate}: 0.0769\\
+
+\noindent{\textbf{TouchCount}} (25\% HOT)\\
+\textbf{Hits:} 3550\\
+\textbf{Misses:} 4250\\
+\textbf{Hit rate:} 0.455\\
+
+\noindent{\textbf{TouchCount}} (75\% HOT)\\
+\textbf{Hits}: 3550\\
+\textbf{Misses}: 4250\\
+\textbf{Hit rate}: 0.455\\
+
+\noindent{\textbf{LRU}}\\
+\textbf{Hits:} 2971\\
+\textbf{Misses:} 4829\\
+\textbf{Hit rate:} 0.380\\
+
+\noindent{\textbf{TouchCount}} (50\% HOT)\\
+\textbf{Hits}: 3550\\
+\textbf{Misses}: 4250\\
+\textbf{Hit rate}: 0.455\\
+
+\noindent{\textbf{TouchCount}} (90\% HOT)\\
+\textbf{Hits}: 600\\
+\textbf{Misses}: 7200\\
+\textbf{Hit rate}: 0.0769\\
+
+\end{multicols}
+
+
+El rendimiento del algoritmo de MRU queda muy por debajo de los otros dos debido a que almacen\'o paginas que no volvieron a ser referenciadas
+ como se explic\'o anteriormente.\\
+
+El algoritmo de \textit{Touch Count} gana m\'as de un 7\% de mejora, al poder mantener ese conjunto de 50 p\'aginas a\'un cuando se efect\'ua 
+el file scan.\\
+
+Es muy interesante notar que no existe mejora de performance entre las variantes de \textit{Touch Count} de 25\%, contra las de  50\% y 75\% de
+hot region. Esto es debe a que las p\'aginas que son continuamente referenciadas ocupan el 25\% de la cach\'e y nunca bajan a la cold region; 
+adem\'as, como nada de la cold region sube (exceptu\'ando las del 25\%), el espacio entre el mid point marker y 
+la primer p\'agina que se referencia continuamente queda con la carga inicial (utilizada para MRU) que al no ser vuelta a referenciar,
+ no a\~{n}ade hits.\\
+
+Por otro lado, cuando se utiliza el porcentaje de hot region en 90\%, se obtienen los mismos resultados que en MRU. Como ya mencionamos, 
+los elementos son insertados como \'ultimo elemento de la cold region. La parte fr\'ia funciona como una LRU. 
+Tenemos entonces una lista de tama\~{n}o 20 (10\% de la cach\'e) en la cual en una r\'afaga le agregamos 50 elementos. 
+Luego de la carga, quedan los 20 \'ultimos y en la siguiente iteraci\'on cuando queremos referenciarlos, para aumentar el
+ touch count en el mismo orden, poseemos el mismo problema que en LRU, nunca obtenemos un hit.\\
+
+Se desprende necesariamente que el tama\~{n}o \'optimo de la hot region depende del tipo de carga que el servidor posee.
+ Adem\'as, tener una zona fr\'ia muy chica fuerza a que para poder una p\'agina pasar a la zona caliente debe ser referenciada 
+en una gran cantidad en poco tiempo y/o no pueden generarse gran cantidad de miss en cach\'e ya que forzar\'ian a que la
+ p\'agina sea desalojada. Por otro lado, cuando m\'as chica es la zona c\'alida, mayor es la cantidad de llamadas 
+que reciben las p\'aginas que posee, ya que si no son r\'apidamente desalojadas.\\
+
+No se considera en la traza el par\'ametro de cantidad m\'axima de hits por segundo. 
+Esto no significa que el tama\~{n}o \'optimo de la hot region sea independiente de \'el, as\'i como de la carga del servidor.
+Evitar las r\'afagas dificulta mucho m\'as que una p\'agina pueda mantenerse en cach\'e, agregando un factor de periodicidad,
+ es decir; no alcanza con haber sido requerida muchas veces en poco tiempo, peri\'odicamente debe ser llamada para evitar el desalojo.\\
+
+Es v\'alido notar que tener igual hit rate con distinto porcentaje de hot region es un caso pr\'acticamente exclusivo de nuestra carga de datos.
+ Al tener una mayor cantidad de p\'aginas salvadas en la zona c\'alida, existe mayor probabilidad que se referencie alguna de ellas una nueva vez
+ (excluyendo los casos extremos considerados en el p\'arrafo anterior).\\
+
+A continuaci\'on veremos un test en donde los porcentajes difieren.\\
+
+\newpage
+\subsection{Traza: smallQueriesAndOneBigFileScan}
+
+
+Se cre\'o una nueva traza con el objeto de analizar qu\'e sucede cuando existen pedidos de sets peque\~{n}os de datos de manera 
+peri\'odica y se produce un pedido grande que supera el tama\~{n}o de la cach\'e de p\'aginas, 
+las cuales todas producen miss, en nuestro caso emulado con un file scan.\\
+
+Para ellos se generaran cinco conjuntos de p\'aginas:
+
+\begin{itemize}
+    \item{P\'aginas de la tabla \textit{music} (tama\~{n}o 5\% de la cach\'e).}
+    \item{P\'aginas de la tabla \textit{artist} (tama\~{n}o 5\% de la cach\'e).}
+    \item{P\'aginas de la tabla \textit{label} (tama\~{n}o 15\% de la cach\'e).}
+    \item{P\'aginas aleat\'oreas en cada iteraci\'on de la tabla \textit{countrysales} (tama\~{n}o 3\% de la cach\'e).}
+    \item{P\'aginas de la tabla \textit{g\'enero} (tama\~{n}o 2 * (tama\~{n}o de cache + offset)).}
+\end{itemize}
+
+En cada iteraci\'on, se generan p\'aginas aleat\'oreas para la tabla countrysales y se piden todas las p\'aginas menos la de genre
+(ya que estas se corresponden con nuestro \textit{big file scan}).
+ Cabe destacar, que con el objeto de no condicionar el resultado, el orden en la que se encolan los pedidos 
+de p\'aginas de cada tabla es randomizado. 
+En la mitad de las iteraciones, se pide el file scan de g\'enero\\
+
+Se permitieron por simplicidad de la traza, r\'afagas. El par\'ametro agingHotCriteria es de 10 y el tama\~{n}o de cach\'e es de 400.\\
+La traza consta de 8272 pedidos de p\'aginas y los resultados obtenidos fueron:
+   
+\begin{multicols}{2}
+
+\noindent{\textbf{MRU}}\\
+\textbf{Hits: 6613}\\
+\textbf{Misses: 1659}\\
+\textbf{Hit rate: 0.799}\\
+
+\noindent{\textbf{LRU}}\\
+\textbf{Hits: 6692}\\
+\textbf{Misses: 1580}\\
+\textbf{Hit rate: 0.808}\\
+
+\noindent{\textbf{TouchCount}} (25\% HOT)\\
+\textbf{Hits: 6792}\\
+\textbf{Misses: 1480}\\
+\textbf{Hit rate: 0.821}\\
+
+\noindent{\textbf{TouchCount}} (50\% HOT)\\
+\textbf{Hits: 6849}\\
+\textbf{Misses: 1423}\\
+\textbf{Hit rate: 0.827}\\
+
+\noindent{\textbf{TouchCount}} (75\% HOT)\\
+\textbf{Hits: 6907}\\
+\textbf{Misses: 1365}\\
+\textbf{Hit rate: 0.834}\\
+
+\noindent{\textbf{TouchCount}} (90\% HOT)\\
+\textbf{Hits: 6902}\\
+\textbf{Misses: 1370}\\
+\textbf{Hit rate: 0.834}\\
+
+\end{multicols}
+
+El algoritmo MRU presenta mejor resultado al de la traza anterior. Esto se debe a que puede resolver el problema del file scan grande, 
+como la p\'agina m\'as reciente es la que acaba de agregar (perteneciente adem\'as al \'unico pedido grande), la remueve y evita perder el 
+resto de las p\'aginas perteneciente a las \textit{small queries} que son las que generan hits.\\
+
+La diferencia de performance entre MRU y LRU se debe al pedido de las p\'aginas aleatorias de countrysales. 
+Por como est\'a implementado el algoritmo, el pedido de estas p\'aginas se realiza en un entorno temporal cercano 
+al pedido del resto de las consultas peque\~{n}as. Si la cach\'e se encuentra llena, como sucede luego del file scan, 
+MRU tendr\'a a desalojar a p\'aginas de las consultas peque\~{n}as que luego generar\'an miss, en cambio LRU y a medida
+que pasen los pedidos, tendr\'a a remover las p\'aginas procedentes al file scan.\\
+
+No es menor la mejora que genera el algoritmo de \textit{Touch Count} en compaci\'on con LRU y MRU. 
+Al poseer un 25\% de p\'aginas que se frecuentan y un 3\% de p\'aginas random que se van agregando, 
+de las cuales posiblemente se repitan en el tiempo; estas se salvan en la zona caliente y el file scan no provoca su desalojo.\\
+
+Se puede inferir que a medida que el porcentaje de zona caliente aumenta, la mejora del hit rate se va estabilizando. 
+Nuevamente esto depende de la carga a la que se est\'e sometiendo al motor de base de datos.
+ Para este ejemplo en particular, parecer\'ia sensato tomar como hot region alg\'un valor entre 25\% y 50\% 
+y dejar el resto de la cach\'e como zona fr\'ia suponiendo que la carga continuara de similar manera y dejando espacio tanto en caliente como fr\'io para alg\'un caso at\'ipico que pueda suceder.
+
+\section{C\'odigo fuente}
+
+\section{Referencias}
 
 \end{document}
