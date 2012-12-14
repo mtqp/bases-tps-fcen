@@ -87,27 +87,9 @@ public class MRUReplacementStrategyTest
 		
 		assertEquals(frame2,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
 	}
-
-	@Test
-	public void testMultiplePagesToReplaceButOldestOnePinnedWithPinAndUnpin() throws Exception
-	{
-		BufferFrame frame0 = strategy.createNewFrame(DummyObjectFactory.PAGE);
-		Thread.sleep(TestUtil.PAUSE_INTERVAL);	//Add a sleep so that frame dates are different
-		BufferFrame frame1 = strategy.createNewFrame(DummyObjectFactory.PAGE);
-		frame1.pin();
-		frame1.unpin();
-		Thread.sleep(TestUtil.PAUSE_INTERVAL);
-		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
-		frame2.pin();
-		frame2.unpin();
-		
-		frame0.pin();
-		
-		assertEquals(frame2,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
-	}
 	
 	@Test
-	public void testMultiplePagesToReplaceWithPinAndUnpin2() throws Exception
+	public void testMultiplePagesToReplaceWithPinAndUnpinButOneDouble() throws Exception
 	{
 		BufferFrame frame0 = strategy.createNewFrame(DummyObjectFactory.PAGE);
 		frame0.pin();
@@ -132,7 +114,7 @@ public class MRUReplacementStrategyTest
 	 * sino tomaba el 1ro no bloqueado de la lista. 
 	 */
 	@Test
-	public void testMultiplePagesToReplaceButOldestOnePinnedWithPinAndUnpin2() throws Exception
+	public void testMultiplePagesToReplaceButNewestOnePinnedWithPin() throws Exception
 	{
 		BufferFrame frame0 = strategy.createNewFrame(DummyObjectFactory.PAGE);
 		frame0.pin();
@@ -147,4 +129,23 @@ public class MRUReplacementStrategyTest
 		
 		assertEquals(frame1,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
 	}
+	
+	@Test
+	public void testMultiplePagesToReplaceButOldestOnePinnedWithPin() throws Exception
+	{
+		BufferFrame frame0 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);	//Add a sleep so that frame dates are different
+		BufferFrame frame1 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame1.pin();
+		frame1.unpin();
+		Thread.sleep(TestUtil.PAUSE_INTERVAL);
+		BufferFrame frame2 = strategy.createNewFrame(DummyObjectFactory.PAGE);
+		frame2.pin();
+		frame2.unpin();
+		
+		frame0.pin();
+		
+		assertEquals(frame2,strategy.findVictim(Arrays.asList(frame0,frame1,frame2)));
+	}
+	
 }
