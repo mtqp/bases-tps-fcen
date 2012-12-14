@@ -285,6 +285,30 @@ public class TouchCountBufferPoolTest
 	}
 	
 	//hacer un test con 50% y 4 elementos
+	@Test
+	public void testMidPointerWithFiftyHotPercentage() throws Exception
+	{
+		int maxPoolSize = 4;
+		double oneHalf = 50.0;
+		int countIntervalSeconds = 1;
+		int agingHotCriteria = 3; 
+		bufferPool = new TouchCountBufferPool(maxPoolSize , oneHalf, new TouchCountReplacementStrategy(countIntervalSeconds, agingHotCriteria));
+		
+		assertEquals(0,((TouchCountBufferPool)bufferPool).getMidPointer());
+		
+		bufferPool.addNewPage(PAGE_0);
+		assertEquals(1,((TouchCountBufferPool)bufferPool).getMidPointer());
+		
+		bufferPool.addNewPage(PAGE_1);
+		assertEquals(1,((TouchCountBufferPool)bufferPool).getMidPointer());
+		
+		bufferPool.addNewPage(PAGE_2);
+		assertEquals(2,((TouchCountBufferPool)bufferPool).getMidPointer());
+		
+		bufferPool.addNewPage(PAGE_3);
+		assertEquals(2,((TouchCountBufferPool)bufferPool).getMidPointer());
+		//In the list should be in this order: 0,2,3,1
+	}
 	
 	@Test
 	public void testMidPointerWithThirdHotPercentage() throws Exception
