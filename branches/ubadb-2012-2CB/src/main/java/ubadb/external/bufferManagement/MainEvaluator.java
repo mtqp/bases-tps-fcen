@@ -23,9 +23,10 @@ import ubadb.external.bufferManagement.etc.PageReferenceTraceSerializer;
 public class MainEvaluator
 {
 	private static int BUFFER_POOL_SIZE = 10;
-	private static double SECONDS_PAUSE_BETWEEN_REFERENCES = 1.5;
+	private static double SECONDS_PAUSE = 1.5;
 	private static int AGING_HOT_CRITERIA = 5;
 	private static int COUNT_INTERVAL_SECONDS = 1;
+	private static boolean PAUSE_EVERY_REFERENCE = false;
 	private static final String LINE = "------------------------------";
 	
 	public static void main(String[] args)
@@ -39,9 +40,11 @@ public class MainEvaluator
 			System.out.println(LINE);
 			processLRUVersusTouchCount();
 			System.out.println(LINE);
-			processLRUVersusTouchCountLong();*/
+			processLRUVersusTouchCountLong();
 			System.out.println(LINE);
-			processBadMRUAndNotGodLRU();
+			processBadMRUAndNotGodLRU();*/
+			System.out.println(LINE);
+			processPageBlast();
 			/*
 			System.out.println(LINE);
 			processSmallQueriesAndOneBigFileScan();
@@ -55,6 +58,60 @@ public class MainEvaluator
 		}
 	}
 
+	/*
+	---TouchCount (allow blast, hotCriteria: 10)---
+	0 
+	Hits: 157
+	Misses: 89
+	Hit rate: 0.6382113821138211
+	---TouchCount (1 per second, hotCriteria: 10)---
+	Hits: 157
+	Misses: 89
+	Hit rate: 0.6382113821138211
+	---TouchCount (1 per 2 seconds, hotCriteria: 10)---
+	Hits: 169
+	Misses: 77
+	Hit rate: 0.6869918699186992
+	---TouchCount (1 per 3 seconds, hotCriteria: 10)---
+	Hits: 169
+	Misses: 77
+	Hit rate: 0.6869918699186992
+	*/
+	private static void processPageBlast() throws Exception
+	{
+		/*
+		 * Efectua 10 blast sobre las paginas que agrega
+		 */
+		
+		String fileName = "generated/pageBlast.trace";
+		
+		BUFFER_POOL_SIZE = 50;
+		AGING_HOT_CRITERIA = 10;
+		SECONDS_PAUSE = 0.5;
+		
+		/*
+		 * Carga <= 5 paginas por segundo
+		 */
+		
+		System.out.println("---TouchCount (allow blast, hotCriteria: " + AGING_HOT_CRITERIA+ ")---"); ///+25 touch count
+		evaluateTouchCountReplacementStrategy(fileName, 0, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 50); 
+		
+		PAUSE_EVERY_REFERENCE = true;
+		
+		System.out.println("---TouchCount (1 per second, hotCriteria: " + AGING_HOT_CRITERIA+ ")---");///+5 touch count 
+		evaluateTouchCountReplacementStrategy(fileName, 1, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 50);
+		System.out.println("---TouchCount (1 per 2 seconds, hotCriteria: " + AGING_HOT_CRITERIA+ ")---"); ///+2 touch count 
+		evaluateTouchCountReplacementStrategy(fileName, 2, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 50);
+		System.out.println("---TouchCount (1 per 3 seconds, hotCriteria: " + AGING_HOT_CRITERIA+ ")---"); ///+1 touch count 
+		evaluateTouchCountReplacementStrategy(fileName, 3, AGING_HOT_CRITERIA, BUFFER_POOL_SIZE, 50);
+	
+		PAUSE_EVERY_REFERENCE = false;
+		AGING_HOT_CRITERIA = 5;
+		BUFFER_POOL_SIZE = 10;
+		SECONDS_PAUSE = 1.5;
+	}
+	
+	
 	/*
 	---MRU---
 	Hits: 600
@@ -88,7 +145,7 @@ public class MainEvaluator
 		COUNT_INTERVAL_SECONDS = 0;
 		BUFFER_POOL_SIZE = 200;
 		AGING_HOT_CRITERIA = 5;
-		SECONDS_PAUSE_BETWEEN_REFERENCES = 0.5;
+		SECONDS_PAUSE = 0.5;
 		
 		System.out.println("---BadMRU - NotGodLRU - Better TouchCount---");
 		System.out.println("---MRU---");
@@ -106,7 +163,7 @@ public class MainEvaluator
 	
 		AGING_HOT_CRITERIA = 5;
 		BUFFER_POOL_SIZE = 10;
-		SECONDS_PAUSE_BETWEEN_REFERENCES = 1.5;
+		SECONDS_PAUSE = 1.5;
 		COUNT_INTERVAL_SECONDS = 1;
 	}
 	
@@ -148,7 +205,7 @@ public class MainEvaluator
 		COUNT_INTERVAL_SECONDS = 0;
 		BUFFER_POOL_SIZE = 400;
 		AGING_HOT_CRITERIA = 10;
-		SECONDS_PAUSE_BETWEEN_REFERENCES = 0.001;
+		SECONDS_PAUSE = 0.001;
 		
 		System.out.println("---SmallQueriesAndOneBigFileScans---");
 		System.out.println("---MRU---");
@@ -166,7 +223,7 @@ public class MainEvaluator
 	
 		AGING_HOT_CRITERIA = 5;
 		BUFFER_POOL_SIZE = 10;
-		SECONDS_PAUSE_BETWEEN_REFERENCES = 1.5;
+		SECONDS_PAUSE = 1.5;
 		COUNT_INTERVAL_SECONDS = 1;
 	}
 	
@@ -208,7 +265,7 @@ public class MainEvaluator
 		COUNT_INTERVAL_SECONDS = 0;
 		BUFFER_POOL_SIZE = 300;
 		AGING_HOT_CRITERIA = 10;
-		SECONDS_PAUSE_BETWEEN_REFERENCES = 0.005;
+		SECONDS_PAUSE = 0.005;
 		
 		System.out.println("---SmallQueriesAndBigFileScans (pathological)---");
 		System.out.println("---MRU---");
@@ -226,7 +283,7 @@ public class MainEvaluator
 	
 		AGING_HOT_CRITERIA = 5;
 		BUFFER_POOL_SIZE = 10;
-		SECONDS_PAUSE_BETWEEN_REFERENCES = 1.5;
+		SECONDS_PAUSE = 1.5;
 		COUNT_INTERVAL_SECONDS = 1;
 	}
 	
@@ -363,6 +420,8 @@ public class MainEvaluator
 		evaluate(pageReplacementStrategy, null, traceFileName, bufferPoolSize);
 	}
 	
+	
+	
 	private static void evaluate(PageReplacementStrategy pageReplacementStrategy, BufferPool bufferPool, String traceFileName, int bufferPoolSize) throws Exception, InterruptedException, BufferManagerException
 	{
 		FaultCounterDiskManagerSpy faultCounterDiskManagerSpy = new FaultCounterDiskManagerSpy();
@@ -375,11 +434,18 @@ public class MainEvaluator
 		for(PageReference pageReference : trace.getPageReferences())
 		{
 			//Pause references to have different dates in LRU and MRU
-			if(line % 500 == 0){
-				System.out.print(line + " ");
-				Thread.sleep((int)(SECONDS_PAUSE_BETWEEN_REFERENCES * 1000));
+			if(!PAUSE_EVERY_REFERENCE)
+			{
+				if(line % 500 == 0){
+					System.out.print(line + " ");
+					Thread.sleep((int)(SECONDS_PAUSE * 1000));
+				}
+				line++;
 			}
-			line++;
+			else
+			{
+				Thread.sleep((int)(SECONDS_PAUSE * 1000));
+			}
 			
 			switch(pageReference.getType())
 			{

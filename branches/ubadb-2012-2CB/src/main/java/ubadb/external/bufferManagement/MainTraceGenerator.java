@@ -48,6 +48,12 @@ public class MainTraceGenerator
 		PageReferenceTrace trace3 = new BufferPoolTraceGenerator().generateBadMRUAndNotGodLRU(mediumBufferPool,hotCriteria);
 		serialize(generateBadMRUAndNotGodLRU, trace3, serializer);
 		
+		String generatePageBlast = "generated/pageBlast.trace";
+		int blastBuffer = 50;
+		int blastHits = 10;
+		PageReferenceTrace trace4 = new BufferPoolTraceGenerator().generatePageBlast(blastBuffer, blastHits);
+		serialize(generatePageBlast, trace4, serializer);
+		
 	}
 	
 	private static void pathologicalDataSet() throws Exception

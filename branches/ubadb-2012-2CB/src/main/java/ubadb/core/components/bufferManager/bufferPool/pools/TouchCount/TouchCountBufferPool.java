@@ -3,6 +3,8 @@ package ubadb.core.components.bufferManager.bufferPool.pools.TouchCount;
 import java.util.ArrayList;
 import java.util.List;
 
+import ConsoleOut.ConsoleOut;
+
 import ubadb.core.common.Page;
 import ubadb.core.common.PageId;
 import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
@@ -104,6 +106,9 @@ public class TouchCountBufferPool implements BufferPool {
 	}
 
 	private void MoveColdBufferToHot(TouchCountBufferFrame maxFrame) {
+		ConsoleOut.touchCountBufferFrame(maxFrame);
+		
+		
 		maxFrame.setTouchCount(0);
 		this.framesPool.remove(maxFrame);
 		this.framesPool.add(maxFrame);
