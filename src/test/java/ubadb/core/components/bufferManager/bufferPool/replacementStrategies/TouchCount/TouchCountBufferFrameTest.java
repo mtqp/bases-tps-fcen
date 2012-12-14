@@ -38,4 +38,20 @@ public class TouchCountBufferFrameTest
 		// Aumento en 1 el touchCount pues pasaron 3 segundos
 		assertTrue(tc0 + 1 == bufferFrame.getTouchCount());  
 	}
+	
+	@Test
+	public void testTouchCountBlast() throws Exception
+	{
+		TouchCountBufferFrame bufferFrame = new TouchCountBufferFrame(DummyObjectFactory.PAGE, 1);
+		bufferFrame.pin();
+		assertTrue(bufferFrame.getTouchCount() == 1);
+		Thread.sleep(TestUtil.SLEEP_MORE_THAN_HALF_SECOND);
+
+		bufferFrame.pin();
+		assertTrue(bufferFrame.getTouchCount() == 1);
+		Thread.sleep(TestUtil.SLEEP_MORE_THAN_HALF_SECOND);
+		
+		bufferFrame.pin();
+		assertTrue(bufferFrame.getTouchCount() == 2);
+	}
 }
