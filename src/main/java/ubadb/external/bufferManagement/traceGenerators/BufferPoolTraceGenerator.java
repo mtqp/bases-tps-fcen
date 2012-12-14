@@ -11,6 +11,66 @@ import ubadb.external.bufferManagement.etc.PageReferenceTrace;
 
 public class BufferPoolTraceGenerator extends PageReferenceTraceGenerator
 {
+	public PageReferenceTrace generatePageBlast(int bufferPoolLength, int blastHitsPerPage)
+	{
+		/*
+		 * Quisiera ver que TouchCount aceptando rafagas puede ser algo que no queremos
+		 * por lo tanto vamos a:
+		 * efectuar rafagas sobre todas las paginas que se encuentren en la cold (una vez llena)
+		 * generar un page fault (todas esas paginas van a subir a la hot barriendo lo que estaba ahi)
+		 * empezar generar n/2 pages faults (todo lo q estaba en la hot y paso a la cold se desalojara)
+		 * pedir todas las paginas q perdimos.
+		 */
+		
+		List<PageId> transaction = new ArrayList<>();
+		
+		List<PageId> initialCacheLoad = selectConsecutivesPages(bufferPoolLength, "Pages");
+		transaction.addAll(initialCacheLoad);
+		
+		/*
+		 * Supongamos que tenemos 10 paginas quedarian en el siguiente orden
+		 * [0,2,4,6,8,9,7,5,3,1]
+		 * Las impares son las que nosotros no queremos perder xq se usan continuamente pero por una rafaga
+		 * aumenta consideramente la cantidad de llamadas a las pares (menos la 8), arrastrandolas a la hot
+		 * y moviendo las impares a la cold zone		
+		 */
+		
+		/* [>,>,>,>,0,1,1,1,1,1] --> TouchCount
+		 * [0,2,4,6,8,9,7,5,3,1] --> Pagina
+		 */
+		for(int pageId=0;pageId<(bufferPoolLength/2)-1;pageId= pageId+2){
+			for(int i=0;i<blastHitsPerPage;i++){
+				transaction.add(initialCacheLoad.get(pageId));
+			}
+		}
+		
+		for(int impar=1;impar<initialCacheLoad.size();impar = impar+2)
+			transaction.add(initialCacheLoad.get(impar));
+		
+		
+		/* [1,1,1,1,	0	,1,0,0,0,0] --> TouchCount
+		 * [9,7,5,3,overFlow,1,0,2,4,6] --> Pagina
+		 */
+		List<PageId> overflowPages = selectConsecutivesPages((bufferPoolLength/2)+1, "OverflowsPages");
+		transaction.add(overflowPages.get(0));
+
+		/*
+		 * Mediante LRU agrego nuevas paginas borrando las 1ras
+		 */
+		for(int i=1;i<overflowPages.size();i++)
+			transaction.add(overflowPages.get(i));
+		
+		/*
+		 * Hago un request de las paginas impares, las cuales todas menos una
+		 * se fueron y en efecto esas eran las que se usaban mas que el resto
+		 */
+		for(int impar=1;impar<initialCacheLoad.size();impar = impar+2)
+			transaction.add(initialCacheLoad.get(impar));
+		
+		return buildRequestAndRelease(new TransactionId(1), transaction);
+	}
+	
+	
 	public PageReferenceTrace generateBadMRUAndNotGodLRU(int bufferPoolLength, int agingHotCriteria)
 	{
 		/*

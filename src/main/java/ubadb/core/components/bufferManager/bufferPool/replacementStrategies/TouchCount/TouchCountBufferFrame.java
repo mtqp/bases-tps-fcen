@@ -2,6 +2,8 @@ package ubadb.core.components.bufferManager.bufferPool.replacementStrategies.Tou
 
 import java.util.Date;
 
+import ConsoleOut.ConsoleOut;
+
 import ubadb.core.common.Page;
 import ubadb.core.components.bufferManager.bufferPool.ReferenceBufferFrame;
 import ubadb.core.exceptions.BufferFrameException;
@@ -9,6 +11,7 @@ import ubadb.core.exceptions.BufferFrameException;
 public class TouchCountBufferFrame extends ReferenceBufferFrame {
 	private int secondsToIncrementCount;
 	private int touchCount;
+	private Date touchCountReferenceDate;
 	
 	public TouchCountBufferFrame(Page page, int secondsToIncrementCount) {
 		super(page);
@@ -19,6 +22,7 @@ public class TouchCountBufferFrame extends ReferenceBufferFrame {
 	public void pin() {
 		if(canIncrementTouchCount()){
 			this.touchCount++;
+			touchCountReferenceDate = new Date();
 		}
 		
 		super.pin();
@@ -35,6 +39,7 @@ public class TouchCountBufferFrame extends ReferenceBufferFrame {
 	public void unpin() throws BufferFrameException {
 		if(canIncrementTouchCount()){
 			this.touchCount++;
+			touchCountReferenceDate = new Date();
 		}
 		
 		super.unpin();
@@ -46,12 +51,14 @@ public class TouchCountBufferFrame extends ReferenceBufferFrame {
 		long lastTouchedNumber = 0;
 		
 		int seconds = this.secondsToIncrementCount;
-		if(getReferenceDate() != null){
-			lastTouchedNumber = getReferenceDate().getTime();
+		if(touchCountReferenceDate != null){
+			lastTouchedNumber = touchCountReferenceDate.getTime();
 			seconds = (int) ((current.getTime() - lastTouchedNumber) / 1000);
 		}
 		
-		//System.out.println("seconds: " + seconds + " | secondsToIncrementCount: " + this.secondsToIncrementCount);
+		ConsoleOut.touchCountBufferFrame(this);
+		ConsoleOut.seconds(seconds, this.secondsToIncrementCount);
+
 		return (seconds >= this.secondsToIncrementCount);
 	}
 	

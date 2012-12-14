@@ -5,6 +5,7 @@ import java.util.Collection;
 import ubadb.core.common.Page;
 import ubadb.core.components.bufferManager.bufferPool.BufferFrame;
 import ubadb.core.components.bufferManager.bufferPool.ReferenceBufferFrame;
+import ubadb.core.components.bufferManager.bufferPool.replacementStrategies.TouchCount.TouchCountBufferFrame;
 
 public class ConsoleOut {
 
@@ -45,5 +46,21 @@ public class ConsoleOut {
 		if(SHOW_CONSOLE_OUT)
 			System.out.println("Add page " + page.getPageId().getNumber());
 	}
+	
+	public static final void touchCountBufferFrame(TouchCountBufferFrame frame)
+	{
+		if(SHOW_CONSOLE_OUT)
+			System.out.println(	"Frame " + frame.getPage().getPageId().getNumber() + 
+				" with TC:" + frame.getTouchCount() + " Table: " +
+				frame.getPage().getPageId().getTableId().getRelativeFilePath());	
+	}
+	
+	public static final void seconds(int seconds, int secondsToIncrementCount)
+	{
+		if(SHOW_CONSOLE_OUT)
+			System.out.println("seconds: " + seconds + " | secondsToIncrementCount: " + secondsToIncrementCount);
+	}
+
+
 	
 }
