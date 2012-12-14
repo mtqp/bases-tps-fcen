@@ -9,7 +9,7 @@ import ubadb.core.util.TestUtil;
 public class TouchCountBufferFrameTest
 {
 	@Test
-	public void testTouchCount() throws Exception
+	public void testTouchCountOnePin() throws Exception
 	{
 		TouchCountBufferFrame touchFrame = new TouchCountBufferFrame(DummyObjectFactory.PAGE, 3);
 		touchFrame.pin();
