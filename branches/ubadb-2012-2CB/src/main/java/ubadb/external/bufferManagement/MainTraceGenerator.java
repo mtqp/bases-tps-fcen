@@ -21,9 +21,9 @@ public class MainTraceGenerator
 {
 	public static void main(String[] args) throws Exception
 	{
-//		basicDataSet();
+		//basicDataSet();
 		//complexDataSet();
-		//pathologicalDataSet();
+		pathologicalDataSet();
 		benchmarksDataSets();
 	}
 
@@ -31,18 +31,18 @@ public class MainTraceGenerator
 	{
 		PageReferenceTraceSerializer serializer = new PageReferenceTraceSerializer();
 		
-		String smallQueriesAndBigFileScanPathological = "smallQueriesAndBigFileScanPathological1.trace";
+		String smallQueriesAndBigFileScanPathological = "smallQueriesAndBigFileScanPathological.trace";
 		String fileNameLRU = "generated/" + smallQueriesAndBigFileScanPathological;
 		
 		int bigbufferSize = 400;
 		PageReferenceTrace traceA1 = new BufferPoolTraceGenerator().generateReapeatedSmallQueriesWithBigFileScanPathological(bigbufferSize); 
 		serialize(fileNameLRU, traceA1, serializer);
 		
-		String fileNameOneBidFileScan = "generated/smallQueriesAndOneBigFileScan1.trace";
+		String fileNameOneBidFileScan = "generated/smallQueriesAndOneBigFileScan.trace";
 		PageReferenceTrace trace2 = new BufferPoolTraceGenerator().generateReapeatedSmallQueriesWithOneBigFileScan(bigbufferSize);
 		serialize(fileNameOneBidFileScan, trace2, serializer);
 		
-		String generateBadMRUAndNotGodLRU = "generated/badMRUAndNotGodLRU1.trace";
+		String generateBadMRUAndNotGodLRU = "generated/badMRUAndNotGodLRU.trace";
 		int hotCriteria = 5;
 		int mediumBufferPool = 200;
 		PageReferenceTrace trace3 = new BufferPoolTraceGenerator().generateBadMRUAndNotGodLRU(mediumBufferPool,hotCriteria);
