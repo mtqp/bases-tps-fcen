@@ -130,6 +130,17 @@ de referencias a la p\'agina se denomina \textit{Touch Count}.
 Uno de los problemas que el \textit{Touch Count} resuelve es el de las r\'afagas de acceso a p\'aginas. En un full scan por ejemplo m\'ultiples p\'aginas
 son referenciadas las que potencialmente pueden borrar la cach\'e. Que una p\'agina sea referenciada espor\'adicamente no implica que permanecer\'a en memoria, deber\'a volver a pedirla, que aumente su \textit{Touch Count} para as\'i poder alejarse de la zona fr\'ia donde es m\'as propensa a ser desalojada.
 
+\newpage
+\subsection{Ventajas y Desventajas}
+
+Como se coment\'o en el p\'arrafo anterior y se ver\'a m\'as adelante, el algoritmo de \textit{Touch Count} posee algunas ventajas con respecto a LRU
+y MRU, con respecto al mejor tratami\'ento de r\'afagas o la posibilidad de no depender del \'ultimo acceso de las p\'aginas sino de la cantidad de
+accesos que haya tenido.\\
+ 
+Una desventaja que podr\'ia considerarse es el reacomodo de las p\'aginas en el momento de un findVictim que los algoritmos de LRU y MRU no necesitan. Adem\'as un detalle a tener en cuenta es que los otros algoritmos pueden ser utilizados de forma \textit{Plug \& Play} mientras que
+el \textit{Touch Count} debe ser previamente configurado para obterner un mejor rendimiento acorde las necesidades espec\'ificas de las consultas.
+Esto \'ultimo es tambi\'en  una ventaja ya que una vez configurado correctamente puede presentar mejoras considerables.
+
 \newpage 
 \section{Implementaci'on estrategias de reemplazo de p'aginas}
 
@@ -263,6 +274,12 @@ da exacto se toma la cantidad de p\'aginas que conformen el porcentaje inmediato
 	\item{\emph{agingCoolCount}: Es el valor de \textit{touch count} que pasa a tener la p\'agina cuando se mueve de la zona caliente a la fr\'ia.}
 \end{itemize}
 
+\newpage
+Cabe aclarar que si la divisi\'on del \textit{midPointer} no deja un porcentaje exacto para la \textit{regi\'on caliente} en base a la variable 
+de \textit{hotPercent}, el mismo se ajustar\'a al porcentaje inmediato inferior, no superior. 
+En el ejemplo, el \textit{midPointer} deja 6 elementos a izquierda para la \textit{zona fria} (54\%)
+y 5 elementos en la \textit{zona caliente} (45\%), as\'i el 45\% no supera el 50\% impuesto por el \textit{hotPercent}. \\
+
 Ahora describiremos su comportamiento en base a las operaciones que se realizan sobre la cach\'e.
 
 \begin{center}
@@ -356,6 +373,25 @@ salvo la primera a la que s\'olo se le hizo pin al principio.}\\
 \noindent{\textbf{testMultiplePagesToReplaceButOldestOnePinnedWithPinAndUnpinFirstReferencesLast: } testea con todas las p\'aginas no bloqueadas habi\'endoselas hecho pin y unpin a cada una salvo la primera a la que s\'olo se le hizo pin al final.}\\
 \textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima. \\
 
+\subsection{TouchCountBufferFrameTest}
+
+\subsubsection{\textit{Touch Count} tests with agingTouchTime = 3}
+
+\noindent{\textbf{testTouchCountOnePin:} testea un pin.}\\
+\textbf{resultado esperado:} el touch count sea 1. \\
+
+\noindent{\textbf{testTouchCountPinUnpinEquals:} testea un pin unpin seguidos.}\\
+\textbf{resultado esperado:} el touch count sea 1. \\
+
+\noindent{\textbf{testTouchCountPinUnpingDistinct:} testea un pin, espera de 3 segundos y luego un unpin.}\\
+\textbf{resultado esperado:} el touch count sea 2. \\
+
+\noindent{\textbf{testTouchCountBlast:} testea pin, espera de m\'as de medio segundo, pin, espera de m\'as de medio segundo, pin.}\\
+\textbf{resultado esperado:} el touch count sea 1 luego del primer pin. \\
+\textbf{resultado esperado:} el touch count sea 1 luego del segundo pin. \\
+\textbf{resultado esperado:} el touch count sea 2 luego del tercer pin. \\
+
+
 \subsection{TouchCountBufferPoolTest}
 
 \subsubsection{\textit{Touch Count} tests}
@@ -375,7 +411,7 @@ salvo la primera a la que s\'olo se le hizo pin al principio.}\\
 \noindent{\textbf{testFindVictimMovingOneToHot:} testea con la primer p\'agina con alto touch count, la segunda con bajo touch count  
 y la tercera bloqueada.}\\
 \textbf{resultado esperado:} devolver la segunda p\'agina como v\'ictima, adem\'as la primera p\'agina debe tener touch count 0 (por haberse movido
-a la \textit{regi\'on caliente}), la segunda debe tener touch count 1 (por haberse movido a la \textit{regi\'on fria}) y la tercera no debi\'o
+a la \textit{regi\'on caliente}), la segunda debe tener un touch count 1 (por haberse movido a la \textit{regi\'on fria}) y la tercera no debi\'o
 modificar su touch count puesto que no se movi\'o\\
 
 \noindent{\textbf{testFindVictimMovingTwoToHot:} testea con la primer y tercer p\'agina con alto touch count y la segunda con bajo touch count.}\\
@@ -416,6 +452,33 @@ as\'i sucesivamente.
 	\includegraphics[scale=0.65]{diagramas/MRUPathological.png}\\
 	\end{center}
 
+
+Se gener\'o una traza llamada \textit{mruPathological-Music.trace} para probar este caso donde se utiliz\'o un buffer de 10 elementos. Una vez lleno se carg\'o una nueva p\'agina (p\'agina de overflow) forzando el desalojo de una p\'agina. Durante un ciclo se pidi\'o alternadamente la p\'agina de overflow y la desalojada.
+
+Los resultados obtenidos fueron:\\
+
+\begin{multicols}{3}
+
+\noindent{\textbf{MRU}}\\
+\textbf{Hits: 0}\\
+\textbf{Misses: 20}\\
+\textbf{Hit rate: 0.0}\\
+
+\noindent{\textbf{LRU}}\\
+\textbf{Hits: 9}\\
+\textbf{Misses: 11}\\
+\textbf{Hit rate: 0.45}\\
+
+\noindent{\textbf{Touch Count}}\\
+\textbf{Hits: 9}\\
+\textbf{Misses: 11}\\
+\textbf{Hit rate: 0.45}\\
+
+\end{multicols}
+
+LRU y \textit{Touch Count} obtuvieron el mismo rendimiento ya que ambos algoritmos alojaron en posiciones distintas de memoria tanto la p\'agina de overflow como la otra utilizada para generar el caso borde. Luego, ambos obtuvieron la misma cantidad hits. Adem\'as, sus resultados fueron \'optimos, ya que generaron la m\'inima cantidad de miss, correspondiente a las once p\'aginas utilizadas en la traza.\\
+
+
 \subsection{ Peor caso LRU: Traza LRUPathological} 
 	En la siguiente traza para LRU, se intenta maximizar la cantidad de \textit{Miss} para el algoritmo. El patr\'on para lograrlo se basa
 en completar la cach\'e con una traza y luego repetirla varias veces de forma de desalojar las mismas p\'aginas que se mantuvieron al principio.
@@ -427,9 +490,37 @@ desalojada. De esta forma se ir\'an desalojando las p\'aginas que ser\'an inmedi
 	\includegraphics[scale=0.65]{diagramas/LRUPathological.png}\\
 	\end{center}
 
+Se gener\'o una traza llamada \textit{lruPathological-Music.trace} para probar este caso donde se utiliz\'o un buffer de 10 elementos. Una vez lleno se carg\'o una nueva p\'agina (p\'agina de overflow) y se fueron llamando a las p\'aginas existentes previas a la de overflow. De esta manera LRU desaloja en el paso i la p\'agina requerida en el paso i+1.\\
+
+Los resultados fueron:\\
+
+\begin{multicols}{3}
+
+\noindent{\textbf{MRU}}\\
+\textbf{Hits: 9}\\
+\textbf{Misses: 11}\\
+\textbf{Hit rate: 0.45}\\
+
+\noindent{\textbf{LRU}}\\
+\textbf{Hits: 0}\\
+\textbf{Misses: 20}\\
+\textbf{Hit rate: 0.0}\\
+
+\noindent{\textbf{Touch Count}}\\
+\textbf{Hits: 4}\\
+\textbf{Misses: 16}\\
+\textbf{Hit rate: 0.2}\\
+
+\end{multicols}
+
+MRU obtuvo un buen rendimiento ya que s\'olo gener\'o miss cuando carg\'o las p\'aginas en la cach\'e, en todos los pedidos de p\'aginas algunas vez cargadas obtuvo hit. Este tipo de escenario no generan un caso borde en MRU.\\
+
+Por otro lado es interesante marcar que si bien Touch Count se basa en el algoritmo de LRU, obtuvo una mejora. Esto sucede ya que la zona caliente pose\'ia elementos y estos nunca fueron desalojados, por lo tanto; al ser requeridos por segunda vez generaron un hit.\\
+
+
 \subsection{ LRU vs \textit{Touch Count}}
 
-A continuaci\'on se describe un escenario en el cual el algoritmo de Touch Count mejora con respecto a LRU.
+Para comparar en detalle las diferencias entre LRU y \textit{Touch Count}, se gener\'o la siguiente traza. A continuaci\'on se describe un escenario en el cual el algoritmo de \textit{Touch Count} mejora con respecto a LRU.\\
 
 El ejemplo consiste en potenciar las p\'aginas que el Touch Count considera importantes, e intentar desalojarlas al mismo tiempo de la cach\'e en el
 algoritmo LRU.\\
@@ -437,7 +528,7 @@ algoritmo LRU.\\
 Inicialmente se utilizar\'a una traza cualquiera para completar la cach\'e. En ambos algoritmos estar inicializaci\'on dar\'a \textit{Miss} ya que
 las p\'aginas no existir\'an.
 
-Un escenario posible ser\'ia
+Un escenario posible ser\'ia:
 
 \begin{itemize}
 	\item[1)] full scan sobre la tabla A: para cargar las p'aginas en la cach\'e (se asume que los datos de A no superan el tama\~{n}o de la cach\'e.
@@ -472,7 +563,7 @@ referenciadas y son \'estas las que decide priorizar.
 
 \subsection{Traza: badMRUAndNotGodLRU}
 
-Esta traza se gener\'o llevando al extremo las diferencias entre los algortimos.\\
+Esta traza se gener\'o llevando al extremo las diferencias entre los tres algortimos.\\
 
 Como vimos anteriormente el algoritmo de MRU no quita una p\'agina de la cach\'e hasta que esta no posea la referencia m\'as reciente. 
 Inmediatamente se desprende que las p\'aginas que puedan llegar a la cach\'e y sean poco utilizadas tienen altas chances de evitar el desalojo.\\
@@ -500,9 +591,8 @@ con el objeto de mantener en cach\'e en el algoritmo de \textit{Touch Count}.}\\
 La traza se corre con el algoritmo de MRU, LRU y \textit{Touch Count}, este \'ultimo aceptando r\'afagas (para simplificar el problema) y 
 con cuatro porcentajes de hot region (25\%, 50\%, 75\%, 90\%).\\
 
-A continuaci\'on se detallan los resultados obtenidos.\\
-
 \newpage
+A continuaci\'on se detallan los resultados obtenidos.\\
 
 \begin{multicols}{2}
 \noindent{\textbf{MRU}}\\
@@ -653,8 +743,94 @@ Nuevamente esto depende de la carga a la que se est\'e sometiendo al motor de ba
  Para este ejemplo en particular, parecer\'ia sensato tomar como hot region alg\'un valor entre 25\% y 50\% 
 y dejar el resto de la cach\'e como zona fr\'ia suponiendo que la carga continuara de similar manera y dejando espacio tanto en caliente como fr\'io para alg\'un caso at\'ipico que pueda suceder.
 
+\newpage
+\subsection{Traza: pageBlast}
+
+El algoritmo de \textit{Touch Count} posee varios par\'ametros que como ya mencionamos, no son independientes entre s\'i.\\
+
+Por simplicidad, en las trazas anteriores, exclu\'imos el par\'ametro de cantidad de segundos m\'inima para poder permitir aumento en el touch count desde el \'ultimo realizado. De esta manera al procesar las trazas, ning\'un aumento de su valor era exclu\'ido, aunque forme parte de una r\'afaga.\\
+
+Oracle considera que r\'afagas de pedidos pueden ensuciar el peso real que una p\'agina tiene en la cach\'e. Ejemplificando este problema, se gener\'o la siguiente traza compuesta por una cach\'e de 50 elementos.\\
+
+Se corri\'o variando \'unicamente la cantidad de segundos necesarias antes de permitir un nuevo aumento en el touch count; los valores son: 
+\begin{itemize}
+	\item{0 (es decir permite r\'afagas), }
+	\item{1 aumento de touch count por segundo, }
+	\item{1 aumento cada dos segundos y uno cada tres.}
+\end{itemize}
+
+La traza se gener\'o de la siguiente manera:\\
+
+    Se posee la cach\'e llena suponiendo que los elementos que se encuentran en la zona caliente han sido, y van a ser referenciados peri\'odicamente en el contexto de ejecuci\'on.\\
+
+    Se genera una r\'afaga sobre los elementos de la zona fr\'ia, cada elemento se le efect\'ua un pin y unpin diez veces. En el supuesto contexto de ejecuci\'on, estas p\'aginas se trajeron por un file scan viejo, y se necesitaron llamar para una peque\~{n}a consulta y no se van
+ a necesitar m\'as. \\
+
+El touch count de estos elementos aumenta, as\'i como su probabilidad de pasar a la zona caliente.
+    Si estas p\'aginas pasan a la zona caliente, las que se encontraban previamente en ella, deber\'an pasarse a la zona fr\'ia (por funcionamiento intr\'inseco del algoritmo).
+    Una vez que las p\'aginas que queremos preservar pasaron a la fr\'ia, se efect\'ua una consulta sobre una tabla que no se encuentra en cach\'e, obligando a desalojar las p\'aginas que no quer\'ian perderse. Por ejemplo, podr\'ia existir un contexto donde alg\'un cliente solicita ver un ABM que no suele visualizarse.
+    Por el contexto de ejecuci\'on, vuelven a ser requeridas las p\'aginas recientemente desalojadas y generan todas ellas miss.\\
+
+
+\textbf{Nota}: el hilo de ejecuci\'on que levanta la traza y la ejecuta fue detenido en cada iteraci\'on durante medio segundo. Se utiliz\'o un \textit{agingHotCriteria} de 10:
+
+\begin{multicols}{2}
+\noindent{\textbf{Touch Count}} (allow blast)\\
+\textbf{Hits: 157}\\
+\textbf{Misses: 89}\\
+\textbf{Hit rate: 0.638}\\
+
+\noindent{\textbf{Touch Count}} (1 per 2 seconds)\\
+\textbf{Hits: 169}\\
+\textbf{Misses: 77}\\
+\textbf{Hit rate: 0.686}\\
+
+\noindent{\textbf{Touch Count}} (1 per second)\\
+\textbf{Hits: 157}\\
+\textbf{Misses: 89}\\
+\textbf{Hit rate: 0.638}\\
+
+\noindent{\textbf{Touch Count}} (1 per 3 seconds)\\
+\textbf{Hits: 169}\\
+\textbf{Misses: 77}\\
+\textbf{Hit rate: 0.686}\\
+\end{multicols}
+
+Este ejemplo adhoc fue generado de forma tal que, tanto permitiendo r\'afagas como limitando el aumento de touch count por segundo en uno, el rendimiento sea el mismo. Vemos que cuando el algoritmo se corre con ventanas de tiempo mayores, el touch count de cada p\'agina no supera el umbral y por lo tanto no se pasa a la \textit{regi\'on caliente}, y por consiguiente; no se desalojan las p\'aginas importantes al contexto de ejecuci\'on del problema.\\
+
+Se decidi\'o forzar a que el l\'imite de un aumento por segundo no sea suficiente para mejorar el rendimiento para ejemplificar que los valores de los par\'ametros del algoritmo dependen fuertemente del contexto de ejecuci\'on, y su m\'inima alteraci\'on afecta fuertemente el rendimiento del todo. \\
+
+A modo de comentario cabe destacar que en las pruebas comprobamos que si el sleep del thread desciende de 0.5 segundos a 0.38, el algoritmo utilizando una ventana de un segundo mejora su rendimiento e iguala al de la ventana de 2 y 3 segundos.
+
+\newpage
 \section{C\'odigo fuente}
 
+Los tests descriptos anteriormente tienen como t\'itulo el nombre del archivo java con el que pueden encontrarse en el proyecto, as\'i los test para las estrategias de MRU, LRU y \textit{Touch Count} pueden encontrarse en las clases \textbf{MRUReplacementStrategyTest}, \textbf{LRUReplacementStrategyTest} y \textbf{TouchCountReplacementStrategyTest} respectivamente.\\
+
+Tests adicionales para \textit{Touch Count} se agrupan en \textbf{TouchCountBufferFrameTest} y \textbf{TouchCountBufferPoolTest}
+donde testean las funcionalidades m\'as importantes de este algoritmo.\\
+ 
+En la clase \textbf{MainEvaluator} figuran los test de todas las trazas que hemos generado, las cuales se encuentran tambi\'en en el proyecto. Estas pueden correrse descomentando el test correspondiente en el m\'etodo main que leer\'an las trazas de los archivos y mostrar\'an los resultados analizados en este informe; en caso de producirse alguna falla con los archivos de trazas se deber\'a correr el main de la clase \textbf{MainTraceGenerator} descomentando los m\'etodos \textbf{pathologicalDataSet} y \textbf{benchmarksDataSets} para volver a generarlas. \\
+
+Las trazas generadas son las siguientes:
+
+\begin{itemize}
+	\item{mruPathological-Music.trace}
+	\item{badMRUAndNotGodLRU.trace}
+	\item{lruPathological-Music.trace}
+	\item{lruVSTouchCount-Music.trace}
+	\item{smallQueriesAndOneBigFileScan.trace}
+	\item{pageBlast.trace}
+\end{itemize}
+
+El m\'etodo \textit{evaluate} fue modificado para realizar las pruebas y puede que tenga l\'ineas de sleep u otras adaptaciones.\\
+
 \section{Referencias}
+
+\begin{itemize}
+	\item{\textbf{Paper All About Oracles Touch Count Algorithm}}
+	\item{\textbf{Oracle Touch Count Algotithm PPT} - www.bgoug.org}
+	\item{\textbf{Touch-Count Algorithm} - http://oracle-online-help.blogspot.com.ar/2006/11/touch-count-algorithm-in-advancement-to.html}
+\end{itemize}
 
 \end{document}
